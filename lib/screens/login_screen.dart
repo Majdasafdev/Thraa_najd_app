@@ -1,0 +1,259 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:thraa_najd_mobile_app/constants.dart';
+import 'package:thraa_najd_mobile_app/providers/model_hud.dart';
+import 'package:thraa_najd_mobile_app/screens/User/home_page.dart';
+import 'package:thraa_najd_mobile_app/screens/registeration_page.dart';
+import 'package:thraa_najd_mobile_app/services/auth.dart';
+import 'package:thraa_najd_mobile_app/widgets/custom_button.dart';
+import 'package:thraa_najd_mobile_app/widgets/custom_text_form_field.dart';
+import 'package:thraa_najd_mobile_app/widgets/custome_logo.dart';
+import 'package:thraa_najd_mobile_app/widgets/snack_bar.dart';
+import 'package:thraa_najd_mobile_app/providers/admin_mode.dart';
+import 'Admin/admin_home.dart';
+
+class loginPage extends StatefulWidget {
+  loginPage({super.key});
+  static String id = 'loginPage';
+  @override
+  State<loginPage> createState() => _loginPageState();
+}
+
+class _loginPageState extends State<loginPage> {
+  bool isLoading = false;
+
+  GlobalKey<FormState> formkey = GlobalKey();
+  String? email;
+  String? passward;
+
+  final _auth = Auth();
+
+  final adminPassword = 'Admin123456';
+
+  bool? keepMeLoggedIn = false;
+
+  @override
+  Widget build(BuildContext context) {
+    MediaQuery.of(context).size.height * .2;
+    return Scaffold(
+      backgroundColor: kMainColor,
+      body: ModalProgressHUD(
+        inAsyncCall: Provider.of<ModelHud>(context).isLoading,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Form(
+            key: formkey,
+            child: ListView(
+              children: [
+                CustomLogo(),
+                const SizedBox(height: 100),
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Welcome to the Log in page',
+                      style: TextStyle(
+                        fontSize: 24,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                Custom_Form_Text_Foeld(
+                  onChanged: (data) {
+                    email = data;
+                  },
+                  hintText: 'Email',
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 20),
+                  child: Row(
+                    children: <Widget>[
+                      Theme(
+                        data: ThemeData(unselectedWidgetColor: Colors.white),
+                        child: Checkbox(
+                          checkColor: kSecondaryColor,
+                          activeColor: kMainColor,
+                          value: keepMeLoggedIn,
+                          onChanged: (value) {
+                            setState(() {
+                              keepMeLoggedIn = value;
+                            });
+                          },
+                        ),
+                      ),
+                      Text(
+                        'Remmeber Me ',
+                        style: TextStyle(color: Colors.white),
+                      )
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Custom_Form_Text_Foeld(
+                  obscureText: true,
+                  onChanged: (data) {
+                    passward = data;
+                  },
+                  hintText: 'Password',
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                Custome_button(
+                    onTap: () async {
+                      if (formkey.currentState!.validate()) {
+                        isLoading = true;
+                        setState(() {});
+                        try {
+                          await loginUser();
+                          Navigator.pushNamed(context, loginPage.id,
+                              arguments: email);
+                        } on FirebaseAuthException catch (e) {
+                          if (e.code == 'user-not-found') {
+                            showSnackBar(
+                                context, "No user found for that email.");
+                          } else if (e.code == 'wrong-password') {
+                            showSnackBar(context,
+                                "Wrong password provided for that user.");
+                          }
+                        } catch (e) {
+                          showSnackBar(context, "There was an error");
+                        }
+                        isLoading = false;
+
+                        setState(() {});
+                      } else {}
+                      _validate(context);
+                    },
+                    text: 'Log in'),
+                const SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'You dont have an account? ',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, RegisterPage.id);
+                      },
+                      child: Text(
+                        'Registeration',
+                        style: TextStyle(
+                          color: Color(0xffC7EDE6),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            Provider.of<AdminMode>(context, listen: false)
+                                .changeIsAdmin(true);
+                          },
+                          child: Text(
+                            'i\'m an admin',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Provider.of<AdminMode>(context).isAdmin
+                                    ? kMainColor
+                                    : Colors.white),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            Provider.of<AdminMode>(context, listen: false)
+                                .changeIsAdmin(false);
+                          },
+                          child: Text(
+                            'i\'m a user',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Provider.of<AdminMode>(context,
+                                            listen: true)
+                                        .isAdmin
+                                    ? Colors.white
+                                    : kMainColor),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> loginUser() async {
+    UserCredential user = await FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: email!, password: passward!);
+  }
+
+  void _validate(context) async {
+    final modelhud = Provider.of<ModelHud>(context, listen: false);
+    modelhud.changeisLoading(true);
+    if (formkey.currentState!.validate()) {
+      formkey.currentState!.save();
+      if (Provider.of<AdminMode>(context, listen: false).isAdmin) {
+        if (passward == adminPassword) {
+          try {
+            await _auth.sigIn(email!.trim(), passward!.trim());
+            Navigator.pushNamed(context, AdminHome.id);
+          } catch (e) {
+            modelhud.changeisLoading(false);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(e.toString()),
+              ),
+            );
+          }
+        } else {
+          modelhud.changeisLoading(false);
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text('Something went wrong !'),
+          ));
+        }
+      } else {
+        try {
+          await _auth.sigIn(email!.trim(), passward!.trim());
+          Navigator.pushNamed(context, HomePage.id);
+        } catch (e) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(e.toString()),
+          ));
+        }
+      }
+    }
+    modelhud.changeisLoading(false);
+  }
+
+  void keepUserLoggedIn() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.setBool(kKeepMeLoggedIn, keepMeLoggedIn!);
+  }
+}
