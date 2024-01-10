@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:thraa_najd_mobile_app/constants.dart';
 import 'package:thraa_najd_mobile_app/firebase_options.dart';
+import 'package:thraa_najd_mobile_app/screens/User/product_info.dart';
 import 'package:thraa_najd_mobile_app/screens/login_screen.dart';
 import 'package:thraa_najd_mobile_app/screens/registeration_page.dart';
 import 'providers/admin_mode.dart';
@@ -57,6 +58,7 @@ class _ThraaNajdAppState extends State<ThraaNajdApp> {
           ManageProducts.id: (context) => ManageProducts(),
           OrdersScreen.id: (context) => OrdersScreen(),
           EditProducts.id: (context) => EditProducts(),
+          ProductInfo.id: (context) => ProductInfo(),
         },
       ),
     );

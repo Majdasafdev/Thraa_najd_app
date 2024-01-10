@@ -15,6 +15,7 @@ const kNuts = 'nuts';
 const kSpices = 'spices';
 const kOils = 'oils';
 const kGrain = 'grain';
+const kOthers = 'others';
 const kOrders = 'Orders';
 const kOrderDetails = 'OrderDetails';
 const kTotallPrice = 'TotallPrice';
