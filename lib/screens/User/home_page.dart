@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thraa_najd_mobile_app/constants.dart';
+import 'package:thraa_najd_mobile_app/function.dart';
 import 'package:thraa_najd_mobile_app/models/product.dart';
 import 'package:thraa_najd_mobile_app/screens/Admin/admin_home.dart';
 import 'package:thraa_najd_mobile_app/screens/Admin/edit_products.dart';
@@ -175,17 +176,21 @@ class _HomePageState extends State<HomePage> {
           for (var doc in snapshot.data.docs) {
             var data = doc.data() as Map<String, dynamic>;
             print(data);
-            products.add(
-              Product(
-                pId: doc.id,
-                pPrice: data[kProductPrice],
-                pName: data[kProductName],
-                pDescription: data[kProductDescription],
-                pLocation: data[kProductLocation],
-                pCategory: data[kProductCategory],
-              ),
-            );
+            if (doc[kProductCategory == kNuts])
+              products.add(
+                Product(
+                  pId: doc.id,
+                  pPrice: data[kProductPrice],
+                  pName: data[kProductName],
+                  pDescription: data[kProductDescription],
+                  pLocation: data[kProductLocation],
+                  pCategory: data[kProductCategory],
+                ),
+              );
           }
+          _products = [...products]; //Screed opreator
+          products.clear();
+          products = getProductByCategory(kNuts, _products);
           return GridView.builder(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
