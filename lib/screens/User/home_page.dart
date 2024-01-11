@@ -1,12 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thraa_najd_mobile_app/constants.dart';
+import 'package:thraa_najd_mobile_app/function.dart';
 import 'package:thraa_najd_mobile_app/models/product.dart';
 import 'package:thraa_najd_mobile_app/screens/Admin/admin_home.dart';
+import 'package:thraa_najd_mobile_app/screens/Admin/edit_products.dart';
 import 'package:thraa_najd_mobile_app/screens/login_screen.dart';
-import 'package:thraa_najd_mobile_app/widgets/nuts_view.dart';
 import 'package:thraa_najd_mobile_app/widgets/product_view.dart';
 import 'package:thraa_najd_mobile_app/services/auth.dart';
+import 'package:thraa_najd_mobile_app/services/store.dart';
+import 'package:thraa_najd_mobile_app/widgets/cusotme_menu.dart';
 
 class HomePage extends StatefulWidget {
   static String id = 'HomePage';
@@ -19,6 +23,7 @@ class _HomePageState extends State<HomePage> {
   final _auth = Auth();
   int _tabBarIndex = 0;
   int _bottomBarIndex = 0;
+  final _store = Store();
   late List<Product> _products;
   @override
   Widget build(BuildContext context) {
@@ -121,10 +126,10 @@ class _HomePageState extends State<HomePage> {
             body: TabBarView(
               children: [
                 nutsView(),
-                ProductsView(kSpices, _products),
-                ProductsView(kOils, _products),
-                ProductsView(kGrain, _products),
-                ProductsView(kOthers, _products),
+                ProductsView(kSpices, List.empty()),
+                ProductsView(kOils, List.empty()),
+                ProductsView(kGrain, List.empty()),
+                ProductsView(kOthers, List.empty()),
               ],
             ),
           ),
@@ -160,6 +165,84 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget nutsView() {
+    return StreamBuilder<QuerySnapshot>(
+      stream: _store.loadProducts(),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.hasData) {
+          List<Product> products = [];
+          for (var doc in snapshot.data.docs) {
+            var data = doc.data() as Map<String, dynamic>;
+            print(data);
+            if (doc[kProductCategory == kNuts])
+              products.add(
+                Product(
+                  pId: doc.id,
+                  pPrice: data[kProductPrice],
+                  pName: data[kProductName],
+                  pDescription: data[kProductDescription],
+                  pLocation: data[kProductLocation],
+                  pCategory: data[kProductCategory],
+                ),
+              );
+          }
+          _products = [...products]; //Screed opreator
+          products.clear();
+          products = getProductByCategory(kNuts, _products);
+          return GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: .8,
+            ),
+            itemBuilder: (context, index) => Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              child: GestureDetector(
+                child: Stack(
+                  children: <Widget>[
+                    Positioned.fill(
+                      child: Image(
+                        fit: BoxFit.fill,
+                        image: AssetImage(products[index].pLocation),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      child: Opacity(
+                        opacity: .6,
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 60,
+                          color: Colors.white,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  products[index].pName,
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text('\$ ${products[index].pPrice}')
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            itemCount: products.length,
+          );
+        } else {
+          return Center(child: (Text('Loading...........')));
+        }
+      },
     );
   }
 }
