@@ -24,7 +24,7 @@ class _HomePageState extends State<HomePage> {
   int _tabBarIndex = 0;
   int _bottomBarIndex = 0;
   final _store = Store();
-  late List<Product> _products;
+  List<Product> _products = [];
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -126,10 +126,10 @@ class _HomePageState extends State<HomePage> {
             body: TabBarView(
               children: [
                 nutsView(),
-                ProductsView(kSpices, List.empty()),
-                ProductsView(kOils, List.empty()),
-                ProductsView(kGrain, List.empty()),
-                ProductsView(kOthers, List.empty()),
+                ProductsView(kSpices, _products),
+                ProductsView(kOils, _products),
+                ProductsView(kGrain, _products),
+                ProductsView(kOthers, _products),
               ],
             ),
           ),
@@ -176,18 +176,16 @@ class _HomePageState extends State<HomePage> {
           List<Product> products = [];
           for (var doc in snapshot.data.docs) {
             var data = doc.data() as Map<String, dynamic>;
-            print(data);
-            if (doc[kProductCategory == kNuts])
-              products.add(
-                Product(
-                  pId: doc.id,
-                  pPrice: data[kProductPrice],
-                  pName: data[kProductName],
-                  pDescription: data[kProductDescription],
-                  pLocation: data[kProductLocation],
-                  pCategory: data[kProductCategory],
-                ),
-              );
+            products.add(
+              Product(
+                pId: doc.id,
+                pPrice: data[kProductPrice],
+                pName: data[kProductName],
+                pDescription: data[kProductDescription],
+                pLocation: data[kProductLocation],
+                pCategory: data[kProductCategory],
+              ),
+            );
           }
           _products = [...products]; //Screed opreator
           products.clear();
