@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:thraa_najd_mobile_app/constants.dart';
 import 'package:thraa_najd_mobile_app/models/product.dart';
+import 'package:thraa_najd_mobile_app/screens/User/cartScreen.dart';
 
 class ProductInfo extends StatefulWidget {
   static String id = 'ProductInfo';
@@ -34,12 +35,22 @@ class _ProductInfoState extends State<ProductInfo> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Icon(
-                    Icons.arrow_back,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Icon(
+                      Icons.arrow_back,
+                    ),
                   ),
-                  Icon(
-                    Icons.shopping_cart,
-                    color: kSecondaryColor,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, CartScreen.id);
+                    },
+                    child: Icon(
+                      Icons.shopping_cart,
+                      color: kSecondaryColor,
+                    ),
                   ),
                 ],
               ),
