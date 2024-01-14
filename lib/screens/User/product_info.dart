@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:thraa_najd_mobile_app/constants.dart';
 import 'package:thraa_najd_mobile_app/models/product.dart';
+import 'package:thraa_najd_mobile_app/providers/cartItem.dart';
 import 'package:thraa_najd_mobile_app/screens/User/cartScreen.dart';
 
 class ProductInfo extends StatefulWidget {
@@ -138,16 +141,20 @@ class _ProductInfoState extends State<ProductInfo> {
                 ButtonTheme(
                   minWidth: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height * .12,
-                  child: TextButton(
-                    onPressed: () {},
-                    child: Text(
-                      'Add to Cart'.toUpperCase(),
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: kSecondaryColor),
-                    ),
-                  ),
+                  child: Builder(builder: (context) {
+                    return TextButton(
+                      onPressed: () {
+                        addToCart(context, product);
+                      },
+                      child: Text(
+                        'Add to Cart'.toUpperCase(),
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: kSecondaryColor),
+                      ),
+                    );
+                  }),
                 ),
               ],
             ),
@@ -171,5 +178,27 @@ class _ProductInfoState extends State<ProductInfo> {
       _quantity++;
       print(_quantity);
     });
+  }
+
+  void addToCart(context, product) {
+    CartItem cartItem = Provider.of<CartItem>(context, listen: false);
+    product.pQuantity = _quantity;
+    bool exist = false;
+    var productsInCart = cartItem.products;
+    for (var productInCart in productsInCart) {
+      if (productInCart.pName == product.pName) {
+        exist = true;
+      }
+    }
+    if (exist) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('you\'ve added this item before'),
+      ));
+    } else {
+      cartItem.addProduct(product);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Added to Cart'),
+      ));
+    }
   }
 }
