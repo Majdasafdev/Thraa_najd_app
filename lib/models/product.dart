@@ -2,7 +2,7 @@ class Product {
   String pName;
   String? pPrice;
   String pLocation;
-  String? pDescription;
+  String pDescription;
   String? pCategory;
   String? pId;
   int? pQuantity;
@@ -11,7 +11,7 @@ class Product {
       this.pId,
       required this.pName,
       this.pCategory,
-      this.pDescription,
+      required this.pDescription,
       required this.pLocation,
       this.pPrice});
 }

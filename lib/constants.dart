@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const kMainColor = Color(0xff925F3A);
+const kMainColor = Color.fromRGBO(146, 95, 58, 1);
 const kSecondaryColor = Color(0xff7CAC4A);
 const kProductId = 'productId';
 const kProductName = 'productName';

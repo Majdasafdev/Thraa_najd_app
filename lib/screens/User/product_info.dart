@@ -6,13 +6,13 @@ import 'package:thraa_najd_mobile_app/screens/User/cartScreen.dart';
 class ProductInfo extends StatefulWidget {
   static String id = 'ProductInfo';
 
-  const ProductInfo({super.key});
-
   @override
   State<ProductInfo> createState() => _ProductInfoState();
 }
 
 class _ProductInfoState extends State<ProductInfo> {
+  int _quantity = 1;
+
   @override
   Widget build(BuildContext context) {
     Product product = ModalRoute.of(context)!.settings.arguments as Product;
@@ -56,8 +56,120 @@ class _ProductInfoState extends State<ProductInfo> {
               ),
             ),
           ),
+          Positioned(
+            bottom: 0,
+            child: Column(
+              children: [
+                Opacity(
+                  opacity: .5,
+                  child: Container(
+                    color: Colors.white,
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height * .3,
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            product.pName,
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            product.pDescription,
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w800),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            '\$${product.pPrice}',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ClipOval(
+                                child: Material(
+                                  color: kMainColor,
+                                  child: GestureDetector(
+                                    onTap: add,
+                                    child: SizedBox(
+                                      child: Icon(Icons.add),
+                                      height: 32,
+                                      width: 32,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                _quantity.toString(),
+                                style: TextStyle(fontSize: 30),
+                              ),
+                              ClipOval(
+                                child: Material(
+                                  color: kMainColor,
+                                  child: GestureDetector(
+                                    onTap: subtract,
+                                    child: SizedBox(
+                                      child: Icon(Icons.remove),
+                                      height: 32,
+                                      width: 32,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                ButtonTheme(
+                  minWidth: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height * .12,
+                  child: TextButton(
+                    onPressed: () {},
+                    child: Text(
+                      'Add to Cart'.toUpperCase(),
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: kSecondaryColor),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
+  }
+
+  subtract() {
+    if (_quantity > 1) {
+      setState(() {
+        _quantity--;
+        print(_quantity);
+      });
+    }
+  }
+
+  add() {
+    setState(() {
+      _quantity++;
+      print(_quantity);
+    });
   }
 }

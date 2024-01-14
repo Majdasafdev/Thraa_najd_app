@@ -6,6 +6,7 @@ import 'package:thraa_najd_mobile_app/function.dart';
 import 'package:thraa_najd_mobile_app/models/product.dart';
 import 'package:thraa_najd_mobile_app/screens/Admin/admin_home.dart';
 import 'package:thraa_najd_mobile_app/screens/Admin/edit_products.dart';
+import 'package:thraa_najd_mobile_app/screens/User/product_info.dart';
 import 'package:thraa_najd_mobile_app/screens/login_screen.dart';
 import 'package:thraa_najd_mobile_app/widgets/product_view.dart';
 import 'package:thraa_najd_mobile_app/services/auth.dart';
@@ -126,6 +127,7 @@ class _HomePageState extends State<HomePage> {
             body: TabBarView(
               children: [
                 nutsView(),
+                //  ProductsView(kNuts, _products),
                 ProductsView(kSpices, _products),
                 ProductsView(kOils, _products),
                 ProductsView(kGrain, _products),
@@ -198,6 +200,10 @@ class _HomePageState extends State<HomePage> {
             itemBuilder: (context, index) => Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, ProductInfo.id,
+                      arguments: products[index]);
+                },
                 child: Stack(
                   children: <Widget>[
                     Positioned.fill(
