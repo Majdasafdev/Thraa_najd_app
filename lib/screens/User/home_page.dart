@@ -4,14 +4,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thraa_najd_mobile_app/constants.dart';
 import 'package:thraa_najd_mobile_app/function.dart';
 import 'package:thraa_najd_mobile_app/models/product.dart';
-import 'package:thraa_najd_mobile_app/screens/Admin/admin_home.dart';
-import 'package:thraa_najd_mobile_app/screens/Admin/edit_products.dart';
+import 'package:thraa_najd_mobile_app/screens/User/cartScreen.dart';
 import 'package:thraa_najd_mobile_app/screens/User/product_info.dart';
 import 'package:thraa_najd_mobile_app/screens/login_screen.dart';
 import 'package:thraa_najd_mobile_app/widgets/product_view.dart';
 import 'package:thraa_najd_mobile_app/services/auth.dart';
 import 'package:thraa_najd_mobile_app/services/store.dart';
-import 'package:thraa_najd_mobile_app/widgets/cusotme_menu.dart';
 
 class HomePage extends StatefulWidget {
   static String id = 'HomePage';
@@ -154,7 +152,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, AdminHome.id);
+                      Navigator.pushNamed(context, CartScreen.id);
                     },
                     child: Icon(
                       Icons.shopping_cart,
