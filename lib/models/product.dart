@@ -1,6 +1,6 @@
 class Product {
   String pName;
-  String? pPrice;
+  String pPrice;
   String pLocation;
   String pDescription;
   String? pCategory;
@@ -13,7 +13,7 @@ class Product {
       this.pCategory,
       required this.pDescription,
       required this.pLocation,
-      this.pPrice});
+      required this.pPrice});
 }
 /*{required this.pQuantity,
       required this.pId,
