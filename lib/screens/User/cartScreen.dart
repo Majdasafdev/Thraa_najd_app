@@ -1,4 +1,5 @@
 // ignore_for_file: sort_child_properties_last
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +20,7 @@ class CartScreen extends StatelessWidget {
     final double statusBarHeight = MediaQuery.of(context).padding.top;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: kSecondaryColor,
+        backgroundColor: kMainColor,
         elevation: 0,
         title: Text(
           'My Cart',
@@ -35,53 +36,115 @@ class CartScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: Expanded(
-        child: Container(
-          height: 50,
-          width: 70,
-          color: Colors.red,
-          child: ListView.builder(
-            itemBuilder: (context, index) {
-              return Container(
-                height: screenHeight * .8,
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                      radius: screenHeight * .15 / 2,
-                      backgroundImage: AssetImage(products[index].pLocation),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10),
-                          child: Column(
+      body: Column(
+        children: [
+          LayoutBuilder(
+            builder: (context, constraints) {
+              if (products.isNotEmpty) {
+                return Container(
+                  height: screenHeight -
+                      statusBarHeight -
+                      appBarHeight -
+                      (screenHeight * .08),
+                  child: ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          color: kSecondaryColor,
+                          height: screenHeight * .15,
+                          // width: screenWidth * .8,
+                          child: Row(
                             children: [
-                              Text(
-                                products[index].pName,
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              CircleAvatar(
+                                radius: screenHeight * .15 / 2,
+                                backgroundImage:
+                                    AssetImage(products[index].pLocation),
                               ),
-                              SizedBox(
-                                height: 10,
+                              Expanded(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(left: 10.0),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            products[index].pName,
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Text(
+                                            products[index].pPrice,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: 20),
+                                      child: Text(
+                                        products[index].pQuantity.toString(),
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
-                              Text(
-                                '\$ ${products[index].pPrice}',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              )
                             ],
                           ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-                color: kMainColor,
-              );
+                        ),
+                      );
+                    },
+                    itemCount: products.length,
+                  ),
+                );
+              } else {
+                return Container(
+                  height: screenHeight -
+                      (screenHeight * .08) -
+                      appBarHeight -
+                      statusBarHeight,
+                  child: Center(
+                    child: Text("Dear customer your Cart is empty!"),
+                  ),
+                );
+              }
             },
-            itemCount: products.length,
           ),
-        ),
+          ButtonTheme(
+            minWidth: screenWidth,
+            height: screenHeight * .08,
+            child: ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(10),
+                      topLeft: Radius.circular(10)),
+                ),
+              ),
+              child: Text(
+                "ORDER",
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

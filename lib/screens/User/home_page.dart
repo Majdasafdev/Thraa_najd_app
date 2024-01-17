@@ -113,7 +113,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   Text(
-                    'Else',
+                    'Other',
                     style: TextStyle(
                       color: _tabBarIndex == 3 ? kMainColor : kSecondaryColor,
                       fontSize: _tabBarIndex == 3 ? 16 : null,
