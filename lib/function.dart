@@ -1,3 +1,7 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:thraa_najd_mobile_app/providers/cartItem.dart';
+
 import 'models/product.dart';
 
 List<Product> getProductByCategory(String kNuts, List<Product> allproducts) {
@@ -13,3 +17,7 @@ List<Product> getProductByCategory(String kNuts, List<Product> allproducts) {
   }
   return products;
 }
+
+/////////////////<THE CODE BELOW FOR PRODUCTINFO PAGE>//////////////////
+
+int _quantity = 1;

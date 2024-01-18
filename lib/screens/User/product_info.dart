@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:thraa_najd_mobile_app/constants.dart';
+import 'package:thraa_najd_mobile_app/function.dart';
 import 'package:thraa_najd_mobile_app/models/product.dart';
 import 'package:thraa_najd_mobile_app/providers/cartItem.dart';
 import 'package:thraa_najd_mobile_app/screens/User/cartScreen.dart';
@@ -91,7 +91,7 @@ class _ProductInfoState extends State<ProductInfo> {
                             height: 10,
                           ),
                           Text(
-                            '\$${product.pPrice}',
+                            product.pPrice,
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
@@ -140,21 +140,31 @@ class _ProductInfoState extends State<ProductInfo> {
                 ),
                 ButtonTheme(
                   minWidth: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height * .12,
-                  child: Builder(builder: (context) {
-                    return TextButton(
-                      onPressed: () {
-                        addToCart(context, product);
-                      },
-                      child: Text(
-                        'Add to Cart'.toUpperCase(),
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: kSecondaryColor),
-                      ),
-                    );
-                  }),
+                  height: MediaQuery.of(context).size.height * .8,
+                  child: Builder(
+                    builder: (context) {
+                      return ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: kMainColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(10),
+                                topLeft: Radius.circular(10)),
+                          ),
+                        ),
+                        onPressed: () {
+                          addToCart(context, product);
+                        },
+                        child: Text(
+                          'Add to Cart'.toUpperCase(),
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ],
             ),
@@ -162,6 +172,32 @@ class _ProductInfoState extends State<ProductInfo> {
         ],
       ),
     );
+  }
+
+  void addToCart(context, product) {
+    CartItem cartItem = Provider.of<CartItem>(context, listen: false);
+    product.pQuantity = _quantity;
+    bool exist = false;
+    var productsInCart = cartItem.products;
+    for (var productInCart in productsInCart) {
+      if (productInCart.pName == product.pName) {
+        exist = true;
+      }
+    }
+    if (exist) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('you\'ve added this item before'),
+        ),
+      );
+    } else {
+      cartItem.addProduct(product);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Added to Cart'),
+        ),
+      );
+    }
   }
 
   subtract() {
@@ -178,27 +214,5 @@ class _ProductInfoState extends State<ProductInfo> {
       _quantity++;
       print(_quantity);
     });
-  }
-
-  void addToCart(context, product) {
-    CartItem cartItem = Provider.of<CartItem>(context, listen: false);
-    product.pQuantity = _quantity;
-    bool exist = false;
-    var productsInCart = cartItem.products;
-    for (var productInCart in productsInCart) {
-      if (productInCart.pName == product.pName) {
-        exist = true;
-      }
-    }
-    if (exist) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('you\'ve added this item before'),
-      ));
-    } else {
-      cartItem.addProduct(product);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Added to Cart'),
-      ));
-    }
   }
 }
