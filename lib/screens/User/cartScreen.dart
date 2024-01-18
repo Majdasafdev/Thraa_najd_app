@@ -168,26 +168,27 @@ class CartScreen extends StatelessWidget {
     double dx2 = MediaQuery.of(context).size.width - dx;
     double dy2 = MediaQuery.of(context).size.width - dy;
     await showMenu(
-        context: context,
-        position: RelativeRect.fromLTRB(dx, dy, dx2, dy2),
-        items: [
-          MyPopupMenuItem(
-            onClick: () {
-              Navigator.pop(context);
-              Provider.of<CartItem>(context, listen: false)
-                  .deleteProduct(product);
-              Navigator.pushNamed(context, ProductInfo.id, arguments: product);
-            },
-            child: Text('Edit'),
-          ),
-          MyPopupMenuItem(
-            onClick: () {
-              Navigator.pop(context);
-              Provider.of<CartItem>(context, listen: false)
-                  .deleteProduct(product);
-            },
-            child: Text('Delete'),
-          ),
-        ]);
+      context: context,
+      position: RelativeRect.fromLTRB(dx, dy, dx2, dy2),
+      items: [
+        MyPopupMenuItem(
+          onClick: () {
+            Navigator.pop(context);
+            Provider.of<CartItem>(context, listen: false)
+                .deleteProduct(product);
+            Navigator.pushNamed(context, ProductInfo.id, arguments: product);
+          },
+          child: Text('Edit'),
+        ),
+        MyPopupMenuItem(
+          onClick: () {
+            Navigator.pop(context);
+            Provider.of<CartItem>(context, listen: false)
+                .deleteProduct(product);
+          },
+          child: Text('Delete'),
+        ),
+      ],
+    );
   }
 }
