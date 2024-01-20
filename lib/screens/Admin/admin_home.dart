@@ -3,6 +3,7 @@ import 'package:thraa_najd_mobile_app/constants.dart';
 import 'package:thraa_najd_mobile_app/screens/Admin/add_product.dart';
 import 'package:thraa_najd_mobile_app/screens/Admin/edit_products.dart';
 import 'package:thraa_najd_mobile_app/screens/Admin/manage_product.dart';
+import 'package:thraa_najd_mobile_app/screens/Admin/orders_screen.dart';
 
 class AdminHome extends StatelessWidget {
   const AdminHome({super.key});
@@ -37,7 +38,9 @@ class AdminHome extends StatelessWidget {
             child: Text('Edit Products'),
           ),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, OrdersScreen.id);
+            },
             child: Text('View Orders'),
           ),
         ],

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:thraa_najd_mobile_app/firebase_options.dart';
 import 'package:thraa_najd_mobile_app/providers/cartItem.dart';
+import 'package:thraa_najd_mobile_app/screens/Admin/oreder_deatiels.dart';
 import 'package:thraa_najd_mobile_app/screens/User/cartScreen.dart';
 import 'package:thraa_najd_mobile_app/screens/User/product_info.dart';
 import 'package:thraa_najd_mobile_app/screens/login_screen.dart';
@@ -54,6 +55,7 @@ class _ThraaNajdAppState extends State<ThraaNajdApp> {
                 .copyWith(background: Colors.white)),
         initialRoute: loginPage.id,
         routes: {
+          OrderDeatiels.id: (context) => OrderDeatiels(),
           loginPage.id: (context) => loginPage(),
           RegisterPage.id: (context) => RegisterPage(),
           HomePage.id: (context) => HomePage(),

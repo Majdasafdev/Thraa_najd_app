@@ -7,6 +7,7 @@ import 'package:thraa_najd_mobile_app/constants.dart';
 import 'package:thraa_najd_mobile_app/models/product.dart';
 import 'package:thraa_najd_mobile_app/providers/cartItem.dart';
 import 'package:thraa_najd_mobile_app/screens/User/product_info.dart';
+import 'package:thraa_najd_mobile_app/services/store.dart';
 
 import '../../widgets/cusotme_menu.dart';
 
@@ -129,7 +130,7 @@ class CartScreen extends StatelessWidget {
                       appBarHeight -
                       statusBarHeight,
                   child: Center(
-                    child: Text("Dear customer your Cart is empty!"),
+                    child: Text("Dear customer your Cart is Empity!"),
                   ),
                 );
               }
@@ -139,7 +140,9 @@ class CartScreen extends StatelessWidget {
             minWidth: screenWidth,
             height: screenHeight * .08,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                showCustomDialog(products, context);
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,
                 shape: RoundedRectangleBorder(
@@ -190,5 +193,51 @@ class CartScreen extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  void showCustomDialog(List<Product> products, context) async {
+    var price = getTotallPrice(products);
+    var address;
+    AlertDialog alertDialog = AlertDialog(
+      actions: <Widget>[
+        MaterialButton(
+          onPressed: () {
+            try {
+              Store _store = Store();
+              _store.storeOrders(
+                  {kTotallPrice: price, kAddress: address}, products);
+
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text('Orderd Successfully'),
+              ));
+              Navigator.pop(context);
+            } catch (ex) {
+              print(ex);
+            }
+          },
+          child: Text('Confirm'),
+        )
+      ],
+      content: TextField(
+        onChanged: (value) {
+          address = value;
+        },
+        decoration: InputDecoration(hintText: 'Enter your Address'),
+      ),
+      title: Text('Totall Price  =  $price'),
+    );
+    await showDialog(
+        context: context,
+        builder: (context) {
+          return alertDialog;
+        });
+  }
+
+  getTotallPrice(List<Product> products) {
+    var price = 0;
+    for (var product in products) {
+      price += product.pQuantity! * int.parse(product.pPrice);
+    }
+    return price;
   }
 }
