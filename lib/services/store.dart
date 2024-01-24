@@ -16,6 +16,14 @@ class Store {
     );
   }
 
+  Stream<QuerySnapshot> loadOrderDetails(documentId) {
+    return _firestore
+        .collection(kOrders)
+        .doc(documentId)
+        .collection(kOrderDetails)
+        .snapshots();
+  }
+
   Stream<QuerySnapshot> loadProducts() {
     return _firestore.collection(kProductsCollection).snapshots();
   }

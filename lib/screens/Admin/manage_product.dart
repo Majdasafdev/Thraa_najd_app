@@ -6,7 +6,6 @@ import '../../constants.dart';
 import '../../models/product.dart';
 import '../../services/store.dart';
 
-
 class ManageProducts extends StatelessWidget {
   static String id = 'ManageProducts';
 

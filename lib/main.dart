@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:thraa_najd_mobile_app/constants.dart';
 import 'package:thraa_najd_mobile_app/firebase_options.dart';
 import 'package:thraa_najd_mobile_app/providers/cartItem.dart';
 import 'package:thraa_najd_mobile_app/screens/Admin/oreder_deatiels.dart';
@@ -22,52 +24,59 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const ThraaNajdApp());
+  runApp(ThraaNajdApp());
 }
 
-class ThraaNajdApp extends StatefulWidget {
-  const ThraaNajdApp({super.key});
+class ThraaNajdApp extends StatelessWidget {
+  bool isUserLoggedIn = false;
 
-  @override
-  State<ThraaNajdApp> createState() => _ThraaNajdAppState();
-}
-
-class _ThraaNajdAppState extends State<ThraaNajdApp> {
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider<CartItem>(
-          create: (context) => CartItem(),
-        ),
-        ChangeNotifierProvider<ModelHud>(
-          create: (context) => ModelHud(),
-        ),
-        ChangeNotifierProvider<AdminMode>(
-          create: (context) => AdminMode(),
-        )
-      ],
-      child: MaterialApp(
-        theme: ThemeData(
-            brightness: Brightness.light,
-            colorScheme: ColorScheme.fromSeed(
-                    seedColor: Color.fromARGB(206, 206, 204, 204))
-                .copyWith(background: Colors.white)),
-        initialRoute: loginPage.id,
-        routes: {
-          OrderDeatiels.id: (context) => OrderDeatiels(),
-          loginPage.id: (context) => loginPage(),
-          RegisterPage.id: (context) => RegisterPage(),
-          HomePage.id: (context) => HomePage(),
-          AdminHome.id: (context) => AdminHome(),
-          AddProduct.id: (context) => AddProduct(),
-          ManageProducts.id: (context) => ManageProducts(),
-          OrdersScreen.id: (context) => OrdersScreen(),
-          EditProducts.id: (context) => EditProducts(),
-          CartScreen.id: (context) => CartScreen(),
-          ProductInfo.id: (context) => ProductInfo(),
-        },
-      ),
+    return FutureBuilder(
+      future: SharedPreferences.getInstance(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return MaterialApp(
+            home: Scaffold(
+              body: Center(
+                child: Text('Loading....'),
+              ),
+            ),
+          );
+        } else {
+          isUserLoggedIn = snapshot.data?.getBool(kKeepMeLoggedIn) ?? false;
+          return MultiProvider(
+            providers: [
+              ChangeNotifierProvider<ModelHud>(
+                create: (context) => ModelHud(),
+              ),
+              ChangeNotifierProvider<CartItem>(
+                create: (context) => CartItem(),
+              ),
+              ChangeNotifierProvider<AdminMode>(
+                create: (context) => AdminMode(),
+              )
+            ],
+            child: MaterialApp(
+              debugShowCheckedModeBanner: false,
+              initialRoute: isUserLoggedIn ? HomePage.id : loginPage.id,
+              routes: {
+                OrderDeatiels.id: (context) => OrderDeatiels(),
+                loginPage.id: (context) => loginPage(),
+                RegisterPage.id: (context) => RegisterPage(),
+                HomePage.id: (context) => HomePage(),
+                AdminHome.id: (context) => AdminHome(),
+                AddProduct.id: (context) => AddProduct(),
+                ManageProducts.id: (context) => ManageProducts(),
+                OrdersScreen.id: (context) => OrdersScreen(),
+                EditProducts.id: (context) => EditProducts(),
+                CartScreen.id: (context) => CartScreen(),
+                ProductInfo.id: (context) => ProductInfo(),
+              },
+            ),
+          );
+        }
+      },
     );
   }
 }
