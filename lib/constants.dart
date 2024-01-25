@@ -21,3 +21,5 @@ const kOrderDetails = 'OrderDetails';
 const kTotallPrice = 'TotallPrice';
 const kAddress = 'Address';
 const kProductQuantity = 'Quantity';
+const kNameOfClient = "NameOfClient";
+const kMobileNumClinet = "MobileNumOfClient";

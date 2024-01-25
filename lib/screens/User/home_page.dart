@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
               currentIndex: _bottomBarIndex,
               fixedColor: kSecondaryColor,
               onTap: (value) async {
-                if (value == 2) {
+                if (value == 1) {
                   SharedPreferences pref =
                       await SharedPreferences.getInstance();
                   pref.clear();
@@ -50,11 +50,7 @@ class _HomePageState extends State<HomePage> {
                   },
                 );
               },
-              items: [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.person),
-                  label: ('Test'),
-                ),
+              items: const [
                 BottomNavigationBarItem(
                   icon: Icon(Icons.person),
                   label: ('Test'),
@@ -62,10 +58,6 @@ class _HomePageState extends State<HomePage> {
                 BottomNavigationBarItem(
                   icon: Icon(Icons.close),
                   label: ('Sign Out'),
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.person),
-                  label: ('Test'),
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.person),

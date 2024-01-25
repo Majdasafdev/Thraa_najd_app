@@ -34,6 +34,8 @@ class OrdersScreen extends StatelessWidget {
                   documentId: doc.id,
                   address: data[kAddress] as String,
                   totallPrice: data[kTotallPrice] as int,
+                  nameOfClinet: '',
+                  mobileNumClinet: '',
                 ),
               );
             }

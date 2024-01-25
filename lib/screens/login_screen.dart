@@ -32,7 +32,6 @@ class _loginPageState extends State<loginPage> {
   final _auth = Auth();
 
   final adminPassword = 'Admin123456';
-
   bool? keepMeLoggedIn = false;
 
   @override
@@ -82,9 +81,11 @@ class _loginPageState extends State<loginPage> {
                           activeColor: kMainColor,
                           value: keepMeLoggedIn,
                           onChanged: (value) {
-                            setState(() {
-                              keepMeLoggedIn = value;
-                            });
+                            setState(
+                              () {
+                                keepMeLoggedIn = value;
+                              },
+                            );
                           },
                         ),
                       ),
@@ -110,6 +111,9 @@ class _loginPageState extends State<loginPage> {
                 ),
                 Custome_button(
                     onTap: () async {
+                      if (keepMeLoggedIn == true) {
+                        keepUserLoggedIn();
+                      }
                       if (formkey.currentState!.validate()) {
                         isLoading = true;
                         setState(() {});

@@ -198,14 +198,20 @@ class CartScreen extends StatelessWidget {
   void showCustomDialog(List<Product> products, context) async {
     var price = getTotallPrice(products);
     var address;
+    var nameOfClient;
+    var mobileNumClinet;
     AlertDialog alertDialog = AlertDialog(
       actions: <Widget>[
         MaterialButton(
           onPressed: () {
             try {
               Store _store = Store();
-              _store.storeOrders(
-                  {kTotallPrice: price, kAddress: address}, products);
+              _store.storeOrders({
+                kTotallPrice: price,
+                kAddress: address,
+                kNameOfClient: nameOfClient,
+                kMobileNumClinet: mobileNumClinet
+              }, products);
 
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text('Orderd Successfully'),
@@ -218,19 +224,38 @@ class CartScreen extends StatelessWidget {
           child: Text('Confirm'),
         )
       ],
-      content: TextField(
-        onChanged: (value) {
-          address = value;
-        },
-        decoration: InputDecoration(hintText: 'Enter your Address'),
+      content: SingleChildScrollView(
+        child: Column(
+          children: [
+            TextField(
+              onChanged: (value) {
+                address = value;
+              },
+              decoration: InputDecoration(hintText: 'Enter your Address'),
+            ),
+            TextField(
+              onChanged: (value) {
+                nameOfClient = value;
+              },
+              decoration: InputDecoration(hintText: 'Enter your Name'),
+            ),
+            TextField(
+              onChanged: (value) {
+                mobileNumClinet = value;
+              },
+              decoration: InputDecoration(hintText: 'Enter your Phone number'),
+            ),
+          ],
+        ),
       ),
       title: Text('Totall Price  =  $price'),
     );
     await showDialog(
-        context: context,
-        builder: (context) {
-          return alertDialog;
-        });
+      context: context,
+      builder: (context) {
+        return alertDialog;
+      },
+    );
   }
 
   getTotallPrice(List<Product> products) {
