@@ -18,13 +18,22 @@ import 'screens/Admin/manage_product.dart';
 import 'screens/Admin/edit_products.dart';
 import 'screens/Admin/orders_screen.dart';
 import 'screens/User/home_page.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(ThraaNajdApp());
+  runApp(EasyLocalization(
+    supportedLocales: [
+      Locale('en'),
+      Locale('ar'),
+    ],
+    path: 'assets/translations',
+    child: ThraaNajdApp(),
+  ));
 }
 
 class ThraaNajdApp extends StatelessWidget {
@@ -37,6 +46,9 @@ class ThraaNajdApp extends StatelessWidget {
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return MaterialApp(
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            locale: context.locale,
             home: Scaffold(
               body: Center(
                 child: Text('Loading....'),
@@ -58,6 +70,9 @@ class ThraaNajdApp extends StatelessWidget {
               )
             ],
             child: MaterialApp(
+              localizationsDelegates: context.localizationDelegates,
+              supportedLocales: context.supportedLocales,
+              locale: context.locale,
               debugShowCheckedModeBanner: false,
               initialRoute: isUserLoggedIn ? HomePage.id : loginPage.id,
               routes: {

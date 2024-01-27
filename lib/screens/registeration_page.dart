@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -48,10 +49,10 @@ class _RegisterPageState extends State<RegisterPage> {
               children: [
                 CustomLogo(),
                 SizedBox(height: 75),
-                const Row(
+                Row(
                   children: [
                     Text(
-                      'Welcome to the regitsteriation page',
+                      'register'.tr(),
                       style: TextStyle(
                         fontSize: 24,
                         color: Colors.white,

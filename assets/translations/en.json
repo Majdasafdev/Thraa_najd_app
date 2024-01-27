@@ -1,0 +1,12 @@
+{
+    "//RegistarationPage": "RegistarationPage",
+    "registeration": "Welcome to the registeration page",
+    "writenamehere": "Enter your name here",
+    "writeemailhere": "Enter your E-mali here",
+    "writepasslhere": "Enter your full password here",
+    "weakpassward": "THE passward enterd is a Weak password",
+    "email-already-in-use": "This email already used!",
+    "therewaserr": "There was an error",
+    "register": "Register",
+    "haveaccount": "Already have an account"
+}

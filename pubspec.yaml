@@ -30,6 +30,7 @@ environment:
 dependencies:
   cloud_firestore: ^4.13.6
   cupertino_icons: ^1.0.6
+  easy_localization: ^3.0.3
   firebase_auth: ^4.15.3
   firebase_core: ^2.24.2
   flutter:
@@ -72,6 +73,7 @@ flutter:
   assets:
   - assets/images/icons/
   - assets/images/products/
+  - assets/translations/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
