@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thraa_najd_mobile_app/constants.dart';
@@ -50,14 +51,14 @@ class _HomePageState extends State<HomePage> {
                   },
                 );
               },
-              items: const [
+              items: [
                 BottomNavigationBarItem(
                   icon: Icon(Icons.person),
                   label: ('Test'),
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.close),
-                  label: ('Sign Out'),
+                  icon: const Icon(Icons.close),
+                  label: ('signout'.tr()),
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.person),
@@ -77,35 +78,35 @@ class _HomePageState extends State<HomePage> {
                 },
                 tabs: <Widget>[
                   Text(
-                    'Nuts',
+                    'nuts'.tr(),
                     style: TextStyle(
                       color: _tabBarIndex == 0 ? kMainColor : kSecondaryColor,
                       fontSize: _tabBarIndex == 0 ? 16 : null,
                     ),
                   ),
                   Text(
-                    'Spices',
+                    'spices'.tr(),
                     style: TextStyle(
                       color: _tabBarIndex == 1 ? kMainColor : kSecondaryColor,
                       fontSize: _tabBarIndex == 1 ? 16 : null,
                     ),
                   ),
                   Text(
-                    'Oils',
+                    'oils'.tr(),
                     style: TextStyle(
                       color: _tabBarIndex == 2 ? kMainColor : kSecondaryColor,
                       fontSize: _tabBarIndex == 2 ? 16 : null,
                     ),
                   ),
                   Text(
-                    'Grain',
+                    'grain'.tr(),
                     style: TextStyle(
                       color: _tabBarIndex == 3 ? kMainColor : kSecondaryColor,
                       fontSize: _tabBarIndex == 3 ? 16 : null,
                     ),
                   ),
                   Text(
-                    'Other',
+                    'other'.tr(),
                     style: TextStyle(
                       color: _tabBarIndex == 3 ? kMainColor : kSecondaryColor,
                       fontSize: _tabBarIndex == 3 ? 16 : null,
@@ -116,8 +117,8 @@ class _HomePageState extends State<HomePage> {
             ),
             body: TabBarView(
               children: [
-                nutsView(),
-                //  ProductsView(kNuts, _products),
+                // nutsView(),
+                ProductsView(kNuts, _products),
                 ProductsView(kSpices, _products),
                 ProductsView(kOils, _products),
                 ProductsView(kGrain, _products),
@@ -136,7 +137,7 @@ class _HomePageState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Discover Thraa Najd Store'.toUpperCase(),
+                    'discover'.tr(),
                     style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -199,7 +200,7 @@ class _HomePageState extends State<HomePage> {
                     Positioned.fill(
                       child: Image(
                         fit: BoxFit.fill,
-                        image: AssetImage(products[index].pLocation),
+                        image: AssetImage(products[index].pLocation.tr()),
                       ),
                     ),
                     Positioned(
@@ -220,7 +221,7 @@ class _HomePageState extends State<HomePage> {
                                   products[index].pName,
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
-                                Text('\$ ${products[index].pPrice}')
+                                Text('${products[index].pPrice}'.tr())
                               ],
                             ),
                           ),

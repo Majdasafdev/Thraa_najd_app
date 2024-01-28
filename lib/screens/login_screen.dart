@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -49,11 +50,11 @@ class _loginPageState extends State<loginPage> {
               children: [
                 CustomLogo(),
                 const SizedBox(height: 100),
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Welcome to the Log in page',
+                      'logwelcome'.tr(),
                       style: TextStyle(
                         fontSize: 24,
                         color: Colors.white,
@@ -68,7 +69,7 @@ class _loginPageState extends State<loginPage> {
                   onChanged: (data) {
                     email = data;
                   },
-                  hintText: 'Email',
+                  hintText: 'email'.tr(),
                 ),
                 Padding(
                   padding: EdgeInsets.only(left: 20),
@@ -90,7 +91,7 @@ class _loginPageState extends State<loginPage> {
                         ),
                       ),
                       Text(
-                        'Remmeber Me ',
+                        'remember'.tr(),
                         style: TextStyle(color: Colors.white),
                       )
                     ],
@@ -104,7 +105,7 @@ class _loginPageState extends State<loginPage> {
                   onChanged: (data) {
                     passward = data;
                   },
-                  hintText: 'Password',
+                  hintText: 'password'.tr(),
                 ),
                 const SizedBox(
                   height: 15,
@@ -124,13 +125,13 @@ class _loginPageState extends State<loginPage> {
                         } on FirebaseAuthException catch (e) {
                           if (e.code == 'user-not-found') {
                             showSnackBar(
-                                context, "No user found for that email.");
+                                context, "No user found for that email.".tr());
                           } else if (e.code == 'wrong-password') {
                             showSnackBar(context,
-                                "Wrong password provided for that user.");
+                                "Wrong password provided for that user.".tr());
                           }
                         } catch (e) {
-                          showSnackBar(context, "There was an error");
+                          showSnackBar(context, "therewaserr".tr());
                         }
                         isLoading = false;
 
@@ -138,15 +139,15 @@ class _loginPageState extends State<loginPage> {
                       } else {}
                       _validate(context);
                     },
-                    text: 'Log in'),
+                    text: 'login'.tr()),
                 const SizedBox(
                   height: 10,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      'You dont have an account? ',
+                    Text(
+                      'donthaveaccount'.tr(),
                       style: TextStyle(
                         color: Colors.white,
                       ),
@@ -156,7 +157,7 @@ class _loginPageState extends State<loginPage> {
                         Navigator.pushNamed(context, RegisterPage.id);
                       },
                       child: Text(
-                        'Registeration',
+                        'registerationn'.tr(),
                         style: TextStyle(
                           color: Color(0xffC7EDE6),
                         ),
@@ -175,7 +176,7 @@ class _loginPageState extends State<loginPage> {
                                 .changeIsAdmin(true);
                           },
                           child: Text(
-                            'i\'m an admin',
+                            'adminpanel'.tr(),
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 color: Provider.of<AdminMode>(context).isAdmin
@@ -191,7 +192,7 @@ class _loginPageState extends State<loginPage> {
                                 .changeIsAdmin(false);
                           },
                           child: Text(
-                            'i\'m a user',
+                            'userpanel'.tr(),
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 color: Provider.of<AdminMode>(context,
@@ -239,7 +240,7 @@ class _loginPageState extends State<loginPage> {
         } else {
           modelhud.changeisLoading(false);
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text('Something went wrong !'),
+            content: Text('therewaserr'.tr()),
           ));
         }
       } else {

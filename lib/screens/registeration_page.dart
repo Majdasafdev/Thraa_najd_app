@@ -52,7 +52,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 Row(
                   children: [
                     Text(
-                      'register'.tr(),
+                      'registeration'.tr(),
                       style: TextStyle(
                         fontSize: 24,
                         color: Colors.white,
@@ -68,7 +68,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     name = data;
                     icon = Icon(Icons.email);
                   },
-                  hintText: 'Write your full name here',
+                  hintText: 'writenamehere'.tr(),
                 ),
                 const SizedBox(
                   height: 10,
@@ -77,7 +77,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   onChanged: (data) {
                     email = data;
                   },
-                  hintText: 'Write your E-mail here',
+                  hintText: 'writeemailhere'.tr(),
                 ),
                 const SizedBox(
                   height: 10,
@@ -87,7 +87,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   onChanged: (data) {
                     passward = data;
                   },
-                  hintText: 'Write your full password here',
+                  hintText: 'writepasslhere'.tr(),
                 ),
                 const SizedBox(
                   height: 15,
@@ -107,19 +107,19 @@ class _RegisterPageState extends State<RegisterPage> {
                         //);
                       } on FirebaseAuthException catch (e) {
                         if (e.code == 'weak-password') {
-                          showSnackBar(context, "Weak passward");
+                          showSnackBar(context, "weakpassward".tr());
                         } else if (e.code == 'email-already-in-use') {
-                          showSnackBar(context, "email-already-in-use");
+                          showSnackBar(context, "email-already-in-use".tr());
                         }
                       } catch (e) {
-                        showSnackBar(context, "There was an error");
+                        showSnackBar(context, "therewaserr".tr());
                       }
                       isLoading = false;
 
                       setState(() {});
                     } else {}
                   },
-                  text: 'Register',
+                  text: 'register'.tr(),
                 ),
                 SizedBox(
                   height: 10,
@@ -127,8 +127,8 @@ class _RegisterPageState extends State<RegisterPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      'Already have an account ',
+                    Text(
+                      'haveaccount'.tr(),
                       style: TextStyle(
                         color: Colors.white,
                       ),
@@ -138,7 +138,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         Navigator.pop(context, loginPage.id);
                       },
                       child: Text(
-                        'Login',
+                        'logregesiter'.tr(),
                         style: TextStyle(
                           color: Color(0xffC7EDE6),
                         ),
