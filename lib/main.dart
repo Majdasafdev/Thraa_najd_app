@@ -28,7 +28,8 @@ void main() async {
   );
   runApp(EasyLocalization(
     supportedLocales: [
-      Locale('ar'),
+      Locale('en', 'US'),
+      Locale('ar', 'AR'),
     ],
     path: 'assets/translations',
     child: ThraaNajdApp(),

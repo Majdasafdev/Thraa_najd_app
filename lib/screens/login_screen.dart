@@ -14,6 +14,7 @@ import 'package:thraa_najd_mobile_app/widgets/custom_text_form_field.dart';
 import 'package:thraa_najd_mobile_app/widgets/custome_logo.dart';
 import 'package:thraa_najd_mobile_app/widgets/snack_bar.dart';
 import 'package:thraa_najd_mobile_app/providers/admin_mode.dart';
+import 'package:thraa_najd_mobile_app/widgets/switch_langs.dart';
 import 'Admin/admin_home.dart';
 
 class loginPage extends StatefulWidget {
@@ -48,8 +49,9 @@ class _loginPageState extends State<loginPage> {
             key: formkey,
             child: ListView(
               children: [
+                LanguageSwitchButton(context: context),
                 CustomLogo(),
-                const SizedBox(height: 100),
+                const SizedBox(height: 50),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

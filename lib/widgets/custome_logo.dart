@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class CustomLogo extends StatelessWidget {
@@ -7,7 +8,7 @@ class CustomLogo extends StatelessWidget {
       padding: EdgeInsets.only(top: 50),
       child: Container(
         height: MediaQuery.of(context).size.height * .2,
-        child: const Stack(
+        child: Stack(
           alignment: Alignment.center,
           children: <Widget>[
             Positioned(
@@ -28,7 +29,7 @@ class CustomLogo extends StatelessWidget {
               top: 110,
               //   left: 0,
               child: Text(
-                'Thraa Najd',
+                'thraaNajd'.tr(),
                 style: TextStyle(
                     fontFamily: 'Pacifico', fontSize: 25, color: Colors.white),
               ),
