@@ -200,7 +200,7 @@ class _HomePageState extends State<HomePage> {
                     Positioned.fill(
                       child: Image(
                         fit: BoxFit.fill,
-                        image: AssetImage(products[index].pLocation.tr()),
+                        image: AssetImage(products[index].pLocation),
                       ),
                     ),
                     Positioned(
@@ -221,7 +221,7 @@ class _HomePageState extends State<HomePage> {
                                   products[index].pName,
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
-                                Text('${products[index].pPrice}'.tr())
+                                Text('${products[index].pPrice}')
                               ],
                             ),
                           ),

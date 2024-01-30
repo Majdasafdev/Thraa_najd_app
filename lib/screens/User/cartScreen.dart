@@ -1,6 +1,7 @@
 // ignore_for_file: sort_child_properties_last
 import 'dart:ui';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:thraa_najd_mobile_app/constants.dart';
@@ -28,7 +29,7 @@ class CartScreen extends StatelessWidget {
         backgroundColor: kMainColor,
         elevation: 0,
         title: Text(
-          'My Cart',
+          'myCart'.tr(),
           style: TextStyle(color: Colors.black),
         ),
         leading: GestureDetector(
@@ -130,7 +131,7 @@ class CartScreen extends StatelessWidget {
                       appBarHeight -
                       statusBarHeight,
                   child: Center(
-                    child: Text("Dear customer your Cart is Empity!"),
+                    child: Text("emptyCart".tr()),
                   ),
                 );
               }
@@ -152,7 +153,7 @@ class CartScreen extends StatelessWidget {
                 ),
               ),
               child: Text(
-                "ORDER",
+                "confirmOrder".tr(),
                 style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
