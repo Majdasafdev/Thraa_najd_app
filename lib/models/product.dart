@@ -14,6 +14,18 @@ class Product {
       required this.pDescription,
       required this.pLocation,
       required this.pPrice});
+
+  factory Product.fromJson(Map<String, dynamic> json) {
+    return Product(
+      pId: json['pId'],
+      pQuantity: json['pQuantity'],
+      pName: json['pName'],
+      pCategory: json['pCategory'],
+      pDescription: json['pDescription'],
+      pLocation: json['pLocation'],
+      pPrice: json['pPrice'],
+    );
+  }
 }
 /*{required this.pQuantity,
       required this.pId,

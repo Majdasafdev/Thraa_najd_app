@@ -4,8 +4,10 @@ import 'package:thraa_najd_mobile_app/models/product.dart';
 import 'package:thraa_najd_mobile_app/screens/User/product_info.dart';
 
 Widget ProductsView(String pCategory, List<Product> allProducts) {
-  List<Product> products;
+  final List<Product> products;
   products = getProductByCategory(pCategory, allProducts);
+  List<Product> filteredProducts = getProductByCategory(pCategory, allProducts);
+
   return GridView.builder(
     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
       crossAxisCount: 2,
@@ -54,6 +56,6 @@ Widget ProductsView(String pCategory, List<Product> allProducts) {
         ),
       ),
     ),
-    itemCount: products.length,
+    itemCount: filteredProducts.length,
   );
 }

@@ -5,12 +5,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thraa_najd_mobile_app/constants.dart';
 import 'package:thraa_najd_mobile_app/function.dart';
 import 'package:thraa_najd_mobile_app/models/product.dart';
-import 'package:thraa_najd_mobile_app/screens/User/cartScreen.dart';
 import 'package:thraa_najd_mobile_app/screens/User/product_info.dart';
 import 'package:thraa_najd_mobile_app/screens/login_screen.dart';
+import 'package:thraa_najd_mobile_app/widgets/custome_discover.dart';
 import 'package:thraa_najd_mobile_app/widgets/product_view.dart';
 import 'package:thraa_najd_mobile_app/services/auth.dart';
 import 'package:thraa_najd_mobile_app/services/store.dart';
+import 'dart:convert';
 
 class HomePage extends StatefulWidget {
   static String id = 'HomePage';
@@ -25,6 +26,32 @@ class _HomePageState extends State<HomePage> {
   int _bottomBarIndex = 0;
   final _store = Store();
   List<Product> _products = [];
+
+  Future<void> _loadProductsFromJson() async {
+    try {
+      String jsonString = await DefaultAssetBundle.of(context).loadString(
+          'assets/Data/ThraaProducts.json'); // Assuming your JSON file is in the 'assets' folder
+      List<dynamic> jsonData = json.decode(jsonString);
+
+      List<Product> products = [];
+      for (var item in jsonData) {
+        products.add(Product.fromJson(item));
+      }
+
+      setState(() {
+        _products = products;
+      });
+    } catch (e) {
+      print('Error loading products from JSON: $e');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProductsFromJson();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -127,36 +154,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
-        Material(
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(20, 30, 20, 0),
-            child: Container(
-              color: Colors.white,
-              height: MediaQuery.of(context).size.height * .1,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'discover'.tr(),
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: kSecondaryColor),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, CartScreen.id);
-                    },
-                    child: Icon(
-                      Icons.shopping_cart,
-                      color: kSecondaryColor,
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-        ),
+        CustomeDiscoverbar(),
       ],
     );
   }
