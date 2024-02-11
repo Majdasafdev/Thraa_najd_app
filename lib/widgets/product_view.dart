@@ -56,6 +56,6 @@ Widget ProductsView(String pCategory, List<Product> allProducts) {
         ),
       ),
     ),
-    itemCount: filteredProducts.length,
+    itemCount: products.length,
   );
 }

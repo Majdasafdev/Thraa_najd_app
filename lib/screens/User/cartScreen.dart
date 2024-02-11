@@ -1,4 +1,4 @@
-// ignore_for_file: sort_child_properties_last
+//ignore_for_file: sort_child_properties_last
 import 'dart:ui';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -111,7 +111,31 @@ class CartScreen extends StatelessWidget {
                                               fontSize: 20,
                                               fontWeight: FontWeight.bold),
                                         ),
-                                      )
+                                      ),
+                                      ButtonTheme(
+                                        minWidth: screenWidth,
+                                        height: screenHeight * .08,
+                                        child: ElevatedButton(
+                                          onPressed: () {
+                                            showCustomDialog(products, context);
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.green,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.only(
+                                                  topRight: Radius.circular(10),
+                                                  topLeft: Radius.circular(10)),
+                                            ),
+                                          ),
+                                          child: Text(
+                                            "confirmOrder".tr(),
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black),
+                                          ),
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -136,30 +160,6 @@ class CartScreen extends StatelessWidget {
                 );
               }
             },
-          ),
-          ButtonTheme(
-            minWidth: screenWidth,
-            height: screenHeight * .08,
-            child: ElevatedButton(
-              onPressed: () {
-                showCustomDialog(products, context);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(10),
-                      topLeft: Radius.circular(10)),
-                ),
-              ),
-              child: Text(
-                "confirmOrder".tr(),
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black),
-              ),
-            ),
           ),
         ],
       ),

@@ -1,12 +1,15 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:thraa_najd_mobile_app/constants.dart';
 import 'package:thraa_najd_mobile_app/models/product.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class Store {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   addProduct(Product product) {
     _firestore.collection(kProductsCollection).add(
       {
+        kProductarName: product.arPname,
         kProductName: product.pName,
         kProductDescription: product.pDescription,
         kProductLocation: product.pLocation,
@@ -16,16 +19,27 @@ class Store {
     );
   }
 
+  loadProductsDb() {
+    FirebaseDatabase database = FirebaseDatabase.instance;
+    // Query dbRef = FirebaseDatabase.instance.ref().child("products");
+
+    final firebaseApp = Firebase.app();
+    final rtdb = FirebaseDatabase.instanceFor(
+        app: firebaseApp,
+        databaseURL: 'https://thraa-najd-app-default-rtdb.firebaseio.com/');
+  }
+
+  Stream<QuerySnapshot> loadProducts() {
+    return _firestore.collection(kProductsCollection).snapshots();
+//  return DatabaseReference;
+  }
+
   Stream<QuerySnapshot> loadOrderDetails(documentId) {
     return _firestore
         .collection(kOrders)
         .doc(documentId)
         .collection(kOrderDetails)
         .snapshots();
-  }
-
-  Stream<QuerySnapshot> loadProducts() {
-    return _firestore.collection(kProductsCollection).snapshots();
   }
 
   Stream<QuerySnapshot> loadOrders() {

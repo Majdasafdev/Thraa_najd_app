@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> {
   final _store = Store();
   List<Product> _products = [];
 
-  Future<void> _loadProductsFromJson() async {
+  Future<void> _loadProductsFromJsonAndUploadToFirestore() async {
     try {
       String jsonString = await DefaultAssetBundle.of(context).loadString(
           'assets/Data/ThraaProducts.json'); // Assuming your JSON file is in the 'assets' folder
@@ -38,18 +38,30 @@ class _HomePageState extends State<HomePage> {
         products.add(Product.fromJson(item));
       }
 
+      // Upload products to Firestore
+      await _uploadProductsToFirestore(products);
+
       setState(() {
         _products = products;
       });
     } catch (e) {
-      print('Error loading products from JSON: $e');
+      print('Error loading products from JSON and uploading to Firestore: $e');
+    }
+  }
+
+  Future<void> _uploadProductsToFirestore(List<Product> products) async {
+    final CollectionReference productCollection =
+        FirebaseFirestore.instance.collection('products');
+
+    for (var product in products) {
+      await productCollection.add(product.toJson());
     }
   }
 
   @override
   void initState() {
     super.initState();
-    _loadProductsFromJson();
+    _loadProductsFromJsonAndUploadToFirestore();
   }
 
   @override
@@ -144,8 +156,8 @@ class _HomePageState extends State<HomePage> {
             ),
             body: TabBarView(
               children: [
-                // nutsView(),
-                ProductsView(kNuts, _products),
+                nutsView(),
+                //ProductsView(kNuts, _products),
                 ProductsView(kSpices, _products),
                 ProductsView(kOils, _products),
                 ProductsView(kGrain, _products),
@@ -154,7 +166,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
-        CustomeDiscoverbar(),
+        const CustomeDiscoverbar(),
       ],
     );
   }
@@ -167,6 +179,7 @@ class _HomePageState extends State<HomePage> {
           List<Product> products = [];
           for (var doc in snapshot.data.docs) {
             var data = doc.data() as Map<String, dynamic>;
+            print(data);
             products.add(
               Product(
                 pId: doc.id,

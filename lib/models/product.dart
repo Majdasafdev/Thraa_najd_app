@@ -1,66 +1,66 @@
 class Product {
   String pName;
+  String? arPname;
+  String? arPrice;
   String pPrice;
   String pLocation;
+  String? arPdescription;
   String pDescription;
+  String? arPcategory;
   String? pCategory;
   String? pId;
+  int? arPquantity;
   int? pQuantity;
-  Product(
-      {this.pQuantity,
-      this.pId,
-      required this.pName,
-      this.pCategory,
-      required this.pDescription,
-      required this.pLocation,
-      required this.pPrice});
 
+  Product({
+    this.arPdescription,
+    this.arPcategory,
+    this.arPrice,
+    this.arPquantity,
+    this.pQuantity,
+    this.pId,
+    this.arPname,
+    required this.pName,
+    this.pCategory,
+    required this.pDescription,
+    required this.pLocation,
+    required this.pPrice,
+  });
+
+  // Define toJson method to convert Product to a Map
+  Map<String, dynamic> toJson() {
+    return {
+      'pId': pId,
+      'pQuantity': pQuantity,
+      'pName': pName,
+      'pCategory': pCategory,
+      'pDescription': pDescription,
+      'pLocation': pLocation,
+      'pPrice': pPrice,
+      'arPname': arPname,
+      'arPrice': arPrice,
+      'arPdescription': arPdescription,
+      'arPcategory': arPcategory,
+      'arPquantity': arPquantity,
+    };
+  }
+
+  // Define fromJson factory method to create a Product instance from a Map
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
       pId: json['pId'],
-      pQuantity: json['pQuantity'],
-      pName: json['pName'],
-      pCategory: json['pCategory'],
-      pDescription: json['pDescription'],
-      pLocation: json['pLocation'],
-      pPrice: json['pPrice'],
+      pQuantity: json['pQuantity'] ?? 0,
+      pName: json['pName'] ?? '',
+      pCategory: json['pCategory'] ?? '',
+      pDescription: json['pDescription'] ?? '',
+      pLocation: json['pLocation'] ?? '',
+      pPrice:
+          json['pPrice']?.toString() ?? '0', // Convert to String if not null
+      arPname: json['arPname'],
+      arPrice: json['arPrice'],
+      arPdescription: json['arPdescription'],
+      arPcategory: json['arPcategory'],
+      arPquantity: json['arPquantity'] ?? 0,
     );
   }
 }
-/*{required this.pQuantity,
-      required this.pId,
-      required this.pName,
-      required this.pCategory,
-      required this.pDescription,
-      required this.pLocation,
-      required this.pPrice}
-      
-      
-      
-      
-      
-      
-      
-      
-       String pName;
-  String? pPrice;
-  String pLocation;
-  String? pDescription;
-  String? pCategory;
-  String pId;
-  int? pQuantity;
-  Product(
-      {this.pQuantity,
-      required this.pId,
-      required this.pName,
-      this.pCategory,
-      this.pDescription,
-      required this.pLocation,
-      this.pPrice});
-      
-      
-      
-      
-      
-      
-      **/

@@ -20,4 +20,8 @@ class Auth {
   Future<void> signOut() async {
     await _auth.signOut();
   }
+
+  Future<void> signInAnonymously() async {
+    await FirebaseAuth.instance.signInAnonymously();
+  }
 }
