@@ -157,7 +157,7 @@ class _HomePageState extends State<HomePage> {
             body: TabBarView(
               children: [
                 nutsView(),
-                //ProductsView(kNuts, _products),
+                //   ProductsView(kNuts, _products),
                 ProductsView(kSpices, _products),
                 ProductsView(kOils, _products),
                 ProductsView(kGrain, _products),

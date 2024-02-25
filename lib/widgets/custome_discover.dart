@@ -12,7 +12,7 @@ class CustomeDiscoverbar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       child: Padding(
-        padding: EdgeInsets.fromLTRB(20, 30, 20, 0),
+        padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
         child: Container(
           color: Colors.white,
           height: MediaQuery.of(context).size.height * .1,
