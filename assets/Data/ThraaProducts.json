@@ -1,24 +1,25 @@
 [
     {
-        "Id": 1111,
-        "Name": "Kajo",
-        "Description 100 charectar": "des",
-        "Arabis Description 100 charectar": "desae",
-        "Category": "nuts",
-        "Arabic category": "nuts",
-        "Price": 14,
-        "Arabic Price": 14,
-        "imageURL": "https:\/\/buylebanese.com\/database\/photos\/36b.jpg"
+        "Id": "1111",
+        "name": "Kajo",
+        "desc": "des",
+        "arDesc": "desae",
+        "category": "nuts",
+        "arCategory": "مكسرات",
+        "price": "14",
+        "arPrice": "14",
+        "imageURL": "assets/images/products/oil1.png"
     },
     {
-        "Id": 1111,
-        "Name": "Kajo",
-        "Description 100 charectar": "ffffffffffffffff",
-        "Arabis Description 100 charectar": "ffffffffffffffff",
-        "Category": "nuts",
-        "Arabic category": "nuts",
-        "Price": 14,
-        "Arabic Price": 14,
-        "imageURL": "https:\/\/buylebanese.com\/database\/photos\/36b.jpg"
+        "Id": "1111",
+        "name": "Kajo",
+        "arName": "كاجو",
+        "desc": "des",
+        "arDesc": "هههههههههههههههههههههههههههههههههههههههههه",
+        "category": "nuts",
+        "arCategory": "مكسرات",
+        "price": "14",
+        "arPrice": "14",
+        "imageURL": "assets/images/products/oil1.png"
     }
 ]

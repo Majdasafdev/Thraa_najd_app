@@ -6,10 +6,16 @@ import 'package:thraa_najd_mobile_app/widgets/custome_text_field.dart';
 
 class EditProducts extends StatelessWidget {
   final GlobalKey<FormState> formkey = GlobalKey<FormState>();
-  late String _name, _price, _description, _category, _imageLocation;
+  late String _name = '';
+  late String _price = '';
+  late String _description = '';
+  late String _category = '';
+  late String _imageLocation = '';
 
   static String id = 'AddProduct';
   final _store = Store();
+
+  EditProducts({super.key});
   @override
   Widget build(BuildContext context) {
     Product? product = ModalRoute.of(context)!.settings.arguments as Product?;
@@ -31,7 +37,7 @@ class EditProducts extends StatelessWidget {
                     _name = data;
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 CustomTextField(
@@ -40,7 +46,7 @@ class EditProducts extends StatelessWidget {
                     _imageLocation = data;
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 CustomTextField(
@@ -49,7 +55,7 @@ class EditProducts extends StatelessWidget {
                     _description = data;
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 CustomTextField(
@@ -58,7 +64,7 @@ class EditProducts extends StatelessWidget {
                     _category = data;
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 CustomTextField(
@@ -67,7 +73,7 @@ class EditProducts extends StatelessWidget {
                     _price = data;
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 30,
                 ),
                 ElevatedButton(
@@ -84,7 +90,7 @@ class EditProducts extends StatelessWidget {
                       }, product?.pId);
                     }
                   },
-                  child: Text('Add Product'),
+                  child: const Text('Add Product'),
                 )
               ],
             )

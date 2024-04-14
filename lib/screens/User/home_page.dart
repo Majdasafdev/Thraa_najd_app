@@ -16,6 +16,8 @@ import 'dart:convert';
 class HomePage extends StatefulWidget {
   static String id = 'HomePage';
 
+  const HomePage({super.key});
+
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -33,27 +35,27 @@ class _HomePageState extends State<HomePage> {
           'assets/Data/ThraaProducts.json'); // Assuming your JSON file is in the 'assets' folder
       List<dynamic> jsonData = json.decode(jsonString);
 
-      List<Product> products = [];
+      List<Product> productsjson = [];
       for (var item in jsonData) {
-        products.add(Product.fromJson(item));
+        productsjson.add(Product.fromJson(item));
       }
 
       // Upload products to Firestore
-      await _uploadProductsToFirestore(products);
+      await _uploadProductsToFirestore(productsjson);
 
       setState(() {
-        _products = products;
+        _products = productsjson;
       });
     } catch (e) {
       print('Error loading products from JSON and uploading to Firestore: $e');
     }
   }
 
-  Future<void> _uploadProductsToFirestore(List<Product> products) async {
+  Future<void> _uploadProductsToFirestore(List<Product> productsJson) async {
     final CollectionReference productCollection =
-        FirebaseFirestore.instance.collection('products');
+        FirebaseFirestore.instance.collection(kArProductsCollection);
 
-    for (var product in products) {
+    for (var product in productsJson) {
       await productCollection.add(product.toJson());
     }
   }
@@ -91,7 +93,7 @@ class _HomePageState extends State<HomePage> {
                 );
               },
               items: [
-                BottomNavigationBarItem(
+                const BottomNavigationBarItem(
                   icon: Icon(Icons.person),
                   label: ('Test'),
                 ),
@@ -99,7 +101,7 @@ class _HomePageState extends State<HomePage> {
                   icon: const Icon(Icons.close),
                   label: ('signout'.tr()),
                 ),
-                BottomNavigationBarItem(
+                const BottomNavigationBarItem(
                   icon: Icon(Icons.person),
                   label: ('Test'),
                 ),
@@ -157,7 +159,7 @@ class _HomePageState extends State<HomePage> {
             body: TabBarView(
               children: [
                 nutsView(),
-                //   ProductsView(kNuts, _products),
+                //ProductsView(kNuts, _products),
                 ProductsView(kSpices, _products),
                 ProductsView(kOils, _products),
                 ProductsView(kGrain, _products),
@@ -176,6 +178,7 @@ class _HomePageState extends State<HomePage> {
       stream: _store.loadProducts(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
+          print(snapshot.data); // Print the data to see its structure
           List<Product> products = [];
           for (var doc in snapshot.data.docs) {
             var data = doc.data() as Map<String, dynamic>;
@@ -183,11 +186,12 @@ class _HomePageState extends State<HomePage> {
             products.add(
               Product(
                 pId: doc.id,
-                pPrice: data[kProductPrice],
-                pName: data[kProductName],
-                pDescription: data[kProductDescription],
-                pLocation: data[kProductLocation],
-                pCategory: data[kProductCategory],
+                pPrice: data[kProductPrice].toString(),
+                pName: data[kProductName].toString(),
+                pDescription: data[kProductDescription].toString(),
+                pLocation: data[kProductLocation].toString(),
+                pCategory: data[kProductCategory].toString(),
+                //   arPname: data[kProductarName].toString(),
               ),
             );
           }
@@ -195,7 +199,7 @@ class _HomePageState extends State<HomePage> {
           products.clear();
           products = getProductByCategory(kNuts, _products);
           return GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               childAspectRatio: .8,
             ),
@@ -223,16 +227,17 @@ class _HomePageState extends State<HomePage> {
                           height: 60,
                           color: Colors.white,
                           child: Padding(
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 5),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
                                   products[index].pName,
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
                                 ),
-                                Text('${products[index].pPrice}')
+                                Text(products[index].pPrice),
                               ],
                             ),
                           ),
@@ -246,7 +251,7 @@ class _HomePageState extends State<HomePage> {
             itemCount: products.length,
           );
         } else {
-          return Center(child: (Text('Loading...........')));
+          return const Center(child: (Text('Loading...........')));
         }
       },
     );

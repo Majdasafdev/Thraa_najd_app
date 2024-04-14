@@ -54,8 +54,7 @@ class Product {
       pCategory: json['pCategory'] ?? '',
       pDescription: json['pDescription'] ?? '',
       pLocation: json['pLocation'] ?? '',
-      pPrice:
-          json['pPrice']?.toString() ?? '0', // Convert to String if not null
+      pPrice: json['pPrice'] == null ? '0' : json['pPrice'].toString(),
       arPname: json['arPname'],
       arPrice: json['arPrice'],
       arPdescription: json['arPdescription'],

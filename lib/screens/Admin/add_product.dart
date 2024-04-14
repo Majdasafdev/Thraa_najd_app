@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:thraa_najd_mobile_app/models/product.dart';
 import 'package:thraa_najd_mobile_app/services/store.dart';
 import 'package:thraa_najd_mobile_app/widgets/custome_text_field.dart';
-
 import '../../constants.dart';
 
 class AddProduct extends StatelessWidget {
@@ -11,6 +10,8 @@ class AddProduct extends StatelessWidget {
 
   static String id = 'AddProduct';
   final _store = Store();
+
+  AddProduct({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +32,7 @@ class AddProduct extends StatelessWidget {
                     _name = data;
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 CustomTextField(
@@ -40,7 +41,7 @@ class AddProduct extends StatelessWidget {
                     _imageLocation = data;
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 CustomTextField(
@@ -49,7 +50,7 @@ class AddProduct extends StatelessWidget {
                     _description = data;
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 CustomTextField(
@@ -58,7 +59,7 @@ class AddProduct extends StatelessWidget {
                     _category = data;
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 CustomTextField(
@@ -67,7 +68,7 @@ class AddProduct extends StatelessWidget {
                     _price = data;
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 30,
                 ),
                 ElevatedButton(
@@ -76,18 +77,24 @@ class AddProduct extends StatelessWidget {
                       formkey.currentState!.save();
                       formkey.currentState!.reset();
 
-                      _store.addProduct(
-                        Product(
-                          pName: _name,
-                          pPrice: _price,
-                          pDescription: _description,
-                          pLocation: _imageLocation,
-                          pCategory: _category,
-                        ),
-                      );
+                      try {
+                        _store.addProduct(
+                          Product(
+                            pName: _name,
+                            pPrice: _price,
+                            pDescription: _description,
+                            pLocation: _imageLocation,
+                            pCategory: _category,
+                          ),
+                        );
+                      } catch (e) {
+                        // Handle the error here
+                        print('Error adding product: $e');
+                        // Show a snackbar or some UI feedback to the user
+                      }
                     }
                   },
-                  child: Text('Add Product'),
+                  child: const Text('Add Product'),
                 )
               ],
             )
@@ -97,5 +104,3 @@ class AddProduct extends StatelessWidget {
     );
   }
 }
-
-//assets/images/products/louz1.png

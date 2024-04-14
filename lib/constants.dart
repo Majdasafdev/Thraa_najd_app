@@ -9,8 +9,13 @@ const kProductDescription = 'productDescription';
 const kProductLocation = 'productLocation';
 const kProductCategory = 'productCategory';
 const kProductsCollection = 'Products';
-const kProductarName = 'arproductName';
-const kProductarPrice = 'arPpricr';
+const kArProductsCollection = 'products';
+const kProductArPrice = 'arPrice';
+const kProductArdesc = 'arDesc';
+const kProductarName = 'arName';
+const kProductarCategory = 'arCategory';
+const kProductURL = 'imageURL';
+
 const kKeepMeLoggedIn = 'KeepMeLoggedIn';
 const kUnActiveColor = Color(0xFFC1BDB8);
 const kNuts = 'nuts';

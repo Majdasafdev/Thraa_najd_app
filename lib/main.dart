@@ -27,7 +27,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(EasyLocalization(
-    supportedLocales: [
+    supportedLocales: const [
       Locale('en', 'US'),
       Locale('ar', 'AR'),
     ],
@@ -39,6 +39,8 @@ void main() async {
 class ThraaNajdApp extends StatelessWidget {
   bool isUserLoggedIn = false;
 
+  ThraaNajdApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -49,7 +51,7 @@ class ThraaNajdApp extends StatelessWidget {
             localizationsDelegates: context.localizationDelegates,
             supportedLocales: context.supportedLocales,
             locale: context.locale,
-            home: Scaffold(
+            home: const Scaffold(
               body: Center(
                 child: Text('Loading....'),
               ),
@@ -79,13 +81,13 @@ class ThraaNajdApp extends StatelessWidget {
                 OrderDeatiels.id: (context) => OrderDeatiels(),
                 loginPage.id: (context) => loginPage(),
                 RegisterPage.id: (context) => RegisterPage(),
-                HomePage.id: (context) => HomePage(),
-                AdminHome.id: (context) => AdminHome(),
+                HomePage.id: (context) => const HomePage(),
+                AdminHome.id: (context) => const AdminHome(),
                 AddProduct.id: (context) => AddProduct(),
                 ManageProducts.id: (context) => ManageProducts(),
                 OrdersScreen.id: (context) => OrdersScreen(),
                 EditProducts.id: (context) => EditProducts(),
-                CartScreen.id: (context) => CartScreen(),
+                CartScreen.id: (context) => const CartScreen(),
                 ProductInfo.id: (context) => ProductInfo(),
               },
             ),
@@ -94,4 +96,8 @@ class ThraaNajdApp extends StatelessWidget {
       },
     );
   }
+}
+
+bool isArabic() {
+  return Intl.getCurrentLocale() == 'ar';
 }

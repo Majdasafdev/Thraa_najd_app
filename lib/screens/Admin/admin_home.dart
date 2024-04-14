@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:thraa_najd_mobile_app/constants.dart';
 import 'package:thraa_najd_mobile_app/screens/Admin/add_product.dart';
-import 'package:thraa_najd_mobile_app/screens/Admin/edit_products.dart';
 import 'package:thraa_najd_mobile_app/screens/Admin/manage_product.dart';
 import 'package:thraa_najd_mobile_app/screens/Admin/orders_screen.dart';
 
@@ -20,28 +19,28 @@ class AdminHome extends StatelessWidget {
         children: [
           ElevatedButton(
             onPressed: () {},
-            child: Text('Welcome To Admin Panel'),
+            child: const Text('Welcome To Admin Panel'),
           ),
-          SizedBox(
+          const SizedBox(
             width: double.infinity,
           ),
           ElevatedButton(
             onPressed: () {
               Navigator.pushNamed(context, AddProduct.id);
             },
-            child: Text('Add Product'),
+            child: const Text('Add Product'),
           ),
           ElevatedButton(
             onPressed: () {
               Navigator.pushNamed(context, ManageProducts.id);
             },
-            child: Text('Edit Products'),
+            child: const Text('Edit Products'),
           ),
           ElevatedButton(
             onPressed: () {
               Navigator.pushNamed(context, OrdersScreen.id);
             },
-            child: Text('View Orders'),
+            child: const Text('View Orders'),
           ),
         ],
       ),
