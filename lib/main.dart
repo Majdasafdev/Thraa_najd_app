@@ -8,6 +8,7 @@ import 'package:thraa_najd_mobile_app/providers/cartItem.dart';
 import 'package:thraa_najd_mobile_app/screens/Admin/oreder_deatiels.dart';
 import 'package:thraa_najd_mobile_app/screens/User/cartScreen.dart';
 import 'package:thraa_najd_mobile_app/screens/User/product_info.dart';
+import 'package:thraa_najd_mobile_app/screens/User/welcomeScreen.dart';
 import 'package:thraa_najd_mobile_app/screens/login_screen.dart';
 import 'package:thraa_najd_mobile_app/screens/registeration_page.dart';
 import 'providers/admin_mode.dart';
@@ -76,7 +77,7 @@ class ThraaNajdApp extends StatelessWidget {
               supportedLocales: context.supportedLocales,
               locale: context.locale,
               debugShowCheckedModeBanner: false,
-              initialRoute: isUserLoggedIn ? HomePage.id : loginPage.id,
+              initialRoute: isUserLoggedIn ? WelcomeScreen.id : loginPage.id,
               routes: {
                 OrderDeatiels.id: (context) => OrderDeatiels(),
                 loginPage.id: (context) => loginPage(),
@@ -89,6 +90,9 @@ class ThraaNajdApp extends StatelessWidget {
                 EditProducts.id: (context) => EditProducts(),
                 CartScreen.id: (context) => const CartScreen(),
                 ProductInfo.id: (context) => ProductInfo(),
+                WelcomeScreen.id: (context) => const WelcomeScreen(),
+
+                //WelcomeScreen
               },
             ),
           );
