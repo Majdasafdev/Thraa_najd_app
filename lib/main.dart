@@ -77,7 +77,7 @@ class ThraaNajdApp extends StatelessWidget {
               supportedLocales: context.supportedLocales,
               locale: context.locale,
               debugShowCheckedModeBanner: false,
-              initialRoute: isUserLoggedIn ? WelcomeScreen.id : loginPage.id,
+              initialRoute: isUserLoggedIn ? WelcomePage.id : loginPage.id,
               routes: {
                 OrderDeatiels.id: (context) => OrderDeatiels(),
                 loginPage.id: (context) => loginPage(),
@@ -90,7 +90,7 @@ class ThraaNajdApp extends StatelessWidget {
                 EditProducts.id: (context) => EditProducts(),
                 CartScreen.id: (context) => const CartScreen(),
                 ProductInfo.id: (context) => ProductInfo(),
-                WelcomeScreen.id: (context) => const WelcomeScreen(),
+                WelcomePage.id: (context) => const WelcomePage(),
 
                 //WelcomeScreen
               },

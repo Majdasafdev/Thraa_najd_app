@@ -1,65 +1,65 @@
+// WelcomePage.dart
 import 'package:flutter/material.dart';
 import 'package:thraa_najd_mobile_app/constants.dart';
 import 'package:thraa_najd_mobile_app/screens/User/home_page.dart';
 
-class WelcomeScreen extends StatefulWidget {
-  static String id = 'WelcomeScreen';
+class WelcomePage extends StatefulWidget {
+  static String id = 'WelcomePage';
 
-  const WelcomeScreen({super.key});
+  const WelcomePage({super.key});
 
   @override
-  _WelcomeScreenState createState() => _WelcomeScreenState();
+  _WelcomePageState createState() => _WelcomePageState();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen> {
+class _WelcomePageState extends State<WelcomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kMainColor,
-      appBar: AppBar(
-        backgroundColor: kSecondaryColor,
-        title: const Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text('Welcome to Thraa Najd Store'),
-          ],
-        ),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'Welcome to Thraa Najd Store',
-              style: TextStyle(fontSize: 25),
-            ),
-            Image.asset(
-              'assets/images/icons/buy_icon.png', // replace with your logo image path
-              height: 30, // adjust the height to your liking
-            ),
-            const SizedBox(height: 35),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const HomePage()),
-                );
-              },
-              child: const Text('Wholesale'),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const HomePage()),
-                );
-              },
-              child: const Text('Retail'),
-            ),
-          ],
-        ),
-      ),
+      backgroundColor: kUnActiveColor,
+      body: _buildBody(),
+    );
+  }
+
+  Widget _buildBody() {
+    return Stack(
+      alignment: Alignment.center,
+      children: <Widget>[
+        _buildGrid(),
+        _buildAvatar(),
+      ],
+    );
+  }
+
+  Widget _buildGrid() {
+    return GridView.count(
+      crossAxisCount: 2,
+      mainAxisSpacing: 20,
+      crossAxisSpacing: 20,
+      padding: const EdgeInsets.all(20),
+      children: <Widget>[
+        _buildButton('Wholesale'),
+        _buildButton('Retail'),
+      ],
+    );
+  }
+
+  Widget _buildButton(String text) {
+    return ElevatedButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const HomePage()),
+        );
+      },
+      child: Text(text),
+    );
+  }
+
+  Widget _buildAvatar() {
+    return const CircleAvatar(
+      radius: 50,
+      backgroundImage: AssetImage('assets/images/icons/buy_icon.png'),
     );
   }
 }
