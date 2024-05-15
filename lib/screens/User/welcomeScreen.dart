@@ -1,6 +1,6 @@
-// WelcomePage.dart
 import 'package:flutter/material.dart';
 import 'package:thraa_najd_mobile_app/constants.dart';
+import 'package:thraa_najd_mobile_app/screens/User/CartScreen.dart';
 import 'package:thraa_najd_mobile_app/screens/User/home_page.dart';
 
 class WelcomePage extends StatefulWidget {
@@ -16,6 +16,10 @@ class _WelcomePageState extends State<WelcomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: kUnActiveColor,
+        toolbarHeight: 100,
+      ),
       backgroundColor: kUnActiveColor,
       body: _buildBody(),
     );
@@ -47,10 +51,17 @@ class _WelcomePageState extends State<WelcomePage> {
   Widget _buildButton(String text) {
     return ElevatedButton(
       onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const HomePage()),
-        );
+        if (text == 'Wholesale') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const CartScreen()),
+          );
+        } else if (text == 'Retail') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const HomePage()),
+          );
+        }
       },
       child: Text(text),
     );
