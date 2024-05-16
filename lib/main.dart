@@ -8,6 +8,7 @@ import 'package:thraa_najd_mobile_app/providers/cartItem.dart';
 import 'package:thraa_najd_mobile_app/screens/Admin/oreder_deatiels.dart';
 import 'package:thraa_najd_mobile_app/screens/User/cartScreen.dart';
 import 'package:thraa_najd_mobile_app/screens/User/product_info.dart';
+import 'package:thraa_najd_mobile_app/screens/User/profileUserScreen.dart';
 import 'package:thraa_najd_mobile_app/screens/User/welcomeScreen.dart';
 import 'package:thraa_najd_mobile_app/screens/login_screen.dart';
 import 'package:thraa_najd_mobile_app/screens/registeration_page.dart';
@@ -91,6 +92,7 @@ class ThraaNajdApp extends StatelessWidget {
                 CartScreen.id: (context) => const CartScreen(),
                 ProductInfo.id: (context) => ProductInfo(),
                 WelcomePage.id: (context) => const WelcomePage(),
+                ProfilePage.id: (context) => ProfilePage(),
 
                 //WelcomeScreen
               },
