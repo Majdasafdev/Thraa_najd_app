@@ -1,61 +1,106 @@
 import 'package:flutter/material.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
+  const ProfilePage({super.key});
   static String id = 'ProfilePage';
 
-  const ProfilePage({super.key});
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
 
+class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile'),
-      ),
-      body: Column(
-        children: [
-          // User information
-
-          // Edit profile button
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () {
-                // Implement edit profile page logic here
-              },
-              child: const Text('Edit Profile'),
-            ),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
-          // Change password button
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
+          title: const Text('Edit Profile'),
+          actions: [
+            TextButton(
               onPressed: () {
-                // Implement change password page logic here
+                // Handle "Done" button press
               },
-              child: const Text('Change Password'),
+              child: const Text('Done'),
             ),
+          ],
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Center(
+                child: CircleAvatar(
+                  radius: 50,
+                  backgroundImage: NetworkImage(
+                      'https://cdn.pixabay.com/photo/2015/10/05/22/37/man-973588_960_720.jpg'),
+                ),
+              ),
+              const SizedBox(height: 20),
+              const Text('Name', style: TextStyle(fontWeight: FontWeight.bold)),
+              const TextField(
+                decoration: InputDecoration(
+                  hintText: 'Eduardo Amaral',
+                ),
+              ),
+              const SizedBox(height: 16),
+              const Text('E-mail',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              const TextField(
+                decoration: InputDecoration(
+                  hintText: 'edu@gmail.com',
+                ),
+              ),
+              const SizedBox(height: 16),
+              const Text('Phone Number',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: const Text('+966'),
+                  ),
+                  const SizedBox(width: 8),
+                  const Expanded(
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: '59-700-5649',
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              const Text('Adress',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              const TextField(
+                decoration: InputDecoration(
+                  hintText: 'City - district - street',
+                ),
+              ),
+              const SizedBox(height: 36),
+              const Text('Orders',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              const TextField(
+                decoration: InputDecoration(
+                  hintText: 'My orders',
+                ),
+              ),
+              const SizedBox(height: 16),
+            ],
           ),
-          // Addresses button
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () {
-                // Implement addresses page logic here
-              },
-              child: const Text('Addresses'),
-            ),
-          ),
-          // Payment methods button
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () {
-                // Implement payment methods page logic here
-              },
-              child: const Text('Payment Methods'),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
