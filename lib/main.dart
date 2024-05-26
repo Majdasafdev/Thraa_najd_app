@@ -21,6 +21,7 @@ import 'screens/Admin/edit_products.dart';
 import 'screens/Admin/orders_screen.dart';
 import 'screens/User/home_page.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -49,13 +50,18 @@ class ThraaNajdApp extends StatelessWidget {
       future: SharedPreferences.getInstance(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return MaterialApp(
-            localizationsDelegates: context.localizationDelegates,
-            supportedLocales: context.supportedLocales,
-            locale: context.locale,
-            home: const Scaffold(
-              body: Center(
-                child: Text('Loading....'),
+          return ScreenUtilInit(
+            designSize: const Size(360, 690),
+            minTextAdapt: true,
+            splitScreenMode: true,
+            child: MaterialApp(
+              localizationsDelegates: context.localizationDelegates,
+              supportedLocales: context.supportedLocales,
+              locale: context.locale,
+              home: const Scaffold(
+                body: Center(
+                  child: Text('Loading....'),
+                ),
               ),
             ),
           );
@@ -78,7 +84,7 @@ class ThraaNajdApp extends StatelessWidget {
               supportedLocales: context.supportedLocales,
               locale: context.locale,
               debugShowCheckedModeBanner: false,
-              initialRoute: isUserLoggedIn ? WelcomePage.id : loginPage.id,
+              initialRoute: isUserLoggedIn ? WelcomePage.id : WelcomePage.id,
               routes: {
                 OrderDeatiels.id: (context) => OrderDeatiels(),
                 loginPage.id: (context) => loginPage(),
@@ -92,7 +98,7 @@ class ThraaNajdApp extends StatelessWidget {
                 CartScreen.id: (context) => const CartScreen(),
                 ProductInfo.id: (context) => ProductInfo(),
                 WelcomePage.id: (context) => const WelcomePage(),
-                ProfilePage.id: (context) => ProfilePage(),
+                ProfilePage.id: (context) => const ProfilePage(),
 
                 //WelcomeScreen
               },

@@ -12,7 +12,7 @@ class CustomeDiscoverbar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       child: Padding(
-        padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
+        padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
         child: Container(
           color: Colors.white,
           height: MediaQuery.of(context).size.height * .1,
@@ -21,7 +21,7 @@ class CustomeDiscoverbar extends StatelessWidget {
             children: [
               Text(
                 'discover'.tr(),
-                style: TextStyle(
+                style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: kSecondaryColor),
@@ -30,7 +30,7 @@ class CustomeDiscoverbar extends StatelessWidget {
                 onTap: () {
                   Navigator.pushNamed(context, CartScreen.id);
                 },
-                child: Icon(
+                child: const Icon(
                   Icons.shopping_cart,
                   color: kSecondaryColor,
                 ),

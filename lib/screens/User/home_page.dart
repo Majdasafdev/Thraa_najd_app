@@ -6,12 +6,15 @@ import 'package:thraa_najd_mobile_app/constants.dart';
 import 'package:thraa_najd_mobile_app/function.dart';
 import 'package:thraa_najd_mobile_app/models/product.dart';
 import 'package:thraa_najd_mobile_app/screens/User/product_info.dart';
+import 'package:thraa_najd_mobile_app/screens/User/profileUserScreen.dart';
 import 'package:thraa_najd_mobile_app/screens/login_screen.dart';
 import 'package:thraa_najd_mobile_app/widgets/custome_discover.dart';
 import 'package:thraa_najd_mobile_app/widgets/product_view.dart';
 import 'package:thraa_najd_mobile_app/services/auth.dart';
 import 'package:thraa_najd_mobile_app/services/store.dart';
 import 'dart:convert';
+
+import 'package:thraa_najd_mobile_app/widgets/searchBar.dart';
 
 class HomePage extends StatefulWidget {
   static String id = 'HomePage';
@@ -79,13 +82,25 @@ class _HomePageState extends State<HomePage> {
               currentIndex: _bottomBarIndex,
               fixedColor: kSecondaryColor,
               onTap: (value) async {
-                if (value == 1) {
-                  SharedPreferences pref =
-                      await SharedPreferences.getInstance();
-                  pref.clear();
-                  await _auth.signOut();
-                  Navigator.popAndPushNamed(context, loginPage.id);
+                switch (value) {
+                  case 0:
+                    SharedPreferences pref =
+                        await SharedPreferences.getInstance();
+                    pref.clear();
+                    Navigator.popAndPushNamed(context, ProfilePage.id);
+                    break;
+                  case 1:
+                    SharedPreferences pref =
+                        await SharedPreferences.getInstance();
+                    pref.clear();
+                    await _auth.signOut();
+                    Navigator.popAndPushNamed(context, loginPage.id);
+                    break;
+                  case 2:
+                    // Perform actions for the third option
+                    break;
                 }
+
                 setState(
                   () {
                     _bottomBarIndex = value;
@@ -121,6 +136,7 @@ class _HomePageState extends State<HomePage> {
                   Text(
                     'nuts'.tr(),
                     style: TextStyle(
+                    
                       color: _tabBarIndex == 0 ? kMainColor : kSecondaryColor,
                       fontSize: _tabBarIndex == 0 ? 16 : null,
                     ),
@@ -168,6 +184,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
+        // const SearchBarApp(),
         const CustomeDiscoverbar(),
       ],
     );

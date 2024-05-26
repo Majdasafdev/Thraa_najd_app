@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:thraa_najd_mobile_app/constants.dart';
 import 'package:thraa_najd_mobile_app/screens/User/CartScreen.dart';
 import 'package:thraa_najd_mobile_app/screens/User/home_page.dart';
+import 'package:thraa_najd_mobile_app/screens/login_screen.dart';
 
 class WelcomePage extends StatefulWidget {
   static String id = 'WelcomePage';
@@ -54,7 +55,7 @@ class _WelcomePageState extends State<WelcomePage> {
         if (text == 'Wholesale') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const CartScreen()),
+            MaterialPageRoute(builder: (context) => loginPage()),
           );
         } else if (text == 'Retail') {
           Navigator.push(
