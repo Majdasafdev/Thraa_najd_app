@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,7 +19,7 @@ import 'package:thraa_najd_mobile_app/widgets/switch_langs.dart';
 import 'Admin/admin_home.dart';
 
 class loginPage extends StatefulWidget {
-  loginPage({super.key});
+  const loginPage({super.key});
   static String id = 'loginPage';
   @override
   State<loginPage> createState() => _loginPageState();
@@ -57,7 +58,7 @@ class _loginPageState extends State<loginPage> {
                   children: [
                     Text(
                       'logwelcome'.tr(),
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 24,
                         color: Colors.white,
                       ),
@@ -74,7 +75,7 @@ class _loginPageState extends State<loginPage> {
                   hintText: 'email'.tr(),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: 20),
+                  padding: const EdgeInsets.only(left: 20),
                   child: Row(
                     children: <Widget>[
                       Theme(
@@ -94,7 +95,7 @@ class _loginPageState extends State<loginPage> {
                       ),
                       Text(
                         'remember'.tr(),
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                       )
                     ],
                   ),
@@ -145,12 +146,17 @@ class _loginPageState extends State<loginPage> {
                 const SizedBox(
                   height: 10,
                 ),
+                Custome_button(
+                    onTap: () async {
+                      signInWithGoogle();
+                    },
+                    text: 'Sign in with google'),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       'donthaveaccount'.tr(),
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
                       ),
                     ),
@@ -160,7 +166,7 @@ class _loginPageState extends State<loginPage> {
                       },
                       child: Text(
                         'registerationn'.tr(),
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Color(0xffC7EDE6),
                         ),
                       ),
@@ -168,7 +174,8 @@ class _loginPageState extends State<loginPage> {
                   ],
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                   child: Row(
                     children: <Widget>[
                       Expanded(
@@ -262,5 +269,24 @@ class _loginPageState extends State<loginPage> {
   void keepUserLoggedIn() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     preferences.setBool(kKeepMeLoggedIn, keepMeLoggedIn!);
+  }
+
+  Future signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    await FirebaseAuth.instance.signInWithCredential(credential);
+    Navigator.pushNamed(context, HomePage.id);
   }
 }

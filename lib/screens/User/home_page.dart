@@ -136,7 +136,6 @@ class _HomePageState extends State<HomePage> {
                   Text(
                     'nuts'.tr(),
                     style: TextStyle(
-                    
                       color: _tabBarIndex == 0 ? kMainColor : kSecondaryColor,
                       fontSize: _tabBarIndex == 0 ? 16 : null,
                     ),
