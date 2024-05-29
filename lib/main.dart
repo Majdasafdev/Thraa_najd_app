@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thraa_najd_mobile_app/constants.dart';
-import 'package:thraa_najd_mobile_app/firebase_options.dart';
 import 'package:thraa_najd_mobile_app/providers/cartItem.dart';
 import 'package:thraa_najd_mobile_app/screens/Admin/oreder_deatiels.dart';
 import 'package:thraa_najd_mobile_app/screens/User/cartScreen.dart';
@@ -22,6 +21,7 @@ import 'screens/Admin/orders_screen.dart';
 import 'screens/User/home_page.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,6 +29,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   runApp(EasyLocalization(
     supportedLocales: const [
       Locale('en', 'US'),
@@ -87,7 +88,7 @@ class ThraaNajdApp extends StatelessWidget {
               initialRoute: isUserLoggedIn ? WelcomePage.id : WelcomePage.id,
               routes: {
                 OrderDeatiels.id: (context) => OrderDeatiels(),
-                loginPage.id: (context) => loginPage(),
+                loginPage.id: (context) => const loginPage(),
                 RegisterPage.id: (context) => RegisterPage(),
                 HomePage.id: (context) => const HomePage(),
                 AdminHome.id: (context) => const AdminHome(),
