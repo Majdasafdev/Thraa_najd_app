@@ -1,4 +1,4 @@
-class Product {
+class OldProduct {
   String pName;
   String? arPname;
   String? arPrice;
@@ -12,7 +12,7 @@ class Product {
   int? arPquantity;
   int? pQuantity;
 
-  Product({
+  OldProduct({
     this.arPdescription,
     this.arPcategory,
     this.arPrice,
@@ -46,8 +46,8 @@ class Product {
   }
 
   // Define fromJson factory method to create a Product instance from a Map
-  factory Product.fromJson(Map<String, dynamic> json) {
-    return Product(
+  factory OldProduct.fromJson(Map<String, dynamic> json) {
+    return OldProduct(
       pId: json['pId'],
       pQuantity: json['pQuantity'] ?? 0,
       pName: json['pName'] ?? '',

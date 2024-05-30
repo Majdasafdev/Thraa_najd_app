@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:thraa_najd_mobile_app/constants.dart';
-import 'package:thraa_najd_mobile_app/models/product.dart';
+import 'package:thraa_najd_mobile_app/utils/constants.dart';
+import 'package:thraa_najd_mobile_app/models/oldProduct.dart';
 import 'package:thraa_najd_mobile_app/services/store.dart';
 
 class OrderDeatiels extends StatelessWidget {
@@ -17,14 +17,14 @@ class OrderDeatiels extends StatelessWidget {
           stream: store.loadOrderDetails(documentId),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              List<Product> products = [];
+              List<OldProduct> products = [];
               var data;
 
               for (var doc in snapshot.data!.docs) {
                 data = doc.data(); // Assign the value from doc to data
 
                 products.add(
-                  Product(
+                  OldProduct(
                     pDescription:
                         data != null ? data[kProductDescription] ?? "" : "",
                     pPrice: data != null ? data[kProductPrice] ?? "" : "",

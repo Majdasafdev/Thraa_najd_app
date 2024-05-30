@@ -1,10 +1,10 @@
-import 'package:thraa_najd_mobile_app/constants.dart';
-import 'package:thraa_najd_mobile_app/models/product.dart';
+import 'package:thraa_najd_mobile_app/utils/constants.dart';
+import 'package:thraa_najd_mobile_app/models/oldProduct.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Store {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  addProduct(Product product) {
+  addProduct(OldProduct product) {
     _firestore.collection(kProductsCollection).add(
       {
         // kProductarName: product.arPname,
@@ -49,7 +49,7 @@ class Store {
     _firestore.collection(kProductsCollection).doc(documentId).update(data);
   }
 
-  storeOrders(data, List<Product> products) {
+  storeOrders(data, List<OldProduct> products) {
     var documentRef = _firestore.collection(kOrders).doc();
     documentRef.set(data);
     for (var product in products) {

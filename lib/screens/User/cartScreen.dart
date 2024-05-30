@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:thraa_najd_mobile_app/constants.dart';
-import 'package:thraa_najd_mobile_app/models/product.dart';
+import 'package:thraa_najd_mobile_app/utils/constants.dart';
+import 'package:thraa_najd_mobile_app/models/oldProduct.dart';
 import 'package:thraa_najd_mobile_app/providers/cartItem.dart';
 import 'package:thraa_najd_mobile_app/screens/User/product_info.dart';
 import 'package:thraa_najd_mobile_app/services/store.dart';
@@ -15,7 +15,7 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Product> products = Provider.of<CartItem>(context).products;
+    List<OldProduct> products = Provider.of<CartItem>(context).products;
     final double screenHeight = MediaQuery.of(context).size.height;
     final double screenWidth = MediaQuery.of(context).size.width;
     final double appBarHeight = AppBar().preferredSize.height;
@@ -193,7 +193,7 @@ class CartScreen extends StatelessWidget {
     );
   }
 
-  void showCustomDialog(List<Product> products, context) async {
+  void showCustomDialog(List<OldProduct> products, context) async {
     var price = getTotallPrice(products);
     var address;
     var nameOfClient;
@@ -256,7 +256,7 @@ class CartScreen extends StatelessWidget {
     );
   }
 
-  getTotallPrice(List<Product> products) {
+  getTotallPrice(List<OldProduct> products) {
     var price = 0;
     for (var product in products) {
       price += product.pQuantity! * int.parse(product.pPrice);

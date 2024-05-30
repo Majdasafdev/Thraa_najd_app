@@ -2,15 +2,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:thraa_najd_mobile_app/constants.dart';
-import 'package:thraa_najd_mobile_app/function.dart';
-import 'package:thraa_najd_mobile_app/models/product.dart';
+import 'package:thraa_najd_mobile_app/utils/constants.dart';
+import 'package:thraa_najd_mobile_app/utils/function.dart';
+import 'package:thraa_najd_mobile_app/models/oldProduct.dart';
 import 'package:thraa_najd_mobile_app/screens/User/product_info.dart';
 import 'package:thraa_najd_mobile_app/screens/User/profileUserScreen.dart';
 import 'package:thraa_najd_mobile_app/screens/login_screen.dart';
 import 'package:thraa_najd_mobile_app/widgets/custome_discover.dart';
 import 'package:thraa_najd_mobile_app/widgets/product_view.dart';
-import 'package:thraa_najd_mobile_app/services/auth.dart';
+import 'package:thraa_najd_mobile_app/services/AuthRepository.dart';
 import 'package:thraa_najd_mobile_app/services/store.dart';
 import 'dart:convert';
 
@@ -26,11 +26,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final _auth = Auth();
+  final _auth = AuthRepository();
   int _tabBarIndex = 0;
   int _bottomBarIndex = 0;
   final _store = Store();
-  List<Product> _products = [];
+  List<OldProduct> _products = [];
 
   Future<void> _loadProductsFromJsonAndUploadToFirestore() async {
     try {
@@ -38,9 +38,9 @@ class _HomePageState extends State<HomePage> {
           'assets/Data/ThraaProducts.json'); // Assuming your JSON file is in the 'assets' folder
       List<dynamic> jsonData = json.decode(jsonString);
 
-      List<Product> productsjson = [];
+      List<OldProduct> productsjson = [];
       for (var item in jsonData) {
-        productsjson.add(Product.fromJson(item));
+        productsjson.add(OldProduct.fromJson(item));
       }
 
       // Upload products to Firestore
@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Future<void> _uploadProductsToFirestore(List<Product> productsJson) async {
+  Future<void> _uploadProductsToFirestore(List<OldProduct> productsJson) async {
     final CollectionReference productCollection =
         FirebaseFirestore.instance.collection(kArProductsCollection);
 
@@ -195,12 +195,12 @@ class _HomePageState extends State<HomePage> {
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           print(snapshot.data); // Print the data to see its structure
-          List<Product> products = [];
+          List<OldProduct> products = [];
           for (var doc in snapshot.data.docs) {
             var data = doc.data() as Map<String, dynamic>;
             print(data);
             products.add(
-              Product(
+              OldProduct(
                 pId: doc.id,
                 pPrice: data[kProductPrice].toString(),
                 pName: data[kProductName].toString(),

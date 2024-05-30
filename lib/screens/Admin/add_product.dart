@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:thraa_najd_mobile_app/models/product.dart';
+import 'package:thraa_najd_mobile_app/models/oldProduct.dart';
 import 'package:thraa_najd_mobile_app/services/store.dart';
 import 'package:thraa_najd_mobile_app/widgets/custome_text_field.dart';
-import '../../constants.dart';
+import '../../utils/constants.dart';
 
 class AddProduct extends StatelessWidget {
   final GlobalKey<FormState> formkey = GlobalKey<FormState>();
@@ -79,7 +79,7 @@ class AddProduct extends StatelessWidget {
 
                       try {
                         _store.addProduct(
-                          Product(
+                          OldProduct(
                             pName: _name,
                             pPrice: _price,
                             pDescription: _description,

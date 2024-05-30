@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:thraa_najd_mobile_app/constants.dart';
-import 'package:thraa_najd_mobile_app/models/product.dart';
+import 'package:thraa_najd_mobile_app/utils/constants.dart';
+import 'package:thraa_najd_mobile_app/models/oldProduct.dart';
 import 'package:thraa_najd_mobile_app/providers/cartItem.dart';
 import 'package:thraa_najd_mobile_app/screens/User/cartScreen.dart';
 
@@ -17,7 +17,8 @@ class _ProductInfoState extends State<ProductInfo> {
 
   @override
   Widget build(BuildContext context) {
-    Product product = ModalRoute.of(context)!.settings.arguments as Product;
+    OldProduct product =
+        ModalRoute.of(context)!.settings.arguments as OldProduct;
     return Scaffold(
       body: Stack(
         children: [

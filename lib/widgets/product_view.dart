@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:thraa_najd_mobile_app/function.dart';
-import 'package:thraa_najd_mobile_app/models/product.dart';
+import 'package:thraa_najd_mobile_app/utils/function.dart';
+import 'package:thraa_najd_mobile_app/models/oldProduct.dart';
 import 'package:thraa_najd_mobile_app/screens/User/product_info.dart';
 
-Widget ProductsView(String pCategory, List<Product> allProducts) {
-  final List<Product> products;
+Widget ProductsView(String pCategory, List<OldProduct> allProducts) {
+  final List<OldProduct> products;
   products = getProductByCategory(pCategory, allProducts);
-  List<Product> filteredProducts = getProductByCategory(pCategory, allProducts);
+  List<OldProduct> filteredProducts =
+      getProductByCategory(pCategory, allProducts);
 
   return GridView.builder(
     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:thraa_najd_mobile_app/models/product.dart';
+import 'package:thraa_najd_mobile_app/models/oldProduct.dart';
 
 class CartItem extends ChangeNotifier {
-  List<Product> products = [];
+  List<OldProduct> products = [];
 
-  addProduct(Product product) {
+  addProduct(OldProduct product) {
     products.add(product);
     notifyListeners();
   }
 
-  deleteProduct(Product product) {
+  deleteProduct(OldProduct product) {
     products.remove(product);
     notifyListeners();
   }

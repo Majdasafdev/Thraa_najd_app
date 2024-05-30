@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:thraa_najd_mobile_app/screens/Admin/edit_products.dart';
 import 'package:thraa_najd_mobile_app/widgets/cusotme_menu.dart';
-import '../../constants.dart';
-import '../../models/product.dart';
+import '../../utils/constants.dart';
+import '../../models/oldProduct.dart';
 import '../../services/store.dart';
 
 class ManageProducts extends StatelessWidget {
@@ -18,19 +18,20 @@ class ManageProducts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Product? product = ModalRoute.of(context)!.settings.arguments as Product?;
+    OldProduct? product =
+        ModalRoute.of(context)!.settings.arguments as OldProduct?;
     return Scaffold(
       backgroundColor: kMainColor,
       body: StreamBuilder<QuerySnapshot>(
         stream: _store.loadProducts(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
-            List<Product> products = [];
+            List<OldProduct> products = [];
             for (var doc in snapshot.data.docs) {
               var data = doc.data() as Map<String, dynamic>;
               print(data);
               products.add(
-                Product(
+                OldProduct(
                   pId: doc.id,
                   pPrice: data[kProductPrice],
                   pName: data[kProductName],

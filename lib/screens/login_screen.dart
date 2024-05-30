@@ -5,11 +5,11 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:thraa_najd_mobile_app/constants.dart';
+import 'package:thraa_najd_mobile_app/utils/constants.dart';
 import 'package:thraa_najd_mobile_app/providers/model_hud.dart';
 import 'package:thraa_najd_mobile_app/screens/User/home_page.dart';
 import 'package:thraa_najd_mobile_app/screens/registeration_page.dart';
-import 'package:thraa_najd_mobile_app/services/auth.dart';
+import 'package:thraa_najd_mobile_app/services/AuthRepository.dart';
 import 'package:thraa_najd_mobile_app/widgets/custom_button.dart';
 import 'package:thraa_najd_mobile_app/widgets/custom_text_form_field.dart';
 import 'package:thraa_najd_mobile_app/widgets/custome_logo.dart';
@@ -32,7 +32,7 @@ class _loginPageState extends State<loginPage> {
   String? email;
   String? passward;
 
-  final _auth = Auth();
+  final _auth = AuthRepository();
 
   final adminPassword = 'Admin123456';
   bool? keepMeLoggedIn = false;
