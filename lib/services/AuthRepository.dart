@@ -1,7 +1,7 @@
 import "package:firebase_auth/firebase_auth.dart";
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
 
-class Auth {
+class AuthRepository extends AbstractRepository {
   final _auth = FirebaseAuth.instance;
 
   Future<dynamic> signUp(String email, String passward) async {
@@ -26,6 +26,7 @@ class Auth {
     await FirebaseAuth.instance.signInAnonymously();
   }
 
+  /*
   Future<UserCredential> signInWithGoogle() async {
     // Trigger the authentication flow
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -43,4 +44,6 @@ class Auth {
     // Once signed in, return the UserCredential
     return await FirebaseAuth.instance.signInWithCredential(credential);
   }
+
+   */
 }
