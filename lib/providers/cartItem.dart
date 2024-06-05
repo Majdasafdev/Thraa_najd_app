@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:thraa_najd_mobile_app/models/CartItem.dart';
 import 'package:thraa_najd_mobile_app/models/oldProduct.dart';
 
-class CartItem extends ChangeNotifier {
-  List<OldProduct> products = [];
+import '../models/Product.dart';
 
-  addProduct(OldProduct product) {
-    products.add(product);
+class CartNotifier extends ChangeNotifier {
+  //NOTE: Changed to Cart Items
+  List<CartItem> cartItems = [];
+
+  addCartItem(CartItem cartItem) {
+    cartItems.add(cartItem);
     notifyListeners();
   }
 
-  deleteProduct(OldProduct product) {
-    products.remove(product);
+  deleteCartItem(CartItem cartItem) {
+    cartItems.remove(cartItem);
     notifyListeners();
   }
 }

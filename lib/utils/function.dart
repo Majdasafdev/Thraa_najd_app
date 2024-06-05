@@ -4,6 +4,7 @@ import 'package:thraa_najd_mobile_app/providers/cartItem.dart';
 
 import '../models/oldProduct.dart';
 
+/*
 List<OldProduct> getProductByCategory(
     String kNuts, List<OldProduct> allproducts) {
   List<OldProduct> products = [];
@@ -18,6 +19,8 @@ List<OldProduct> getProductByCategory(
   }
   return products;
 }
+
+ */
 
 /////////////////<THE CODE BELOW FOR PRODUCTINFO PAGE>//////////////////
 

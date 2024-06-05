@@ -1,7 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:thraa_najd_mobile_app/screens/Admin/edit_products.dart';
+import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
 import 'package:thraa_najd_mobile_app/widgets/cusotme_menu.dart';
+import '../../models/Product.dart';
 import '../../utils/constants.dart';
 import '../../models/oldProduct.dart';
 import '../../services/store.dart';
@@ -9,40 +14,21 @@ import '../../services/store.dart';
 class ManageProducts extends StatelessWidget {
   static String id = 'ManageProducts';
 
-  // ignore: non_constant_identifier_names
-  //ManageProducts();
-
-  final _store = Store();
-
   final GlobalKey<FormState> formkey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    OldProduct? product =
-        ModalRoute.of(context)!.settings.arguments as OldProduct?;
     return Scaffold(
       backgroundColor: kMainColor,
-      body: StreamBuilder<QuerySnapshot>(
-        stream: _store.loadProducts(),
+      //NOTE: Changed from stream builder to future builder.
+      //because there is no reason to use streams here.
+      body: StreamBuilder(
+        stream: repositoryClient.productRepository.getAllProducts(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
-            List<OldProduct> products = [];
-            for (var doc in snapshot.data.docs) {
-              var data = doc.data() as Map<String, dynamic>;
-              print(data);
-              products.add(
-                OldProduct(
-                  pId: doc.id,
-                  pPrice: data[kProductPrice],
-                  pName: data[kProductName],
-                  pDescription: data[kProductDescription],
-                  pLocation: data[kProductLocation],
-                  pCategory: data[kProductCategory],
-                ),
-              );
-            }
+            IList<Product> products = snapshot.data;
             return GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 childAspectRatio: .8,
               ),
@@ -64,48 +50,65 @@ class ManageProducts extends StatelessWidget {
                             Navigator.pushNamed(context, EditProducts.id,
                                 arguments: products[index]);
                           },
-                          child: Text('Edit'),
+                          child: const Text('Edit'),
                         ),
                         MyPopupMenuItem(
                           onClick: () {
-                            _store.deleteProduct(products[index].pId);
+                            //NOTE: Here performed Deletion
+                            repositoryClient.productRepository
+                                .removeProductByProductId(
+                                    products.elementAt(index).productId);
                             Navigator.pop(context);
                           },
-                          child: Text('Delete'),
+                          child: const Text('Delete'),
                         ),
                       ],
                     );
                   },
-                  child: Stack(
+
+                  //NOTE: Changed from stack to column
+                  child: Column(
                     children: <Widget>[
-                      Positioned.fill(
-                        child: Image(
+                      //NOTE: changed image from assets to the cloud image
+                      SizedBox(
+                        height: 150,
+                        child: Image.network(
+                          products.elementAt(index).imageLink,
                           fit: BoxFit.fill,
-                          image: AssetImage(products[index].pLocation),
                         ),
                       ),
-                      Positioned(
-                        bottom: 0,
-                        child: Opacity(
-                          opacity: .6,
-                          child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            height: 60,
-                            color: Colors.white,
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 5),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    products[index].pName,
+                      Opacity(
+                        opacity: .6,
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 60,
+                          color: Colors.white,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Flexible(
+                                  child: Text(
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    //NOTE: Changed here to english product name.
+                                    //TODO: Integrate localization by if(english) then english name else arabic name.
+                                    products[index].productNameEN,
                                     style:
                                         TextStyle(fontWeight: FontWeight.bold),
                                   ),
-                                  Text('\$ ${products[index].pPrice}')
-                                ],
-                              ),
+                                ),
+                                Flexible(
+                                    child: Text(
+                                        '\$ ${products[index].costPrice}')),
+                                //NOTE: added category name
+                                //TODO: Integrate localization
+                                Flexible(
+                                    child: Text(
+                                        '\$ ${products[index].category.nameEN}'))
+                              ],
                             ),
                           ),
                         ),

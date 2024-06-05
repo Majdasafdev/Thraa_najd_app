@@ -1,7 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:thraa_najd_mobile_app/models/Category.dart';
+import 'package:thraa_najd_mobile_app/models/Product.dart';
+import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
 import 'package:thraa_najd_mobile_app/utils/function.dart';
 import 'package:thraa_najd_mobile_app/models/oldProduct.dart';
@@ -29,44 +33,11 @@ class _HomePageState extends State<HomePage> {
   final _auth = AuthRepository();
   int _tabBarIndex = 0;
   int _bottomBarIndex = 0;
-  final _store = Store();
-  List<OldProduct> _products = [];
-
-  Future<void> _loadProductsFromJsonAndUploadToFirestore() async {
-    try {
-      String jsonString = await DefaultAssetBundle.of(context).loadString(
-          'assets/Data/ThraaProducts.json'); // Assuming your JSON file is in the 'assets' folder
-      List<dynamic> jsonData = json.decode(jsonString);
-
-      List<OldProduct> productsjson = [];
-      for (var item in jsonData) {
-        productsjson.add(OldProduct.fromJson(item));
-      }
-
-      // Upload products to Firestore
-      await _uploadProductsToFirestore(productsjson);
-
-      setState(() {
-        _products = productsjson;
-      });
-    } catch (e) {
-      print('Error loading products from JSON and uploading to Firestore: $e');
-    }
-  }
-
-  Future<void> _uploadProductsToFirestore(List<OldProduct> productsJson) async {
-    final CollectionReference productCollection =
-        FirebaseFirestore.instance.collection(kArProductsCollection);
-
-    for (var product in productsJson) {
-      await productCollection.add(product.toJson());
-    }
-  }
+  IList<Product> allProducts = IList();
 
   @override
   void initState() {
     super.initState();
-    _loadProductsFromJsonAndUploadToFirestore();
   }
 
   @override
@@ -126,6 +97,8 @@ class _HomePageState extends State<HomePage> {
               backgroundColor: Colors.white,
               elevation: 0,
               bottom: TabBar(
+                isScrollable: true,
+                tabAlignment: TabAlignment.center,
                 indicatorColor: Colors.white,
                 onTap: (value) {
                   setState(() {
@@ -164,8 +137,8 @@ class _HomePageState extends State<HomePage> {
                   Text(
                     'other'.tr(),
                     style: TextStyle(
-                      color: _tabBarIndex == 3 ? kMainColor : kSecondaryColor,
-                      fontSize: _tabBarIndex == 3 ? 16 : null,
+                      color: _tabBarIndex == 4 ? kMainColor : kSecondaryColor,
+                      fontSize: _tabBarIndex == 4 ? 16 : null,
                     ),
                   ),
                 ],
@@ -173,12 +146,13 @@ class _HomePageState extends State<HomePage> {
             ),
             body: TabBarView(
               children: [
+                //NOTE: Changed the products view to the actual categories.
+                //TODO: MUST remove nuts view and use productsView.
                 nutsView(),
-                //ProductsView(kNuts, _products),
-                ProductsView(kSpices, _products),
-                ProductsView(kOils, _products),
-                ProductsView(kGrain, _products),
-                ProductsView(kOthers, _products),
+                ProductsView(Category.spices, allProducts),
+                ProductsView(Category.oils, allProducts),
+                ProductsView(Category.grains, allProducts),
+                ProductsView(Category.other, allProducts),
               ],
             ),
           ),
@@ -189,31 +163,18 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  //NOTE: Changed To Other Stream.
   Widget nutsView() {
-    return StreamBuilder<QuerySnapshot>(
-      stream: _store.loadProducts(),
+    return StreamBuilder<IList<Product>>(
+      stream: repositoryClient.productRepository.getAllProducts(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           print(snapshot.data); // Print the data to see its structure
-          List<OldProduct> products = [];
-          for (var doc in snapshot.data.docs) {
-            var data = doc.data() as Map<String, dynamic>;
-            print(data);
-            products.add(
-              OldProduct(
-                pId: doc.id,
-                pPrice: data[kProductPrice].toString(),
-                pName: data[kProductName].toString(),
-                pDescription: data[kProductDescription].toString(),
-                pLocation: data[kProductLocation].toString(),
-                pCategory: data[kProductCategory].toString(),
-                //   arPname: data[kProductarName].toString(),
-              ),
-            );
-          }
-          _products = [...products]; //Screed opreator
-          products.clear();
-          products = getProductByCategory(kNuts, _products);
+
+          allProducts = snapshot.data;
+
+          var products =
+              allProducts.where((element) => element.category == Category.nuts);
           return GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
@@ -224,14 +185,14 @@ class _HomePageState extends State<HomePage> {
               child: GestureDetector(
                 onTap: () {
                   Navigator.pushNamed(context, ProductInfo.id,
-                      arguments: products[index]);
+                      arguments: products.elementAt(index));
                 },
                 child: Stack(
                   children: <Widget>[
                     Positioned.fill(
-                      child: Image(
+                      child: Image.network(
+                        products.elementAt(index).imageLink,
                         fit: BoxFit.fill,
-                        image: AssetImage(products[index].pLocation),
                       ),
                     ),
                     Positioned(
@@ -248,12 +209,17 @@ class _HomePageState extends State<HomePage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
+                                //TODO: Add localization
                                 Text(
-                                  products[index].pName,
+                                  products.elementAt(index).productNameEN,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold),
                                 ),
-                                Text(products[index].pPrice),
+                                //TODO: Select which price to view.
+                                Text(products
+                                    .elementAt(index)
+                                    .retailPrice
+                                    .toString()),
                               ],
                             ),
                           ),

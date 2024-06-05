@@ -7,10 +7,10 @@ import 'package:excel/excel.dart';
 import 'Category.dart';
 import 'Product.dart';
 
-part 'ProductDTO.mapper.dart';
+part 'ExcelProductDTO.mapper.dart';
 
 @MappableClass()
-class ProductDTO with ProductDTOMappable {
+class ExcelProductDTO with ExcelProductDTOMappable {
   final String productId;
   final String materialId;
   final String productNameEN;
@@ -22,7 +22,7 @@ class ProductDTO with ProductDTOMappable {
   final Uint8List? imageLink;
   final bool stocked;
 
-  const ProductDTO(
+  const ExcelProductDTO(
       {required this.productId,
       required this.materialId,
       required this.productNameEN,
@@ -34,13 +34,13 @@ class ProductDTO with ProductDTOMappable {
       required this.imageLink,
       required this.stocked});
 
-  factory ProductDTO.fromExcelData(
+  factory ExcelProductDTO.fromExcelData(
       {required List<Data?> data,
       required Uint8List image,
       bool throwExceptionWithError = false}) {
     final costPrice =
         double.tryParse(data[5]?.value.toString().trim() ?? "") ?? -1;
-    final product = ProductDTO(
+    final product = ExcelProductDTO(
         productId: "",
         materialId: data[0]?.value.toString().trim() ?? "",
         productNameEN: data[1]?.value.toString().trim() ?? "",

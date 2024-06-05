@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:thraa_najd_mobile_app/models/CartItem.dart';
+import 'package:thraa_najd_mobile_app/models/Product.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
 import 'package:thraa_najd_mobile_app/models/oldProduct.dart';
 import 'package:thraa_najd_mobile_app/providers/cartItem.dart';
@@ -17,21 +19,21 @@ class _ProductInfoState extends State<ProductInfo> {
 
   @override
   Widget build(BuildContext context) {
-    OldProduct product =
-        ModalRoute.of(context)!.settings.arguments as OldProduct;
+    //NOTE: NEVER use as operator;
+    Product product = ModalRoute.of(context)!.settings.arguments as Product;
     return Scaffold(
       body: Stack(
         children: [
           Container(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
-            child: Image(
+            child: Image.network(
+              product.imageLink,
               fit: BoxFit.fill,
-              image: AssetImage(product.pLocation),
             ),
           ),
           Padding(
-            padding: EdgeInsets.fromLTRB(20, 30, 20, 0),
+            padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
             child: Container(
               color: Colors.white,
               height: MediaQuery.of(context).size.height * .1,
@@ -42,7 +44,7 @@ class _ProductInfoState extends State<ProductInfo> {
                     onTap: () {
                       Navigator.pop(context);
                     },
-                    child: Icon(
+                    child: const Icon(
                       Icons.arrow_back,
                     ),
                   ),
@@ -50,7 +52,7 @@ class _ProductInfoState extends State<ProductInfo> {
                     onTap: () {
                       Navigator.pushNamed(context, CartScreen.id);
                     },
-                    child: Icon(
+                    child: const Icon(
                       Icons.shopping_cart,
                       color: kSecondaryColor,
                     ),
@@ -74,28 +76,32 @@ class _ProductInfoState extends State<ProductInfo> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          //NOTE: Added product name
+                          //TODO: Add Localization.
                           Text(
-                            product.pName,
-                            style: TextStyle(
+                            product.productNameEN,
+                            style: const TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
+                          //TODO: Is Description nullable?
                           Text(
-                            product.pDescription,
-                            style: TextStyle(
+                            product.productDescription ?? "",
+                            style: const TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.w800),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
+                          //TODO: What price to view?
                           Text(
-                            product.pPrice,
-                            style: TextStyle(
+                            product.retailPrice.toString(),
+                            style: const TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Row(
@@ -106,27 +112,27 @@ class _ProductInfoState extends State<ProductInfo> {
                                   color: kMainColor,
                                   child: GestureDetector(
                                     onTap: add,
-                                    child: SizedBox(
-                                      child: Icon(Icons.add),
+                                    child: const SizedBox(
                                       height: 32,
                                       width: 32,
+                                      child: Icon(Icons.add),
                                     ),
                                   ),
                                 ),
                               ),
                               Text(
                                 _quantity.toString(),
-                                style: TextStyle(fontSize: 30),
+                                style: const TextStyle(fontSize: 30),
                               ),
                               ClipOval(
                                 child: Material(
                                   color: kMainColor,
                                   child: GestureDetector(
                                     onTap: subtract,
-                                    child: SizedBox(
-                                      child: Icon(Icons.remove),
+                                    child: const SizedBox(
                                       height: 32,
                                       width: 32,
+                                      child: Icon(Icons.remove),
                                     ),
                                   ),
                                 ),
@@ -146,7 +152,7 @@ class _ProductInfoState extends State<ProductInfo> {
                       return ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: kMainColor,
-                          shape: RoundedRectangleBorder(
+                          shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.only(
                                 topRight: Radius.circular(10),
                                 topLeft: Radius.circular(10)),
@@ -157,7 +163,7 @@ class _ProductInfoState extends State<ProductInfo> {
                         },
                         child: Text(
                           'Add to Cart'.toUpperCase(),
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                               color: Colors.black),
@@ -174,26 +180,27 @@ class _ProductInfoState extends State<ProductInfo> {
     );
   }
 
-  void addToCart(context, product) {
-    CartItem cartItem = Provider.of<CartItem>(context, listen: false);
-    product.pQuantity = _quantity;
+  //NOTE: Changed the flow here.
+  void addToCart(context, Product product) {
+    CartNotifier cartNotifier =
+        Provider.of<CartNotifier>(context, listen: false);
     bool exist = false;
-    var productsInCart = cartItem.products;
+    var productsInCart = cartNotifier.cartItems;
     for (var productInCart in productsInCart) {
-      if (productInCart.pName == product.pName) {
+      if (productInCart.product.materialId == product.materialId) {
         exist = true;
       }
     }
     if (exist) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('you\'ve added this item before'),
         ),
       );
     } else {
-      cartItem.addProduct(product);
+      cartNotifier.addCartItem(CartItem(product: product, quantity: _quantity));
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('Added to Cart'),
         ),
       );

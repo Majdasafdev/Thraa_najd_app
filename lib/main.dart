@@ -10,6 +10,7 @@ import 'package:thraa_najd_mobile_app/screens/User/profileUserScreen.dart';
 import 'package:thraa_najd_mobile_app/screens/User/welcomeScreen.dart';
 import 'package:thraa_najd_mobile_app/screens/login_screen.dart';
 import 'package:thraa_najd_mobile_app/screens/registeration_page.dart';
+import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
 import 'providers/admin_mode.dart';
 import 'providers/model_hud.dart';
@@ -47,6 +48,24 @@ class ThraaNajdApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //NOTE: Here we've added the products.
+    //TODO: delete this before uploading application to stores.
+    /*
+    Future(
+      () async {
+
+        await Future.delayed(Duration(seconds: 3));
+        print("started translation");
+        var result = await repositoryClient.productRepository
+            .translateExcelSheet("assets/Products sheet.xlsx");
+        print("finished translation");
+        await repositoryClient.productRepository.addBulkProducts(result);
+        print("Finished Addition, All set...");
+
+      },
+    );
+
+         */
     return FutureBuilder(
       future: SharedPreferences.getInstance(),
       builder: (context, snapshot) {
@@ -73,8 +92,8 @@ class ThraaNajdApp extends StatelessWidget {
               ChangeNotifierProvider<ModelHud>(
                 create: (context) => ModelHud(),
               ),
-              ChangeNotifierProvider<CartItem>(
-                create: (context) => CartItem(),
+              ChangeNotifierProvider<CartNotifier>(
+                create: (context) => CartNotifier(),
               ),
               ChangeNotifierProvider<AdminMode>(
                 create: (context) => AdminMode(),

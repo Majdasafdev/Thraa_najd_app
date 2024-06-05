@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
@@ -9,33 +10,37 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../models/Product.dart';
-import '../models/ProductDTO.dart';
+import '../models/ExcelProductDTO.dart';
 import '../models/Category.dart';
 import 'AbstractRepository.dart';
 import '../utils/FirebaseConstants.dart';
 
 class ProductRepository extends AbstractRepository {
-  Future<List<ProductDTO>> translateExcelSheet(String sheetPath) async {
+  Future<ByteData> loadNetworkAsset(String rawImageLink) async {
+    return NetworkAssetBundle(Uri.parse(rawImageLink.trim()))
+        .load(rawImageLink.trim());
+  }
+
+  Future<List<ExcelProductDTO>> translateExcelSheet(String sheetPath) async {
     final data = Excel.decodeBytes(
         (await rootBundle.load(sheetPath)).buffer.asUint8List());
 
     final table = data.tables.entries.first.value.rows;
     table.removeAt(0);
-
+    var emptyImage = await rootBundle.load("assets/images/empty.jpg");
     List<Future<ByteData>> futureImages = table.map((e) async {
       if (e[6]?.value != null) {
-        return NetworkAssetBundle(Uri.parse(e[6]!.value.toString().trim()))
-            .load(e[6]!.value.toString().trim());
+        return loadNetworkAsset(e[6]!.value.toString());
       }
-      return rootBundle.load("assets/images/empty.jpg");
+      return emptyImage;
     }).toList();
     var images = (await futureImages.wait).map((e) {
       return e.buffer.asUint8List();
     });
 
-    List<ProductDTO> productDTOs = [];
+    List<ExcelProductDTO> productDTOs = [];
     for (int i = 0; i < table.length; i++) {
-      productDTOs.add(ProductDTO.fromExcelData(
+      productDTOs.add(ExcelProductDTO.fromExcelData(
           data: table.elementAt(i), image: images.elementAt(i)));
     }
     return productDTOs;
@@ -49,7 +54,7 @@ class ProductRepository extends AbstractRepository {
         .update({Product.firebaseStocked: updatedFlag});
   }
 
-  Future<void> addBulkProducts(List<ProductDTO> productDTOs) async {
+  Future<void> addBulkProducts(List<ExcelProductDTO> productDTOs) async {
     var storageRef = firebaseStorage.ref();
     try {
       if (productDTOs.any((element) => element.imageLink == null)) {
@@ -90,9 +95,16 @@ class ProductRepository extends AbstractRepository {
     }
   }
 
-  Future<void> addProduct(ProductDTO productDTO) async {
+  Future<void> addProduct(
+      {required ExcelProductDTO productDTO,
+      required String rawImageLink}) async {
     try {
-      if (productDTO.imageLink == null) throw Exception("no image specified");
+      if (rawImageLink.isEmpty) throw Exception("no image specified");
+
+      var imageBytes = await loadNetworkAsset(rawImageLink);
+      productDTO =
+          productDTO.copyWith(imageLink: imageBytes.buffer.asUint8List());
+
       var imageLink =
           await addImage(productDTO.imageLink!, productDTO.materialId);
       var product = productDTO.toProduct(imageLink: imageLink);
@@ -106,7 +118,7 @@ class ProductRepository extends AbstractRepository {
     }
   }
 
-  Future<void> updateProduct(ProductDTO updatedProduct) async {
+  Future<void> updateProduct(ExcelProductDTO updatedProduct) async {
     var storageRef = firebaseStorage.ref();
     String updatedImageLink = "";
     if (updatedProduct.imageLink != null) {
@@ -171,13 +183,23 @@ class ProductRepository extends AbstractRepository {
 
   // getters
 
-  Future<IList<Product>> getAllProducts() async {
+  Stream<IList<Product>> getAllProducts() {
+    var stream = firebaseFirestore
+        .collection(FirebaseConstants.productsCollection)
+        .snapshots()
+        .asyncMap((event) {
+      return event.docs.map((e) => Product.fromMap(e.data())).toIList();
+    });
+    return stream;
+/*
     return (await firebaseFirestore
             .collection(FirebaseConstants.productsCollection)
             .get())
         .docs
         .map((e) => Product.fromMap(e.data()))
         .toIList();
+
+ */
   }
 
   Future<IList<Product>> getProductsByCategory(Category category) async {

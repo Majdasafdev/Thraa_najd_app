@@ -1,13 +1,14 @@
+import 'package:thraa_najd_mobile_app/models/Product.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
 import 'package:thraa_najd_mobile_app/models/oldProduct.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Store {
+class Store1 {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  /*
   addProduct(OldProduct product) {
     _firestore.collection(kProductsCollection).add(
       {
-        // kProductarName: product.arPname,
         kProductName: product.pName,
         kProductDescription: product.pDescription,
         kProductLocation: product.pLocation,
@@ -26,18 +27,6 @@ class Store {
       .collection(
           kArProductsCollection); // or 'Products' based on your database
 
-  Stream<QuerySnapshot> loadOrderDetails(documentId) {
-    return _firestore
-        .collection(kOrders)
-        .doc(documentId)
-        .collection(kOrderDetails)
-        .snapshots();
-  }
-
-  Stream<QuerySnapshot> loadOrders() {
-    return _firestore.collection(kOrders).snapshots();
-  }
-
   deleteProduct(documentId) {
     _firestore.collection(kProductsCollection).doc(documentId).delete();
   }
@@ -49,19 +38,6 @@ class Store {
     _firestore.collection(kProductsCollection).doc(documentId).update(data);
   }
 
-  storeOrders(data, List<OldProduct> products) {
-    var documentRef = _firestore.collection(kOrders).doc();
-    documentRef.set(data);
-    for (var product in products) {
-      documentRef.collection(kOrderDetails).doc().set(
-        {
-          kProductName: product.pName,
-          kProductPrice: product.pPrice,
-          kProductQuantity: product.pQuantity,
-          kProductLocation: product.pLocation,
-          kProductCategory: product.pCategory
-        },
-      );
-    }
-  }
+
+   */
 }

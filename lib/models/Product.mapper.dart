@@ -51,6 +51,9 @@ class ProductMapper extends ClassMapperBase<Product> {
   static bool _$stocked(Product v) => v.stocked;
   static const Field<Product, bool> _f$stocked =
       Field('stocked', _$stocked, opt: true, def: true);
+  static String? _$productDescription(Product v) => v.productDescription;
+  static const Field<Product, String> _f$productDescription =
+      Field('productDescription', _$productDescription, opt: true);
 
   @override
   final MappableFields<Product> fields = const {
@@ -64,6 +67,7 @@ class ProductMapper extends ClassMapperBase<Product> {
     #wholesalePrice: _f$wholesalePrice,
     #imageLink: _f$imageLink,
     #stocked: _f$stocked,
+    #productDescription: _f$productDescription,
   };
 
   static Product _instantiate(DecodingData data) {
@@ -77,7 +81,8 @@ class ProductMapper extends ClassMapperBase<Product> {
         retailPrice: data.dec(_f$retailPrice),
         wholesalePrice: data.dec(_f$wholesalePrice),
         imageLink: data.dec(_f$imageLink),
-        stocked: data.dec(_f$stocked));
+        stocked: data.dec(_f$stocked),
+        productDescription: data.dec(_f$productDescription));
   }
 
   @override
@@ -139,7 +144,8 @@ abstract class ProductCopyWith<$R, $In extends Product, $Out>
       double? retailPrice,
       double? wholesalePrice,
       String? imageLink,
-      bool? stocked});
+      bool? stocked,
+      String? productDescription});
   ProductCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
 
@@ -162,7 +168,8 @@ class _ProductCopyWithImpl<$R, $Out>
           double? retailPrice,
           double? wholesalePrice,
           String? imageLink,
-          bool? stocked}) =>
+          bool? stocked,
+          Object? productDescription = $none}) =>
       $apply(FieldCopyWithData({
         if (productId != null) #productId: productId,
         if (materialId != null) #materialId: materialId,
@@ -173,7 +180,8 @@ class _ProductCopyWithImpl<$R, $Out>
         if (retailPrice != null) #retailPrice: retailPrice,
         if (wholesalePrice != null) #wholesalePrice: wholesalePrice,
         if (imageLink != null) #imageLink: imageLink,
-        if (stocked != null) #stocked: stocked
+        if (stocked != null) #stocked: stocked,
+        if (productDescription != $none) #productDescription: productDescription
       }));
   @override
   Product $make(CopyWithData data) => Product(
@@ -186,7 +194,9 @@ class _ProductCopyWithImpl<$R, $Out>
       retailPrice: data.get(#retailPrice, or: $value.retailPrice),
       wholesalePrice: data.get(#wholesalePrice, or: $value.wholesalePrice),
       imageLink: data.get(#imageLink, or: $value.imageLink),
-      stocked: data.get(#stocked, or: $value.stocked));
+      stocked: data.get(#stocked, or: $value.stocked),
+      productDescription:
+          data.get(#productDescription, or: $value.productDescription));
 
   @override
   ProductCopyWith<$R2, Product, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t) =>
