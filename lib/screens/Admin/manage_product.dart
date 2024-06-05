@@ -16,11 +16,27 @@ class ManageProducts extends StatelessWidget {
 
   final GlobalKey<FormState> formkey = GlobalKey<FormState>();
 
+  ManageProducts({super.key});
+
   @override
   Widget build(BuildContext context) {
     Product? product = ModalRoute.of(context)!.settings.arguments as Product?;
+
     return Scaffold(
-      backgroundColor: kMainColor,
+      appBar: AppBar(
+        title: const Text('Manage Products'), // title of the app bar
+        backgroundColor: kUnActiveColor, // background color of the app bar
+        actions: <Widget>[
+          // actions on the right side of the app bar
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () {
+              // action when the search button is pressed
+            },
+          ),
+        ],
+      ),
+      backgroundColor: Colors.white,
       body: StreamBuilder<QuerySnapshot>(
         stream: _store.loadProducts(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -41,7 +57,7 @@ class ManageProducts extends StatelessWidget {
               );
             }
             return GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 childAspectRatio: .8,
               ),
@@ -63,14 +79,14 @@ class ManageProducts extends StatelessWidget {
                             Navigator.pushNamed(context, EditProducts.id,
                                 arguments: products[index]);
                           },
-                          child: Text('Edit'),
+                          child: const Text('Edit'),
                         ),
                         MyPopupMenuItem(
                           onClick: () {
                             _store.deleteProduct(products[index].pId);
                             Navigator.pop(context);
                           },
-                          child: Text('Delete'),
+                          child: const Text('Delete'),
                         ),
                       ],
                     );
@@ -92,15 +108,15 @@ class ManageProducts extends StatelessWidget {
                             height: 60,
                             color: Colors.white,
                             child: Padding(
-                              padding: EdgeInsets.symmetric(
+                              padding: const EdgeInsets.symmetric(
                                   horizontal: 10, vertical: 5),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text(
                                     products[index].pName,
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold),
                                   ),
                                   Text('\$ ${products[index].pPrice}')
                                 ],
@@ -116,7 +132,7 @@ class ManageProducts extends StatelessWidget {
               itemCount: products.length,
             );
           } else {
-            return Center(child: (Text('Loading...........')));
+            return const Center(child: (Text('Loading...........')));
           }
         },
       ),

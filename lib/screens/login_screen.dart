@@ -18,7 +18,7 @@ import 'package:thraa_najd_mobile_app/widgets/switch_langs.dart';
 import 'Admin/admin_home.dart';
 
 class loginPage extends StatefulWidget {
-  loginPage({super.key});
+  const loginPage({super.key});
   static String id = 'loginPage';
   @override
   State<loginPage> createState() => _loginPageState();
@@ -57,7 +57,7 @@ class _loginPageState extends State<loginPage> {
                   children: [
                     Text(
                       'logwelcome'.tr(),
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 24,
                         color: Colors.white,
                       ),
@@ -74,7 +74,7 @@ class _loginPageState extends State<loginPage> {
                   hintText: 'email'.tr(),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: 20),
+                  padding: const EdgeInsets.only(left: 20),
                   child: Row(
                     children: <Widget>[
                       Theme(
@@ -94,7 +94,7 @@ class _loginPageState extends State<loginPage> {
                       ),
                       Text(
                         'remember'.tr(),
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                       )
                     ],
                   ),
@@ -145,12 +145,25 @@ class _loginPageState extends State<loginPage> {
                 const SizedBox(
                   height: 10,
                 ),
+                Custome_button(
+                    onTap: () async {
+                      try {
+                        await _auth.signInWithGoogle(context);
+                        Navigator.pushNamed(context, HomePage.id);
+                      } catch (e) {
+                        print('Error signing in with Google: $e');
+                      }
+                    },
+                    text: 'login GOOGLE'),
+                const SizedBox(
+                  height: 10,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       'donthaveaccount'.tr(),
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
                       ),
                     ),
@@ -160,7 +173,7 @@ class _loginPageState extends State<loginPage> {
                       },
                       child: Text(
                         'registerationn'.tr(),
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Color(0xffC7EDE6),
                         ),
                       ),
@@ -168,7 +181,8 @@ class _loginPageState extends State<loginPage> {
                   ],
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                   child: Row(
                     children: <Widget>[
                       Expanded(

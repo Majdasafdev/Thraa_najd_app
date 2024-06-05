@@ -27,13 +27,13 @@ class CartScreen extends StatelessWidget {
         elevation: 0,
         title: Text(
           'myCart'.tr(),
-          style: TextStyle(color: Colors.black),
+          style: const TextStyle(color: Colors.black),
         ),
         leading: GestureDetector(
           onTap: () {
             Navigator.pop(context);
           },
-          child: Icon(
+          child: const Icon(
             Icons.arrow_back,
             color: Colors.black,
           ),
@@ -44,7 +44,7 @@ class CartScreen extends StatelessWidget {
           LayoutBuilder(
             builder: (context, constraints) {
               if (products.isNotEmpty) {
-                return Container(
+                return SizedBox(
                   height: screenHeight -
                       statusBarHeight -
                       appBarHeight -
@@ -59,85 +59,92 @@ class CartScreen extends StatelessWidget {
                           onTapUp: (details) {
                             showCustomMenu(details, context, products[index]);
                           },
-                          child: Container(
-                            color: kSecondaryColor,
-                            height: screenHeight * .15,
-                            // width: screenWidth * .8,
-                            child: Row(
-                              children: [
-                                CircleAvatar(
-                                  radius: screenHeight * .15 / 2,
-                                  backgroundImage:
-                                      AssetImage(products[index].pLocation),
+                          child: Column(
+                            children: [
+                              Container(
+                                color: kSecondaryColor,
+                                height: screenHeight * .15,
+                                child: Row(
+                                  children: [
+                                    CircleAvatar(
+                                      radius: screenHeight * .15 / 2,
+                                      backgroundImage:
+                                          AssetImage(products[index].pLocation),
+                                    ),
+                                    Expanded(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 10.0),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  products[index].pName,
+                                                  style: const TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                const SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Text(
+                                                  products[index].pPrice,
+                                                  style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 20),
+                                            child: Text(
+                                              products[index]
+                                                  .pQuantity
+                                                  .toString(),
+                                              style: const TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                Expanded(
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 10.0),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              products[index].pName,
-                                              style: TextStyle(
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Text(
-                                              products[index].pPrice,
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 20),
-                                        child: Text(
-                                          products[index].pQuantity.toString(),
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                      ButtonTheme(
-                                        minWidth: screenWidth,
-                                        height: screenHeight * .08,
-                                        child: ElevatedButton(
-                                          onPressed: () {
-                                            showCustomDialog(products, context);
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.green,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.only(
-                                                  topRight: Radius.circular(10),
-                                                  topLeft: Radius.circular(10)),
-                                            ),
-                                          ),
-                                          child: Text(
-                                            "confirmOrder".tr(),
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.black),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                              ),
+                              ButtonTheme(
+                                minWidth: screenWidth,
+                                height: screenHeight * .08,
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    showCustomDialog(products, context);
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.green,
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                          topRight: Radius.circular(10),
+                                          topLeft: Radius.circular(10)),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    "confirmOrder".tr(),
+                                    style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black),
                                   ),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                       );
@@ -146,7 +153,7 @@ class CartScreen extends StatelessWidget {
                   ),
                 );
               } else {
-                return Container(
+                return SizedBox(
                   height: screenHeight -
                       (screenHeight * .08) -
                       appBarHeight -
@@ -179,7 +186,7 @@ class CartScreen extends StatelessWidget {
                 .deleteProduct(product);
             Navigator.pushNamed(context, ProductInfo.id, arguments: product);
           },
-          child: Text('Edit'),
+          child: const Text('Edit'),
         ),
         MyPopupMenuItem(
           onClick: () {
@@ -187,40 +194,53 @@ class CartScreen extends StatelessWidget {
             Provider.of<CartItem>(context, listen: false)
                 .deleteProduct(product);
           },
-          child: Text('Delete'),
+          child: const Text('Delete'),
         ),
       ],
     );
   }
 
-  void showCustomDialog(List<Product> products, context) async {
-    var price = getTotallPrice(products);
-    var address;
-    var nameOfClient;
-    var mobileNumClinet;
-    AlertDialog alertDialog = AlertDialog(
-      actions: <Widget>[
-        MaterialButton(
-          onPressed: () {
-            try {
-              Store _store = Store();
-              _store.storeOrders({
-                kTotallPrice: price,
-                kAddress: address,
-                kNameOfClient: nameOfClient,
-                kMobileNumClinet: mobileNumClinet
-              }, products);
+  void showCustomDialog(List<Product> products, BuildContext context) async {
+    double price = getTotallPrice(products);
+    String? address;
+    String? nameOfClient;
+    String? mobileNumClinet;
 
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text('Orderd Successfully'),
-              ));
-              Navigator.pop(context);
-            } catch (ex) {
-              print(ex);
+    AlertDialog alertDialog = AlertDialog(
+      actions: [
+        TextButton(
+          onPressed: () {
+            if (address != null &&
+                nameOfClient != null &&
+                mobileNumClinet != null) {
+              try {
+                Store store = Store();
+                store.storeOrders({
+                  kTotallPrice: price,
+                  kAddress: address!,
+                  kNameOfClient: nameOfClient!,
+                  kMobileNumClinet: mobileNumClinet!,
+                }, products);
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Order Placed Successfully'),
+                  ),
+                );
+                Navigator.of(context).pop();
+              } catch (ex) {
+                print('Error: $ex');
+              }
             }
           },
-          child: Text('Confirm'),
-        )
+          child: const Text('Confirm'),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Text('Cancel'),
+        ),
       ],
       content: SingleChildScrollView(
         child: Column(
@@ -229,35 +249,37 @@ class CartScreen extends StatelessWidget {
               onChanged: (value) {
                 address = value;
               },
-              decoration: InputDecoration(hintText: 'Enter your Address'),
+              decoration: const InputDecoration(hintText: 'Enter your Address'),
             ),
+            const SizedBox(height: 16.0),
             TextField(
               onChanged: (value) {
                 nameOfClient = value;
               },
-              decoration: InputDecoration(hintText: 'Enter your Name'),
+              decoration: const InputDecoration(hintText: 'Enter your Name'),
             ),
+            const SizedBox(height: 16.0),
             TextField(
               onChanged: (value) {
                 mobileNumClinet = value;
               },
-              decoration: InputDecoration(hintText: 'Enter your Phone number'),
+              decoration:
+                  const InputDecoration(hintText: 'Enter your Phone number'),
             ),
           ],
         ),
       ),
-      title: Text('Totall Price  =  $price'),
+      title: Text('Total Price = \$${price.toStringAsFixed(2)}'),
     );
+
     await showDialog(
       context: context,
-      builder: (context) {
-        return alertDialog;
-      },
+      builder: (context) => alertDialog,
     );
   }
 
   getTotallPrice(List<Product> products) {
-    var price = 0;
+    double price = 0;
     for (var product in products) {
       price += product.pQuantity! * int.parse(product.pPrice);
     }
