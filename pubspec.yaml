@@ -31,12 +31,15 @@ dependencies:
   cloud_firestore: ^4.13.6
   csv: ^5.1.1
   cupertino_icons: ^1.0.6
+  dart_mappable: ^4.2.2
   easy_localization: ^3.0.3
   excel: ^4.0.2
+  fast_immutable_collections: ^10.2.4
   firebase_auth: ^4.15.3
   firebase_core: ^2.24.2
   firebase_database: ^10.4.5
   firebase_database_rest: ^1.0.3
+  firebase_storage: ^11.7.7
   flutter:
     sdk: flutter
   flutter_notifire: ^0.0.1
@@ -53,6 +56,10 @@ dev_dependencies:
   flutter_lints: ^3.0.0
   flutter_test:
     sdk: flutter
+  build_runner: ^2.4.9
+  dart_mappable_builder: ^4.2.3
+  
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 # The following section is specific to Flutter packages.
@@ -66,9 +73,9 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/icons/
-    - assets/images/products/
+    - assets/images/
     - assets/translations/
-    - assets/Data/
+    - assets/
     # An image asset can refer to one or more resolution-specific "variants", see
     # https://flutter.dev/assets-and-images/#resolution-aware
     # For details regarding adding assets from package dependencies, see
