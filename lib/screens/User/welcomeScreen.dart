@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:thraa_najd_mobile_app/constants.dart';
+import 'package:thraa_najd_mobile_app/utils/constants.dart';
 import 'package:thraa_najd_mobile_app/screens/User/CartScreen.dart';
 import 'package:thraa_najd_mobile_app/screens/User/home_page.dart';
 import 'package:thraa_najd_mobile_app/screens/login_screen.dart';

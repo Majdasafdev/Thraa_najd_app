@@ -2,8 +2,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:thraa_najd_mobile_app/constants.dart';
-import 'package:thraa_najd_mobile_app/firebase_options.dart';
 import 'package:thraa_najd_mobile_app/providers/cartItem.dart';
 import 'package:thraa_najd_mobile_app/screens/Admin/oreder_deatiels.dart';
 import 'package:thraa_najd_mobile_app/screens/User/cartScreen.dart';
@@ -12,6 +10,8 @@ import 'package:thraa_najd_mobile_app/screens/User/profileUserScreen.dart';
 import 'package:thraa_najd_mobile_app/screens/User/welcomeScreen.dart';
 import 'package:thraa_najd_mobile_app/screens/login_screen.dart';
 import 'package:thraa_najd_mobile_app/screens/registeration_page.dart';
+import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
+import 'package:thraa_najd_mobile_app/utils/constants.dart';
 import 'providers/admin_mode.dart';
 import 'providers/model_hud.dart';
 import 'screens/Admin/add_product.dart';
@@ -22,6 +22,7 @@ import 'screens/Admin/orders_screen.dart';
 import 'screens/User/home_page.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,6 +30,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   runApp(EasyLocalization(
     supportedLocales: const [
       Locale('en', 'US'),
@@ -46,6 +48,24 @@ class ThraaNajdApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //NOTE: Here we've added the products.
+    //TODO: delete this before uploading application to stores.
+    /*
+    Future(
+      () async {
+
+        await Future.delayed(Duration(seconds: 3));
+        print("started translation");
+        var result = await repositoryClient.productRepository
+            .translateExcelSheet("assets/Products sheet.xlsx");
+        print("finished translation");
+        await repositoryClient.productRepository.addBulkProducts(result);
+        print("Finished Addition, All set...");
+
+      },
+    );
+
+         */
     return FutureBuilder(
       future: SharedPreferences.getInstance(),
       builder: (context, snapshot) {
@@ -72,8 +92,8 @@ class ThraaNajdApp extends StatelessWidget {
               ChangeNotifierProvider<ModelHud>(
                 create: (context) => ModelHud(),
               ),
-              ChangeNotifierProvider<CartItem>(
-                create: (context) => CartItem(),
+              ChangeNotifierProvider<CartNotifier>(
+                create: (context) => CartNotifier(),
               ),
               ChangeNotifierProvider<AdminMode>(
                 create: (context) => AdminMode(),
@@ -87,7 +107,7 @@ class ThraaNajdApp extends StatelessWidget {
               initialRoute: isUserLoggedIn ? WelcomePage.id : WelcomePage.id,
               routes: {
                 OrderDeatiels.id: (context) => OrderDeatiels(),
-                loginPage.id: (context) => loginPage(),
+                loginPage.id: (context) => const loginPage(),
                 RegisterPage.id: (context) => RegisterPage(),
                 HomePage.id: (context) => const HomePage(),
                 AdminHome.id: (context) => const AdminHome(),
@@ -98,7 +118,7 @@ class ThraaNajdApp extends StatelessWidget {
                 CartScreen.id: (context) => const CartScreen(),
                 ProductInfo.id: (context) => ProductInfo(),
                 WelcomePage.id: (context) => const WelcomePage(),
-                ProfilePage.id: (context) => const ProfilePage(),
+                ProfilePage.id: (context) => ProfilePage(),
 
                 //WelcomeScreen
               },

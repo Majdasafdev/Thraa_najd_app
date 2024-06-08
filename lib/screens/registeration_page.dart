@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
-import 'package:thraa_najd_mobile_app/constants.dart';
+import 'package:thraa_najd_mobile_app/utils/constants.dart';
 import 'package:thraa_najd_mobile_app/providers/model_hud.dart';
 import 'package:thraa_najd_mobile_app/screens/login_screen.dart';
 import 'package:thraa_najd_mobile_app/widgets/custom_button.dart';

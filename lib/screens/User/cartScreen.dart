@@ -1,21 +1,30 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:thraa_najd_mobile_app/constants.dart';
-import 'package:thraa_najd_mobile_app/models/product.dart';
+import 'package:thraa_najd_mobile_app/models/CartItem.dart';
+import 'package:thraa_najd_mobile_app/models/Order.dart';
+import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
+import 'package:thraa_najd_mobile_app/utils/constants.dart';
+import 'package:thraa_najd_mobile_app/models/oldProduct.dart';
 import 'package:thraa_najd_mobile_app/providers/cartItem.dart';
 import 'package:thraa_najd_mobile_app/screens/User/product_info.dart';
 import 'package:thraa_najd_mobile_app/services/store.dart';
 
+import '../../models/CustomerOrder.dart';
+import '../../models/Product.dart';
 import '../../widgets/cusotme_menu.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({super.key});
+
   static String id = 'CartScreen';
 
   @override
   Widget build(BuildContext context) {
-    List<Product> products = Provider.of<CartItem>(context).products;
+    List<CartItem> currentCartItems =
+        Provider.of<CartNotifier>(context).cartItems;
     final double screenHeight = MediaQuery.of(context).size.height;
     final double screenWidth = MediaQuery.of(context).size.width;
     final double appBarHeight = AppBar().preferredSize.height;
@@ -28,12 +37,14 @@ class CartScreen extends StatelessWidget {
         title: Text(
           'myCart'.tr(),
           style: const TextStyle(color: Colors.black),
+          style: const TextStyle(color: Colors.black),
         ),
         leading: GestureDetector(
           onTap: () {
             Navigator.pop(context);
           },
           child: const Icon(
+          child: Icon(
             Icons.arrow_back,
             color: Colors.black,
           ),
@@ -49,6 +60,8 @@ class CartScreen extends StatelessWidget {
                       statusBarHeight -
                       appBarHeight -
                       (screenHeight * .08),
+              if (currentCartItems.isNotEmpty) {
+                return Container(
                   child: ListView.builder(
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
@@ -57,7 +70,8 @@ class CartScreen extends StatelessWidget {
                         padding: const EdgeInsets.all(8.0),
                         child: GestureDetector(
                           onTapUp: (details) {
-                            showCustomMenu(details, context, products[index]);
+                            showCustomMenu(
+                                details, context, currentCartItems[index]);
                           },
                           child: Column(
                             children: [
@@ -145,11 +159,96 @@ class CartScreen extends StatelessWidget {
                                 ),
                               ),
                             ],
+                          child: Container(
+                            color: kSecondaryColor,
+                            //height: screenHeight * .15,
+                            // width: screenWidth * .8,
+                            child: Row(
+                              children: [
+                                CircleAvatar(
+                                  radius: screenHeight * .15 / 2,
+                                  //NOTE: Changed The Image
+                                  backgroundImage: NetworkImage(
+                                      currentCartItems[index]
+                                          .product
+                                          .imageLink),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        currentCartItems[index]
+                                            .product
+                                            .productNameEN,
+                                        maxLines: 4,
+                                        softWrap: true,
+                                        overflow: TextOverflow.clip,
+                                        style: const TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      //Note added retail Price.
+                                      //TODO: Is it retails or wholesale here?
+                                      Text(
+                                        currentCartItems[index]
+                                            .product
+                                            .retailPrice
+                                            .toString(),
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 20),
+                                        child: Text(
+                                          currentCartItems[index]
+                                              .quantity
+                                              .toString(),
+                                          style: const TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      ButtonTheme(
+                                        minWidth: screenWidth,
+                                        height: screenHeight * .08,
+                                        child: ElevatedButton(
+                                          onPressed: () {
+                                            showCustomDialog(
+                                                currentCartItems, context);
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.green,
+                                            shape: const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.only(
+                                                  topRight: Radius.circular(10),
+                                                  topLeft: Radius.circular(10)),
+                                            ),
+                                          ),
+                                          child: Text(
+                                            "confirmOrder".tr(),
+                                            style: const TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       );
                     },
-                    itemCount: products.length,
+                    itemCount: currentCartItems.length,
                   ),
                 );
               } else {
@@ -170,11 +269,12 @@ class CartScreen extends StatelessWidget {
     );
   }
 
-  void showCustomMenu(details, context, product) async {
+  void showCustomMenu(details, context, CartItem product) async {
     double dx = details.globalPosition.dx;
     double dy = details.globalPosition.dy;
     double dx2 = MediaQuery.of(context).size.width - dx;
     double dy2 = MediaQuery.of(context).size.width - dy;
+
     await showMenu(
       context: context,
       position: RelativeRect.fromLTRB(dx, dy, dx2, dy2),
@@ -182,18 +282,22 @@ class CartScreen extends StatelessWidget {
         MyPopupMenuItem(
           onClick: () {
             Navigator.pop(context);
-            Provider.of<CartItem>(context, listen: false)
-                .deleteProduct(product);
-            Navigator.pushNamed(context, ProductInfo.id, arguments: product);
+            Provider.of<CartNotifier>(context, listen: false)
+                .deleteCartItem(product);
+            //NOTE: Passed product here.
+            Navigator.pushNamed(context, ProductInfo.id,
+                arguments: product.product);
           },
+          child: const Text('Edit'),
           child: const Text('Edit'),
         ),
         MyPopupMenuItem(
           onClick: () {
             Navigator.pop(context);
-            Provider.of<CartItem>(context, listen: false)
-                .deleteProduct(product);
+            Provider.of<CartNotifier>(context, listen: false)
+                .deleteCartItem(product);
           },
+          child: const Text('Delete'),
           child: const Text('Delete'),
         ),
       ],
@@ -206,21 +310,35 @@ class CartScreen extends StatelessWidget {
     String? nameOfClient;
     String? mobileNumClinet;
 
+  //NOTE: Edited workflow.
+  //TODO: Assign actual address, clientName, clientNumber.
+  void showCustomDialog(List<CartItem> cartItems, context) async {
+    var price = CartItem.getListTotalPrice(cartItems);
+    String address = "";
+    String clientName = "";
+    String clientNumber = "";
     AlertDialog alertDialog = AlertDialog(
       actions: [
         TextButton(
           onPressed: () {
-            if (address != null &&
-                nameOfClient != null &&
+            if (nameOfClient != null &&
                 mobileNumClinet != null) {
               try {
                 Store store = Store();
                 store.storeOrders({
                   kTotallPrice: price,
-                  kAddress: address!,
-                  kNameOfClient: nameOfClient!,
-                  kMobileNumClinet: mobileNumClinet!,
+                  kAddress: address,
+                  kNameOfClient: nameOfClient,
+                  kMobileNumClinet: mobileNumClinet,
                 }, products);
+            try {
+              repositoryClient.ordersRepository.storeOrders(CustomerOrder(
+                  totalPrice: price,
+                  clientName: clientName,
+                  clientMobileNumber: clientNumber,
+                  address: address,
+                  products: cartItems,
+                  orderId: ""));
 
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -231,6 +349,12 @@ class CartScreen extends StatelessWidget {
               } catch (ex) {
                 print('Error: $ex');
               }
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text('Orderd Successfully'),
+              ));
+              Navigator.pop(context);
+            } catch (ex) {
+              print(ex);
             }
           },
           child: const Text('Confirm'),
@@ -241,6 +365,8 @@ class CartScreen extends StatelessWidget {
           },
           child: const Text('Cancel'),
         ),
+          child: const Text('Confirm'),
+        )
       ],
       content: SingleChildScrollView(
         child: Column(
@@ -250,19 +376,23 @@ class CartScreen extends StatelessWidget {
                 address = value;
               },
               decoration: const InputDecoration(hintText: 'Enter your Address'),
+              decoration: const InputDecoration(hintText: 'Enter your Address'),
             ),
             const SizedBox(height: 16.0),
             TextField(
               onChanged: (value) {
-                nameOfClient = value;
+                clientName = value;
               },
+              decoration: const InputDecoration(hintText: 'Enter your Name'),
               decoration: const InputDecoration(hintText: 'Enter your Name'),
             ),
             const SizedBox(height: 16.0),
             TextField(
               onChanged: (value) {
-                mobileNumClinet = value;
+                clientNumber = value;
               },
+              decoration:
+                  const InputDecoration(hintText: 'Enter your Phone number'),
               decoration:
                   const InputDecoration(hintText: 'Enter your Phone number'),
             ),
@@ -270,7 +400,7 @@ class CartScreen extends StatelessWidget {
         ),
       ),
       title: Text('Total Price = \$${price.toStringAsFixed(2)}'),
-    );
+    )
 
     await showDialog(
       context: context,

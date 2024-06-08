@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:thraa_najd_mobile_app/providers/cartItem.dart';
 
-import 'models/product.dart';
+import '../models/oldProduct.dart';
 
-List<Product> getProductByCategory(String kNuts, List<Product> allproducts) {
-  List<Product> products = [];
+/*
+List<OldProduct> getProductByCategory(
+    String kNuts, List<OldProduct> allproducts) {
+  List<OldProduct> products = [];
   try {
     for (var product in allproducts) {
       if (product.pCategory == kNuts) {
@@ -17,6 +19,8 @@ List<Product> getProductByCategory(String kNuts, List<Product> allproducts) {
   }
   return products;
 }
+
+ */
 
 /////////////////<THE CODE BELOW FOR PRODUCTINFO PAGE>//////////////////
 

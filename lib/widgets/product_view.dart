@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:thraa_najd_mobile_app/function.dart';
-import 'package:thraa_najd_mobile_app/models/product.dart';
+import 'package:thraa_najd_mobile_app/models/Category.dart';
+import 'package:thraa_najd_mobile_app/models/Product.dart';
+import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
+import 'package:thraa_najd_mobile_app/utils/function.dart';
+import 'package:thraa_najd_mobile_app/models/oldProduct.dart';
 import 'package:thraa_najd_mobile_app/screens/User/product_info.dart';
 
 Widget ProductsView(String pCategory, List<Product> allProducts) {
@@ -20,7 +23,7 @@ Widget ProductsView(String pCategory, List<Product> allProducts) {
           Navigator.pushNamed(context, ProductInfo.id,
               arguments: products[index]);
         },
-        child: Stack(
+        child: Column(
           children: <Widget>[
             Positioned.fill(
               child: Image(
