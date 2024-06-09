@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
@@ -17,9 +20,9 @@ import 'package:thraa_najd_mobile_app/widgets/snack_bar.dart';
 import 'package:thraa_najd_mobile_app/providers/admin_mode.dart';
 import 'package:thraa_najd_mobile_app/widgets/switch_langs.dart';
 import 'Admin/admin_home.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class loginPage extends StatefulWidget {
-  const loginPage({super.key});
   const loginPage({super.key});
   static String id = 'loginPage';
   @override
@@ -27,7 +30,33 @@ class loginPage extends StatefulWidget {
 }
 
 class _loginPageState extends State<loginPage> {
+/*  Future<void> _handleSignIn(BuildContext context) async {
+    try {
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
+      if (googleAuth != null) {
+        // do something with googleAuth
+      } else {
+        // handle the case where googleAuth is null
+      }
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        idToken: googleAuth?.idToken,
+        accessToken: googleAuth?.accessToken,
+      );
+      final User? user = (await _auth.signInWithCredential(credential)).user;
+      // Navigate to the UserInfoScreen with the signed-in user
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomePage()),
+      );
+    } catch (e) {
+      print('Error signing in with Google: $e');
+    }
+  }
+*/
   bool isLoading = false;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   GlobalKey<FormState> formkey = GlobalKey();
   String? email;
@@ -60,7 +89,6 @@ class _loginPageState extends State<loginPage> {
                     Text(
                       'logwelcome'.tr(),
                       style: const TextStyle(
-                      style: TextStyle(
                         fontSize: 24,
                         color: Colors.white,
                       ),
@@ -77,7 +105,6 @@ class _loginPageState extends State<loginPage> {
                   hintText: 'email'.tr(),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 20),
                   padding: const EdgeInsets.only(left: 20),
                   child: Row(
                     children: <Widget>[
@@ -98,7 +125,6 @@ class _loginPageState extends State<loginPage> {
                       ),
                       Text(
                         'remember'.tr(),
-                        style: const TextStyle(color: Colors.white),
                         style: const TextStyle(color: Colors.white),
                       )
                     ],
@@ -152,29 +178,20 @@ class _loginPageState extends State<loginPage> {
                 ),
                 Custome_button(
                     onTap: () async {
-                      signInWithGoogle();
-                    },
-                    text: 'Sign in with google'),
-                Custome_button(
-                    onTap: () async {
                       try {
-                        await _auth.signInWithGoogle(context);
-                        Navigator.pushNamed(context, HomePage.id);
+                        await _auth
+                            .signInWithGoogle(context); // Pass the context here
                       } catch (e) {
                         print('Error signing in with Google: $e');
                       }
                     },
-                    text: 'login GOOGLE'),
-                const SizedBox(
-                  height: 10,
-                ),
+                    text: 'Sign in with google'),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       'donthaveaccount'.tr(),
                       style: const TextStyle(
-                      style: TextStyle(
                         color: Colors.white,
                       ),
                     ),
@@ -185,7 +202,6 @@ class _loginPageState extends State<loginPage> {
                       child: Text(
                         'registerationn'.tr(),
                         style: const TextStyle(
-                        style: TextStyle(
                           color: Color(0xffC7EDE6),
                         ),
                       ),
@@ -193,8 +209,6 @@ class _loginPageState extends State<loginPage> {
                   ],
                 ),
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                   padding:
                       const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                   child: Row(
@@ -290,24 +304,5 @@ class _loginPageState extends State<loginPage> {
   void keepUserLoggedIn() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     preferences.setBool(kKeepMeLoggedIn, keepMeLoggedIn!);
-  }
-
-  Future signInWithGoogle() async {
-    // Trigger the authentication flow
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
-
-    // Create a new credential
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
-
-    // Once signed in, return the UserCredential
-    await FirebaseAuth.instance.signInWithCredential(credential);
-    Navigator.pushNamed(context, HomePage.id);
   }
 }

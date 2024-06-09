@@ -20,36 +20,17 @@ class ManageProducts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Product? product = ModalRoute.of(context)!.settings.arguments as Product?;
-
     return Scaffold(
       backgroundColor: kMainColor,
       //NOTE: Changed from stream builder to future builder.
       //because there is no reason to use streams here.
       body: StreamBuilder(
         stream: repositoryClient.productRepository.getAllProducts(),
-      appBar: AppBar(
-        title: const Text('Manage Products'), // title of the app bar
-        backgroundColor: kUnActiveColor, // background color of the app bar
-        actions: <Widget>[
-          // actions on the right side of the app bar
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              // action when the search button is pressed
-            },
-          ),
-        ],
-      ),
-      backgroundColor: Colors.white,
-      body: StreamBuilder<QuerySnapshot>(
-        stream: _store.loadProducts(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
             IList<Product> products = snapshot.data;
             return GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 childAspectRatio: .8,
               ),
@@ -72,7 +53,6 @@ class ManageProducts extends StatelessWidget {
                                 arguments: products[index]);
                           },
                           child: const Text('Edit'),
-                          child: const Text('Edit'),
                         ),
                         MyPopupMenuItem(
                           onClick: () {
@@ -82,7 +62,6 @@ class ManageProducts extends StatelessWidget {
                                     products.elementAt(index).productId);
                             Navigator.pop(context);
                           },
-                          child: const Text('Delete'),
                           child: const Text('Delete'),
                         ),
                       ],
@@ -119,24 +98,6 @@ class ManageProducts extends StatelessWidget {
                                     //NOTE: Changed here to english product name.
                                     //TODO: Integrate localization by if(english) then english name else arabic name.
                                     products[index].productNameEN,
-                                    style:
-                                        const TextStyle(fontWeight: FontWeight.bold),
-                      Positioned(
-                        bottom: 0,
-                        child: Opacity(
-                          opacity: .6,
-                          child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            height: 60,
-                            color: Colors.white,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 5),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    products[index].pName,
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold),
                                   ),

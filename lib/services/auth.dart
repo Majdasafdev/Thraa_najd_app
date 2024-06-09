@@ -28,23 +28,4 @@ class Auth {
   Future<void> signInAnonymously() async {
     await FirebaseAuth.instance.signInAnonymously();
   }
-
-  Future<void> signInWithGoogle(BuildContext context) async {
-    try {
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      final GoogleSignInAuthentication? googleAuth =
-          await googleUser?.authentication;
-
-      final credential = GoogleAuthProvider.credential(
-        idToken: googleAuth?.idToken,
-        accessToken: googleAuth?.accessToken,
-      );
-
-      await FirebaseAuth.instance.signInWithCredential(credential);
-      // Navigate to the home page
-      Navigator.pushNamed(context, HomePage.id);
-    } catch (e) {
-      print('Error signing in with Google: $e');
-    }
-  }
 }

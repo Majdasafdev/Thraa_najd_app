@@ -37,14 +37,12 @@ class CartScreen extends StatelessWidget {
         title: Text(
           'myCart'.tr(),
           style: const TextStyle(color: Colors.black),
-          style: const TextStyle(color: Colors.black),
         ),
         leading: GestureDetector(
           onTap: () {
             Navigator.pop(context);
           },
           child: const Icon(
-          child: Icon(
             Icons.arrow_back,
             color: Colors.black,
           ),
@@ -54,12 +52,6 @@ class CartScreen extends StatelessWidget {
         children: [
           LayoutBuilder(
             builder: (context, constraints) {
-              if (products.isNotEmpty) {
-                return SizedBox(
-                  height: screenHeight -
-                      statusBarHeight -
-                      appBarHeight -
-                      (screenHeight * .08),
               if (currentCartItems.isNotEmpty) {
                 return Container(
                   child: ListView.builder(
@@ -73,92 +65,6 @@ class CartScreen extends StatelessWidget {
                             showCustomMenu(
                                 details, context, currentCartItems[index]);
                           },
-                          child: Column(
-                            children: [
-                              Container(
-                                color: kSecondaryColor,
-                                height: screenHeight * .15,
-                                child: Row(
-                                  children: [
-                                    CircleAvatar(
-                                      radius: screenHeight * .15 / 2,
-                                      backgroundImage:
-                                          AssetImage(products[index].pLocation),
-                                    ),
-                                    Expanded(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 10.0),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  products[index].pName,
-                                                  style: const TextStyle(
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                                const SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Text(
-                                                  products[index].pPrice,
-                                                  style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 20),
-                                            child: Text(
-                                              products[index]
-                                                  .pQuantity
-                                                  .toString(),
-                                              style: const TextStyle(
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              ButtonTheme(
-                                minWidth: screenWidth,
-                                height: screenHeight * .08,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    showCustomDialog(products, context);
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.green,
-                                    shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.only(
-                                          topRight: Radius.circular(10),
-                                          topLeft: Radius.circular(10)),
-                                    ),
-                                  ),
-                                  child: Text(
-                                    "confirmOrder".tr(),
-                                    style: const TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black),
-                                  ),
-                                ),
-                              ),
-                            ],
                           child: Container(
                             color: kSecondaryColor,
                             //height: screenHeight * .15,
@@ -289,7 +195,6 @@ class CartScreen extends StatelessWidget {
                 arguments: product.product);
           },
           child: const Text('Edit'),
-          child: const Text('Edit'),
         ),
         MyPopupMenuItem(
           onClick: () {
@@ -298,17 +203,10 @@ class CartScreen extends StatelessWidget {
                 .deleteCartItem(product);
           },
           child: const Text('Delete'),
-          child: const Text('Delete'),
         ),
       ],
     );
   }
-
-  void showCustomDialog(List<Product> products, BuildContext context) async {
-    double price = getTotallPrice(products);
-    String? address;
-    String? nameOfClient;
-    String? mobileNumClinet;
 
   //NOTE: Edited workflow.
   //TODO: Assign actual address, clientName, clientNumber.
@@ -318,19 +216,9 @@ class CartScreen extends StatelessWidget {
     String clientName = "";
     String clientNumber = "";
     AlertDialog alertDialog = AlertDialog(
-      actions: [
-        TextButton(
+      actions: <Widget>[
+        MaterialButton(
           onPressed: () {
-            if (nameOfClient != null &&
-                mobileNumClinet != null) {
-              try {
-                Store store = Store();
-                store.storeOrders({
-                  kTotallPrice: price,
-                  kAddress: address,
-                  kNameOfClient: nameOfClient,
-                  kMobileNumClinet: mobileNumClinet,
-                }, products);
             try {
               repositoryClient.ordersRepository.storeOrders(CustomerOrder(
                   totalPrice: price,
@@ -340,15 +228,6 @@ class CartScreen extends StatelessWidget {
                   products: cartItems,
                   orderId: ""));
 
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Order Placed Successfully'),
-                  ),
-                );
-                Navigator.of(context).pop();
-              } catch (ex) {
-                print('Error: $ex');
-              }
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                 content: Text('Orderd Successfully'),
               ));
@@ -357,14 +236,6 @@ class CartScreen extends StatelessWidget {
               print(ex);
             }
           },
-          child: const Text('Confirm'),
-        ),
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: const Text('Cancel'),
-        ),
           child: const Text('Confirm'),
         )
       ],
@@ -376,43 +247,30 @@ class CartScreen extends StatelessWidget {
                 address = value;
               },
               decoration: const InputDecoration(hintText: 'Enter your Address'),
-              decoration: const InputDecoration(hintText: 'Enter your Address'),
             ),
-            const SizedBox(height: 16.0),
             TextField(
               onChanged: (value) {
                 clientName = value;
               },
               decoration: const InputDecoration(hintText: 'Enter your Name'),
-              decoration: const InputDecoration(hintText: 'Enter your Name'),
             ),
-            const SizedBox(height: 16.0),
             TextField(
               onChanged: (value) {
                 clientNumber = value;
               },
               decoration:
                   const InputDecoration(hintText: 'Enter your Phone number'),
-              decoration:
-                  const InputDecoration(hintText: 'Enter your Phone number'),
             ),
           ],
         ),
       ),
-      title: Text('Total Price = \$${price.toStringAsFixed(2)}'),
-    )
-
+      title: Text('Totall Price  =  $price'),
+    );
     await showDialog(
       context: context,
-      builder: (context) => alertDialog,
+      builder: (context) {
+        return alertDialog;
+      },
     );
-  }
-
-  getTotallPrice(List<Product> products) {
-    double price = 0;
-    for (var product in products) {
-      price += product.pQuantity! * int.parse(product.pPrice);
-    }
-    return price;
   }
 }
