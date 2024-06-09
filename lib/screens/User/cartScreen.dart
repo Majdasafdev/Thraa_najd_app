@@ -53,8 +53,8 @@ class CartScreen extends StatelessWidget {
           LayoutBuilder(
             builder: (context, constraints) {
               if (currentCartItems.isNotEmpty) {
-                return Container(
-                  child: ListView.builder(
+                return Column(children: [
+                  ListView.builder(
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
@@ -120,31 +120,6 @@ class CartScreen extends StatelessWidget {
                                               fontWeight: FontWeight.bold),
                                         ),
                                       ),
-                                      ButtonTheme(
-                                        minWidth: screenWidth,
-                                        height: screenHeight * .08,
-                                        child: ElevatedButton(
-                                          onPressed: () {
-                                            showCustomDialog(
-                                                currentCartItems, context);
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.green,
-                                            shape: const RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.only(
-                                                  topRight: Radius.circular(10),
-                                                  topLeft: Radius.circular(10)),
-                                            ),
-                                          ),
-                                          child: Text(
-                                            "confirmOrder".tr(),
-                                            style: const TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.black),
-                                          ),
-                                        ),
-                                      ),
                                     ],
                                   ),
                                 ),
@@ -156,7 +131,31 @@ class CartScreen extends StatelessWidget {
                     },
                     itemCount: currentCartItems.length,
                   ),
-                );
+                  ButtonTheme(
+                    minWidth: screenWidth,
+                    height: screenHeight * .08,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        showCustomDialog(currentCartItems, context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(10),
+                              topLeft: Radius.circular(10)),
+                        ),
+                      ),
+                      child: Text(
+                        "confirmOrder".tr(),
+                        style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
+                      ),
+                    ),
+                  ),
+                ]);
               } else {
                 return SizedBox(
                   height: screenHeight -
