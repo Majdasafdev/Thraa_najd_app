@@ -7,15 +7,13 @@ import 'package:thraa_najd_mobile_app/models/Category.dart';
 import 'package:thraa_najd_mobile_app/models/Product.dart';
 import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
-import 'package:thraa_najd_mobile_app/utils/function.dart';
-import 'package:thraa_najd_mobile_app/models/oldProduct.dart';
-import 'package:thraa_najd_mobile_app/screens/User/product_info.dart';
+import 'package:thraa_najd_mobile_app/utils/Extensions.dart';
+import 'package:thraa_najd_mobile_app/screens/User/ProductInfo.dart';
 import 'package:thraa_najd_mobile_app/screens/User/profileUserScreen.dart';
 import 'package:thraa_najd_mobile_app/screens/login_screen.dart';
 import 'package:thraa_najd_mobile_app/widgets/custome_discover.dart';
 import 'package:thraa_najd_mobile_app/widgets/product_view.dart';
 import 'package:thraa_najd_mobile_app/services/AuthRepository.dart';
-import 'package:thraa_najd_mobile_app/services/store.dart';
 import 'dart:convert';
 
 import 'package:thraa_najd_mobile_app/widgets/searchBar.dart';
@@ -144,17 +142,50 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            body: TabBarView(
-              children: [
-                //NOTE: Changed the products view to the actual categories.
-                //TODO: MUST remove nuts view and use productsView.
-                nutsView(),
-                ProductsView(Category.spices, allProducts),
-                ProductsView(Category.oils, allProducts),
-                ProductsView(Category.grains, allProducts),
-                ProductsView(Category.other, allProducts),
-              ],
-            ),
+            body: StreamBuilder<IList<Product>>(
+                stream: repositoryClient.productRepository.getAllProducts(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    allProducts = snapshot.data as IList<Product>;
+                    return TabBarView(
+                      children: [
+                        //NOTE: Changed the products view to the actual categories.
+                        ProductsView(
+                            category: Category.nuts,
+                            allProducts: allProducts
+                                .where((element) =>
+                                    (element.category == Category.nuts))
+                                .toIList()),
+                        ProductsView(
+                            category: Category.spices,
+                            allProducts: allProducts
+                                .where((element) =>
+                                    (element.category == Category.spices))
+                                .toIList()),
+                        ProductsView(
+                            category: Category.oils,
+                            allProducts: allProducts
+                                .where((element) =>
+                                    (element.category == Category.oils))
+                                .toIList()),
+                        ProductsView(
+                            category: Category.grains,
+                            allProducts: allProducts
+                                .where((element) =>
+                                    (element.category == Category.grains))
+                                .toIList()),
+                        ProductsView(
+                            category: Category.other,
+                            allProducts: allProducts
+                                .where((element) =>
+                                    (element.category == Category.other))
+                                .toIList()),
+                      ],
+                    );
+                  } else {
+                    return const Center(child: (Text('Loading...........')));
+                  }
+                }),
           ),
         ),
         // const SearchBarApp(),
@@ -209,9 +240,9 @@ class _HomePageState extends State<HomePage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                //TODO: Add localization
                                 Text(
-                                  products.elementAt(index).productNameEN,
+                                  context.locale.getProductName(
+                                      products.elementAt(index)),
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold),
                                 ),

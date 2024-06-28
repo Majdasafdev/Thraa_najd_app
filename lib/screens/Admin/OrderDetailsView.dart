@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:thraa_najd_mobile_app/models/Order.dart';
 import 'package:thraa_najd_mobile_app/models/Product.dart';
 import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
+import 'package:thraa_najd_mobile_app/utils/Extensions.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
-import 'package:thraa_najd_mobile_app/models/oldProduct.dart';
-import 'package:thraa_najd_mobile_app/services/store.dart';
 
 import '../../models/CustomerOrder.dart';
 
@@ -41,7 +41,9 @@ class OrderDeatiels extends StatelessWidget {
                               children: <Widget>[
                                 //TODO: Add Localization
                                 Text(
-                                    'product name : ${order.products.elementAt(index).product.productNameEN}',
+                                    context.locale.getProductName(order.products
+                                        .elementAt(index)
+                                        .product),
                                     style: const TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold)),

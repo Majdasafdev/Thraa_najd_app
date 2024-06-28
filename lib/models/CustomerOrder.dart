@@ -11,6 +11,7 @@ class CustomerOrder with CustomerOrderMappable {
   final String clientMobileNumber;
   final String clientName;
   final List<CartItem> products;
+  final bool orderStatus;
 
   const CustomerOrder(
       {required this.totalPrice,
@@ -18,7 +19,8 @@ class CustomerOrder with CustomerOrderMappable {
       required this.clientMobileNumber,
       required this.address,
       required this.products,
-      required this.orderId});
+      required this.orderId,
+      required this.orderStatus});
 
   static const fromMap = CustomerOrderMapper.fromMap;
 
@@ -28,4 +30,5 @@ class CustomerOrder with CustomerOrderMappable {
   static String get firebaseClientMobileNumber => "clientMobileNumber";
   static String get firebaseClientName => "clientName";
   static String get firebaseProducts => "products";
+  static String get firebaseOrderStatus => "orderStatus";
 }

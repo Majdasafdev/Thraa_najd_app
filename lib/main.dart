@@ -2,10 +2,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:thraa_najd_mobile_app/providers/cartItem.dart';
-import 'package:thraa_najd_mobile_app/screens/Admin/oreder_deatiels.dart';
-import 'package:thraa_najd_mobile_app/screens/User/cartScreen.dart';
-import 'package:thraa_najd_mobile_app/screens/User/product_info.dart';
+import 'package:thraa_najd_mobile_app/providers/CartNotifier.dart';
+import 'package:thraa_najd_mobile_app/screens/Admin/OrderDetailsView.dart';
+import 'package:thraa_najd_mobile_app/screens/User/CartView.dart';
+import 'package:thraa_najd_mobile_app/screens/User/ProductInfo.dart';
 import 'package:thraa_najd_mobile_app/screens/User/profileUserScreen.dart';
 import 'package:thraa_najd_mobile_app/screens/User/welcomeScreen.dart';
 import 'package:thraa_najd_mobile_app/screens/login_screen.dart';
@@ -18,8 +18,8 @@ import 'screens/Admin/add_product.dart';
 import 'screens/Admin/admin_home.dart';
 import 'screens/Admin/manage_product.dart';
 import 'screens/Admin/edit_products.dart';
-import 'screens/Admin/orders_screen.dart';
-import 'screens/User/home_page.dart';
+import 'screens/Admin/AllOrdersView.dart';
+import 'screens/User/HomeView.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'firebase_options.dart';
@@ -128,8 +128,4 @@ class ThraaNajdApp extends StatelessWidget {
       },
     );
   }
-}
-
-bool isArabic() {
-  return Intl.getCurrentLocale() == 'ar';
 }

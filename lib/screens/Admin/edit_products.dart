@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:thraa_najd_mobile_app/models/ExcelProductDTO.dart';
 import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
-import 'package:thraa_najd_mobile_app/models/oldProduct.dart';
-import 'package:thraa_najd_mobile_app/services/store.dart';
 import 'package:thraa_najd_mobile_app/widgets/custome_text_field.dart';
 
 import '../../models/Category.dart';

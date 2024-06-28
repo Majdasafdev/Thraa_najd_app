@@ -1,11 +1,12 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:thraa_najd_mobile_app/models/CartItem.dart';
 import 'package:thraa_najd_mobile_app/models/Product.dart';
+import 'package:thraa_najd_mobile_app/utils/Extensions.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
-import 'package:thraa_najd_mobile_app/models/oldProduct.dart';
-import 'package:thraa_najd_mobile_app/providers/cartItem.dart';
-import 'package:thraa_najd_mobile_app/screens/User/cartScreen.dart';
+import 'package:thraa_najd_mobile_app/providers/CartNotifier.dart';
+import 'package:thraa_najd_mobile_app/screens/User/CartView.dart';
 
 class ProductInfo extends StatefulWidget {
   static String id = 'ProductInfo';
@@ -76,19 +77,16 @@ class _ProductInfoState extends State<ProductInfo> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          //NOTE: Added product name
-                          //TODO: Add Localization.
                           Text(
-                            product.productNameEN,
+                            context.locale.getProductName(product),
                             style: const TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(
                             height: 10,
                           ),
-                          //TODO: Is Description nullable?
                           Text(
-                            product.productDescription ?? "",
+                            context.locale.getProductDescription(product),
                             style: const TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.w800),
                           ),

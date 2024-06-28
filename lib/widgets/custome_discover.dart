@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
-import 'package:thraa_najd_mobile_app/screens/User/cartScreen.dart';
+import 'package:thraa_najd_mobile_app/screens/User/CartView.dart';
 
 class CustomeDiscoverbar extends StatelessWidget {
   const CustomeDiscoverbar({

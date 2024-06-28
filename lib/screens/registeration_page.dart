@@ -11,7 +11,7 @@ import 'package:thraa_najd_mobile_app/widgets/custom_text_form_field.dart';
 import 'package:thraa_najd_mobile_app/widgets/custome_logo.dart';
 import 'package:thraa_najd_mobile_app/widgets/snack_bar.dart';
 
-import 'User/home_page.dart';
+import 'User/HomeView.dart';
 
 class RegisterPage extends StatefulWidget {
   RegisterPage({super.key});

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:thraa_najd_mobile_app/providers/SectionNotifier.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
-import 'package:thraa_najd_mobile_app/screens/User/CartScreen.dart';
-import 'package:thraa_najd_mobile_app/screens/User/home_page.dart';
+import 'package:thraa_najd_mobile_app/screens/User/CartView.dart';
+import 'package:thraa_najd_mobile_app/screens/User/HomeView.dart';
 import 'package:thraa_najd_mobile_app/screens/login_screen.dart';
 
 class WelcomePage extends StatefulWidget {
@@ -53,11 +55,13 @@ class _WelcomePageState extends State<WelcomePage> {
     return ElevatedButton(
       onPressed: () {
         if (text == 'Wholesale') {
+          //Provider.of<SectionNotifier>(context).setSection(true);
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => loginPage()),
+            MaterialPageRoute(builder: (context) => const loginPage()),
           );
         } else if (text == 'Retail') {
+          //Provider.of<SectionNotifier>(context).setSection(false);
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const HomePage()),

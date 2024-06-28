@@ -6,11 +6,10 @@ import 'package:provider/provider.dart';
 import 'package:thraa_najd_mobile_app/models/CartItem.dart';
 import 'package:thraa_najd_mobile_app/models/Order.dart';
 import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
+import 'package:thraa_najd_mobile_app/utils/Extensions.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
-import 'package:thraa_najd_mobile_app/models/oldProduct.dart';
-import 'package:thraa_najd_mobile_app/providers/cartItem.dart';
-import 'package:thraa_najd_mobile_app/screens/User/product_info.dart';
-import 'package:thraa_najd_mobile_app/services/store.dart';
+import 'package:thraa_najd_mobile_app/providers/CartNotifier.dart';
+import 'package:thraa_najd_mobile_app/screens/User/ProductInfo.dart';
 
 import '../../models/CustomerOrder.dart';
 import '../../models/Product.dart';
@@ -88,9 +87,8 @@ class CartScreen extends StatelessWidget {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        currentCartItems[index]
-                                            .product
-                                            .productNameEN,
+                                        context.locale.getProductName(
+                                            currentCartItems[index].product),
                                         maxLines: 4,
                                         softWrap: true,
                                         overflow: TextOverflow.clip,
@@ -226,7 +224,8 @@ class CartScreen extends StatelessWidget {
                   clientMobileNumber: clientNumber,
                   address: address,
                   products: cartItems,
-                  orderId: ""));
+                  orderId: "",
+                  orderStatus: false));
 
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                 content: Text('Orderd Successfully'),

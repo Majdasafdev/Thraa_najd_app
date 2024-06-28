@@ -36,13 +36,6 @@ class _ProfilePageState extends State<ProfilePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Center(
-                child: CircleAvatar(
-                  radius: 50,
-                  backgroundImage: NetworkImage(
-                      'https://cdn.pixabay.com/photo/2015/10/05/22/37/man-973588_960_720.jpg'),
-                ),
-              ),
               const SizedBox(height: 20),
               const Text('Name', style: TextStyle(fontWeight: FontWeight.bold)),
               const TextField(
