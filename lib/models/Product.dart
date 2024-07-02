@@ -11,8 +11,6 @@ class Product with ProductMappable {
   final String materialId;
   final String productNameEN;
   final String productNameAR;
-  final String? productDescriptionEN;
-  final String? productDescriptionAR;
   final Category category;
   final double costPrice;
   final double retailPrice;
@@ -30,9 +28,7 @@ class Product with ProductMappable {
       required this.retailPrice,
       required this.wholesalePrice,
       required this.imageLink,
-      this.stocked = true,
-      this.productDescriptionEN,
-      this.productDescriptionAR});
+      this.stocked = true});
 
   static get firebaseProductId => "productId";
 

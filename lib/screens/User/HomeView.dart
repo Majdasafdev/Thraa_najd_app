@@ -9,7 +9,7 @@ import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
 import 'package:thraa_najd_mobile_app/utils/Extensions.dart';
 import 'package:thraa_najd_mobile_app/screens/User/ProductInfo.dart';
-import 'package:thraa_najd_mobile_app/screens/User/profileUserScreen.dart';
+import 'package:thraa_najd_mobile_app/screens/User/ProfileView.dart';
 import 'package:thraa_najd_mobile_app/screens/login_screen.dart';
 import 'package:thraa_najd_mobile_app/widgets/custome_discover.dart';
 import 'package:thraa_najd_mobile_app/widgets/product_view.dart';
@@ -18,17 +18,16 @@ import 'dart:convert';
 
 import 'package:thraa_najd_mobile_app/widgets/searchBar.dart';
 
-class HomePage extends StatefulWidget {
+class HomeView extends StatefulWidget {
   static String id = 'HomePage';
 
-  const HomePage({super.key});
+  const HomeView({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomeView> createState() => _HomeViewState();
 }
 
-class _HomePageState extends State<HomePage> {
-  final _auth = AuthRepository();
+class _HomeViewState extends State<HomeView> {
   int _tabBarIndex = 0;
   int _bottomBarIndex = 0;
   IList<Product> allProducts = IList();
@@ -53,20 +52,10 @@ class _HomePageState extends State<HomePage> {
               onTap: (value) async {
                 switch (value) {
                   case 0:
-                    SharedPreferences pref =
-                        await SharedPreferences.getInstance();
-                    pref.clear();
-                    Navigator.popAndPushNamed(context, ProfilePage.id);
+                    Navigator.pushNamed(context, HomeView.id);
                     break;
                   case 1:
-                    SharedPreferences pref =
-                        await SharedPreferences.getInstance();
-                    pref.clear();
-                    await _auth.signOut();
-                    Navigator.popAndPushNamed(context, loginPage.id);
-                    break;
-                  case 2:
-                    // Perform actions for the third option
+                    Navigator.pushNamed(context, ProfileView.id);
                     break;
                 }
 
@@ -76,18 +65,14 @@ class _HomePageState extends State<HomePage> {
                   },
                 );
               },
-              items: [
-                const BottomNavigationBarItem(
-                  icon: Icon(Icons.person),
-                  label: ('Test'),
+              items: const [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home),
+                  label: ('Store'),
                 ),
                 BottomNavigationBarItem(
-                  icon: const Icon(Icons.close),
-                  label: ('signout'.tr()),
-                ),
-                const BottomNavigationBarItem(
                   icon: Icon(Icons.person),
-                  label: ('Test'),
+                  label: ('Profile'),
                 ),
               ],
             ),
@@ -188,85 +173,7 @@ class _HomePageState extends State<HomePage> {
                 }),
           ),
         ),
-        // const SearchBarApp(),
-        const CustomeDiscoverbar(),
       ],
-    );
-  }
-
-  //NOTE: Changed To Other Stream.
-  Widget nutsView() {
-    return StreamBuilder<IList<Product>>(
-      stream: repositoryClient.productRepository.getAllProducts(),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.hasData) {
-          print(snapshot.data); // Print the data to see its structure
-
-          allProducts = snapshot.data;
-
-          var products =
-              allProducts.where((element) => element.category == Category.nuts);
-          return GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: .8,
-            ),
-            itemBuilder: (context, index) => Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(context, ProductInfo.id,
-                      arguments: products.elementAt(index));
-                },
-                child: Stack(
-                  children: <Widget>[
-                    Positioned.fill(
-                      child: Image.network(
-                        products.elementAt(index).imageLink,
-                        fit: BoxFit.fill,
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      child: Opacity(
-                        opacity: .6,
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 60,
-                          color: Colors.white,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 5),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                  context.locale.getProductName(
-                                      products.elementAt(index)),
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                //TODO: Select which price to view.
-                                Text(products
-                                    .elementAt(index)
-                                    .retailPrice
-                                    .toString()),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-            itemCount: products.length,
-          );
-        } else {
-          return const Center(child: (Text('Loading...........')));
-        }
-      },
     );
   }
 }

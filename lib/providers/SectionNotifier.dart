@@ -5,5 +5,6 @@ class SectionNotifier extends ChangeNotifier {
 
   void setSection(bool isWholeSale) {
     this.isWholeSale = isWholeSale;
+    notifyListeners();
   }
 }

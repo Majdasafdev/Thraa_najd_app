@@ -86,16 +86,7 @@ class _ProductInfoState extends State<ProductInfo> {
                             height: 10,
                           ),
                           Text(
-                            context.locale.getProductDescription(product),
-                            style: const TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w800),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          //TODO: What price to view?
-                          Text(
-                            product.retailPrice.toString(),
+                            context.getProductPrice(product).toString(),
                             style: const TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),

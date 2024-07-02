@@ -64,7 +64,7 @@ class _WelcomePageState extends State<WelcomePage> {
           //Provider.of<SectionNotifier>(context).setSection(false);
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const HomePage()),
+            MaterialPageRoute(builder: (context) => const loginPage()),
           );
         }
       },

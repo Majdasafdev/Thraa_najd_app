@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thraa_najd_mobile_app/providers/CartNotifier.dart';
+import 'package:thraa_najd_mobile_app/providers/SectionNotifier.dart';
 import 'package:thraa_najd_mobile_app/screens/Admin/OrderDetailsView.dart';
 import 'package:thraa_najd_mobile_app/screens/User/CartView.dart';
 import 'package:thraa_najd_mobile_app/screens/User/ProductInfo.dart';
-import 'package:thraa_najd_mobile_app/screens/User/profileUserScreen.dart';
+import 'package:thraa_najd_mobile_app/screens/User/ProfileView.dart';
 import 'package:thraa_najd_mobile_app/screens/User/welcomeScreen.dart';
 import 'package:thraa_najd_mobile_app/screens/login_screen.dart';
 import 'package:thraa_najd_mobile_app/screens/registeration_page.dart';
@@ -95,6 +96,9 @@ class ThraaNajdApp extends StatelessWidget {
               ChangeNotifierProvider<CartNotifier>(
                 create: (context) => CartNotifier(),
               ),
+              ChangeNotifierProvider<SectionNotifier>(
+                create: (context) => SectionNotifier(),
+              ),
               ChangeNotifierProvider<AdminMode>(
                 create: (context) => AdminMode(),
               )
@@ -109,7 +113,7 @@ class ThraaNajdApp extends StatelessWidget {
                 OrderDeatiels.id: (context) => OrderDeatiels(),
                 loginPage.id: (context) => const loginPage(),
                 RegisterPage.id: (context) => RegisterPage(),
-                HomePage.id: (context) => const HomePage(),
+                HomeView.id: (context) => const HomeView(),
                 AdminHome.id: (context) => const AdminHome(),
                 AddProduct.id: (context) => AddProduct(),
                 ManageProducts.id: (context) => ManageProducts(),
@@ -118,7 +122,7 @@ class ThraaNajdApp extends StatelessWidget {
                 CartScreen.id: (context) => const CartScreen(),
                 ProductInfo.id: (context) => ProductInfo(),
                 WelcomePage.id: (context) => const WelcomePage(),
-                ProfilePage.id: (context) => ProfilePage(),
+                ProfileView.id: (context) => ProfileView(),
 
                 //WelcomeScreen
               },

@@ -88,13 +88,11 @@ class _ProductsViewState extends State<ProductsView> {
                                 ),
                               ),
                               Flexible(
-                                  child:
-                                      Text('\$ ${products[index].costPrice}')),
-                              //NOTE: added category name
-                              //TODO: Integrate localization
+                                  child: Text(
+                                      '\$ ${context.getProductPrice(products[index])}')),
                               Flexible(
                                   child: Text(
-                                      '\$ ${products[index].category.nameEN}'))
+                                      '\$  ${context.locale.getProductCategory(products[index])}'))
                             ],
                           ),
                         ),

@@ -12,9 +12,11 @@ class CustomerOrder with CustomerOrderMappable {
   final String clientName;
   final List<CartItem> products;
   final bool orderStatus;
+  final bool isWholesale;
 
   const CustomerOrder(
       {required this.totalPrice,
+      required this.isWholesale,
       required this.clientName,
       required this.clientMobileNumber,
       required this.address,
@@ -31,4 +33,5 @@ class CustomerOrder with CustomerOrderMappable {
   static String get firebaseClientName => "clientName";
   static String get firebaseProducts => "products";
   static String get firebaseOrderStatus => "orderStatus";
+  static String get firebaseIsWholesale => "isWholesale";
 }

@@ -39,9 +39,9 @@ class OrderDeatiels extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                //TODO: Add Localization
                                 Text(
-                                    context.locale.getProductName(order.products
+                                    context.locale.getProductCategory(order
+                                        .products
                                         .elementAt(index)
                                         .product),
                                     style: const TextStyle(
@@ -61,7 +61,7 @@ class OrderDeatiels extends StatelessWidget {
                                 ),
                                 //TODO: Add Localization.
                                 Text(
-                                  'product Category : ${order.products.elementAt(index).product.category.nameEN}',
+                                  'product Category : ${context.locale.getProductName(order.products.elementAt(index).product)}',
                                   style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold),
@@ -69,9 +69,8 @@ class OrderDeatiels extends StatelessWidget {
                                 const SizedBox(
                                   height: 10,
                                 ),
-                                //TODO: Retails or wholesale?
                                 Text(
-                                  'Product price : ${order.products.elementAt(index).product.retailPrice}',
+                                  'Product price : ${order.isWholesale ? order.products.elementAt(index).product.wholesalePrice : order.products.elementAt(index).product.retailPrice}',
                                   style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold),

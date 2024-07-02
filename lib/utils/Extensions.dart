@@ -1,9 +1,11 @@
 import 'dart:ui';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:thraa_najd_mobile_app/models/Product.dart';
 import 'package:thraa_najd_mobile_app/providers/CartNotifier.dart';
+import 'package:thraa_najd_mobile_app/providers/SectionNotifier.dart';
 
 extension ProductsExtension on Locale {
   String getProductName(Product product) {
@@ -13,10 +15,18 @@ extension ProductsExtension on Locale {
     return product.productNameAR;
   }
 
-  String getProductDescription(Product product) {
+  String getProductCategory(Product product) {
     if (languageCode == "en") {
-      return product.productDescriptionEN ?? "";
+      return product.category.nameEN;
     }
-    return product.productDescriptionAR ?? "";
+    return product.category.nameAR;
+  }
+}
+
+extension ProductPrice on BuildContext {
+  double getProductPrice(Product product) {
+    return Provider.of<SectionNotifier>(this).isWholeSale
+        ? product.wholesalePrice
+        : product.retailPrice;
   }
 }

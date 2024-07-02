@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:thraa_najd_mobile_app/models/CartItem.dart';
 import 'package:thraa_najd_mobile_app/models/Order.dart';
+import 'package:thraa_najd_mobile_app/providers/SectionNotifier.dart';
 import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
 import 'package:thraa_najd_mobile_app/utils/Extensions.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
@@ -96,13 +97,8 @@ class CartScreen extends StatelessWidget {
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold),
                                       ),
-                                      //Note added retail Price.
-                                      //TODO: Is it retails or wholesale here?
                                       Text(
-                                        currentCartItems[index]
-                                            .product
-                                            .retailPrice
-                                            .toString(),
+                                        "${context.getProductPrice(currentCartItems[index].product)}",
                                         style: const TextStyle(
                                             fontWeight: FontWeight.bold),
                                       ),
@@ -209,7 +205,8 @@ class CartScreen extends StatelessWidget {
   //NOTE: Edited workflow.
   //TODO: Assign actual address, clientName, clientNumber.
   void showCustomDialog(List<CartItem> cartItems, context) async {
-    var price = CartItem.getListTotalPrice(cartItems);
+    var price = CartItem.getListTotalPrice(
+        cartItems, Provider.of<SectionNotifier>(context).isWholeSale);
     String address = "";
     String clientName = "";
     String clientNumber = "";
@@ -225,7 +222,9 @@ class CartScreen extends StatelessWidget {
                   address: address,
                   products: cartItems,
                   orderId: "",
-                  orderStatus: false));
+                  orderStatus: false,
+                  isWholesale:
+                      Provider.of<SectionNotifier>(context).isWholeSale));
 
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                 content: Text('Orderd Successfully'),

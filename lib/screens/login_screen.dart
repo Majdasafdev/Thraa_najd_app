@@ -236,7 +236,7 @@ class _loginPageState extends State<loginPage> {
       if (Provider.of<AdminMode>(context, listen: false).isAdmin) {
         if (passward == adminPassword) {
           try {
-            await _auth.sigIn(email!.trim(), passward!.trim());
+            await _auth.signIn(email!.trim(), passward!.trim());
             Navigator.pushNamed(context, AdminHome.id);
           } catch (e) {
             modelhud.changeisLoading(false);
@@ -254,8 +254,8 @@ class _loginPageState extends State<loginPage> {
         }
       } else {
         try {
-          await _auth.sigIn(email!.trim(), passward!.trim());
-          Navigator.pushNamed(context, HomePage.id);
+          await _auth.signIn(email!.trim(), passward!.trim());
+          Navigator.pushNamed(context, HomeView.id);
         } catch (e) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(e.toString()),
@@ -287,6 +287,6 @@ class _loginPageState extends State<loginPage> {
 
     // Once signed in, return the UserCredential
     await FirebaseAuth.instance.signInWithCredential(credential);
-    Navigator.pushNamed(context, HomePage.id);
+    Navigator.pushNamed(context, HomeView.id);
   }
 }

@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
+import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
 import 'package:thraa_najd_mobile_app/providers/model_hud.dart';
 import 'package:thraa_najd_mobile_app/screens/login_screen.dart';
@@ -14,7 +15,7 @@ import 'package:thraa_najd_mobile_app/widgets/snack_bar.dart';
 import 'User/HomeView.dart';
 
 class RegisterPage extends StatefulWidget {
-  RegisterPage({super.key});
+  const RegisterPage({super.key});
   static String id = 'RegisterPage';
 
   @override
@@ -98,8 +99,9 @@ class _RegisterPageState extends State<RegisterPage> {
                       isLoading = true;
                       setState(() {});
                       try {
-                        await regeisterUser();
-                        Navigator.pushNamed(context, HomePage.id);
+                        repositoryClient.authRepository
+                            .signUp(email!, passward!, name!);
+                        Navigator.pushNamed(context, HomeView.id);
 
                         //  showSnackBar(
                         //  context,
