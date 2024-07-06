@@ -30,31 +30,6 @@ class loginPage extends StatefulWidget {
 }
 
 class _loginPageState extends State<loginPage> {
-/*  Future<void> _handleSignIn(BuildContext context) async {
-    try {
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      final GoogleSignInAuthentication? googleAuth =
-          await googleUser?.authentication;
-      if (googleAuth != null) {
-        // do something with googleAuth
-      } else {
-        // handle the case where googleAuth is null
-      }
-      final AuthCredential credential = GoogleAuthProvider.credential(
-        idToken: googleAuth?.idToken,
-        accessToken: googleAuth?.accessToken,
-      );
-      final User? user = (await _auth.signInWithCredential(credential)).user;
-      // Navigate to the UserInfoScreen with the signed-in user
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
-      );
-    } catch (e) {
-      print('Error signing in with Google: $e');
-    }
-  }
-*/
   bool isLoading = false;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
@@ -176,16 +151,6 @@ class _loginPageState extends State<loginPage> {
                 const SizedBox(
                   height: 10,
                 ),
-                Custome_button(
-                    onTap: () async {
-                      try {
-                        await _auth
-                            .signInWithGoogle(context); // Pass the context here
-                      } catch (e) {
-                        print('Error signing in with Google: $e');
-                      }
-                    },
-                    text: 'Sign in with google'),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

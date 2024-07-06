@@ -33,45 +33,4 @@ class AuthRepository extends AbstractRepository {
   Future<void> signInAnonymously() async {
     await FirebaseAuth.instance.signInAnonymously();
   }
-
-  Future<UserCredential> signInWithGoogle(BuildContext context) async {
-    try {
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-      if (googleUser != null) {
-        final GoogleSignInAuthentication googleAuth =
-            await googleUser.authentication;
-        final AuthCredential credential = GoogleAuthProvider.credential(
-          idToken: googleAuth.idToken,
-          accessToken: googleAuth.accessToken,
-        );
-
-        final UserCredential userCredential =
-            await FirebaseAuth.instance.signInWithCredential(credential);
-        // Navigate to the UserInfoScreen with the signed-in user
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const HomePage()),
-        );
-        return userCredential;
-      } else {
-        // Handle the case where googleUser is null (e.g., user canceled the sign-in process)
-        throw Exception('User canceled the sign-in process.');
-      }
-    } on PlatformException catch (e) {
-      // Handle the PlatformException
-      print('Error signing in with Google: $e');
-      if (e.code == 'sign_in_failed') {
-        // Specific error handling for the 'sign_in_failed' error code
-        // You can display a more user-friendly error message here
-        throw Exception('Google Sign-In failed. Please try again.');
-      } else {
-        // Handle other PlatformException errors
-        throw Exception('Google Sign-In error: ${e.code} - ${e.message}');
-      }
-    } catch (e) {
-      // Handle other exceptions
-      print('Error signing in with Google: $e');
-      throw Exception('Error signing in with Google: $e');
-    }
-  }
 }
