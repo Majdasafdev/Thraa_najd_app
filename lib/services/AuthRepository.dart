@@ -1,97 +1,36 @@
-import 'package:easy_localization/easy_localization.dart';
+import 'dart:async';
+
 import "package:firebase_auth/firebase_auth.dart";
-import 'package:thraa_najd_mobile_app/models/UserModel.dart';
+import 'package:flutter/services.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:thraa_najd_mobile_app/screens/User/home_page.dart';
 import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
-import 'package:thraa_najd_mobile_app/utils/FirebaseConstants.dart';
+import 'package:flutter/material.dart';
+import 'package:thraa_najd_mobile_app/widgets/snack_bar.dart';
 
 class AuthRepository extends AbstractRepository {
-  Future<bool> signUp(String email, String password, String name) async {
-    final authResult = await firebaseAuth.createUserWithEmailAndPassword(
-        email: email, password: password);
-    if (authResult.user == null) {
-      return false;
-    }
+  final _auth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-    await firebaseFirestore
-        .collection(FirebaseConstants.usersCollection)
-        .doc(authResult.user!.uid)
-        .set(UserModel(email: email, name: name).toMap());
+  Future<dynamic> signUp(String email, String passward) async {
+    final authResult = await _auth.createUserWithEmailAndPassword(
+        email: email, password: passward);
 
-    return true;
+    return authResult;
   }
 
-  Stream<UserModel> getCurrentUserInfo() {
-    return firebaseFirestore
-        .collection(FirebaseConstants.usersCollection)
-        .doc(firebaseAuth.currentUser!.uid)
-        .snapshots()
-        .asyncMap((event) => UserModel.fromMap(event.data()!));
-  }
-
-  Future<bool> editUserName(String name) async {
-    await firebaseFirestore
-        .collection(FirebaseConstants.usersCollection)
-        .doc(firebaseAuth.currentUser!.uid)
-        .set({UserModel.firebaseName: name});
-    return true;
-  }
-
-  Future<bool> editUserInfo(UserModel userModel) async {
-    if (userModel.name.isEmpty) {
-      throw Exception("Invalid Name");
-    }
-    if (userModel.phoneNumber!.isEmpty) {
-      throw Exception("Invalid Phone Number");
-    }
-    if (userModel.phoneNumber!.length != 10 ||
-        userModel.phoneNumber!.length != 9 ||
-        !userModel.phoneNumber!.startsWith("05")) {
-      throw Exception("Invalid Phone Number");
-    }
-    await firebaseFirestore
-        .collection(FirebaseConstants.usersCollection)
-        .doc(firebaseAuth.currentUser!.uid)
-        .set(userModel.toMap());
-    return true;
-  }
-
-  Future<bool> updateEmail(String email) async {
-    return true;
-  }
-
-  Future<dynamic> signIn(String email, String passward) async {
-    final authResult = await firebaseAuth.signInWithEmailAndPassword(
+  Future<dynamic> sigIn(String email, String passward) async {
+    final authResult = await _auth.signInWithEmailAndPassword(
         email: email, password: passward);
 
     return authResult;
   }
 
   Future<void> signOut() async {
-    await firebaseAuth.signOut();
+    await _auth.signOut();
   }
 
   Future<void> signInAnonymously() async {
     await FirebaseAuth.instance.signInAnonymously();
   }
-
-/*
-  Future<UserCredential> signInWithGoogle() async {
-    // Trigger the authentication flow
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
-
-    // Create a new credential
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
-
-    // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithCredential(credential);
-  }
-
-   */
 }

@@ -1,13 +1,16 @@
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
 import 'package:thraa_najd_mobile_app/providers/model_hud.dart';
-import 'package:thraa_najd_mobile_app/screens/User/HomeView.dart';
+import 'package:thraa_najd_mobile_app/screens/User/home_page.dart';
 import 'package:thraa_najd_mobile_app/screens/registeration_page.dart';
 import 'package:thraa_najd_mobile_app/services/AuthRepository.dart';
 import 'package:thraa_najd_mobile_app/widgets/custom_button.dart';
@@ -17,6 +20,7 @@ import 'package:thraa_najd_mobile_app/widgets/snack_bar.dart';
 import 'package:thraa_najd_mobile_app/providers/admin_mode.dart';
 import 'package:thraa_najd_mobile_app/widgets/switch_langs.dart';
 import 'Admin/admin_home.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class loginPage extends StatefulWidget {
   const loginPage({super.key});
@@ -27,6 +31,7 @@ class loginPage extends StatefulWidget {
 
 class _loginPageState extends State<loginPage> {
   bool isLoading = false;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   GlobalKey<FormState> formkey = GlobalKey();
   String? email;
@@ -146,11 +151,6 @@ class _loginPageState extends State<loginPage> {
                 const SizedBox(
                   height: 10,
                 ),
-                Custome_button(
-                    onTap: () async {
-                      signInWithGoogle();
-                    },
-                    text: 'Sign in with google'),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -236,7 +236,7 @@ class _loginPageState extends State<loginPage> {
       if (Provider.of<AdminMode>(context, listen: false).isAdmin) {
         if (passward == adminPassword) {
           try {
-            await _auth.signIn(email!.trim(), passward!.trim());
+            await _auth.sigIn(email!.trim(), passward!.trim());
             Navigator.pushNamed(context, AdminHome.id);
           } catch (e) {
             modelhud.changeisLoading(false);
@@ -254,8 +254,8 @@ class _loginPageState extends State<loginPage> {
         }
       } else {
         try {
-          await _auth.signIn(email!.trim(), passward!.trim());
-          Navigator.pushNamed(context, HomeView.id);
+          await _auth.sigIn(email!.trim(), passward!.trim());
+          Navigator.pushNamed(context, HomePage.id);
         } catch (e) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(e.toString()),
@@ -269,24 +269,5 @@ class _loginPageState extends State<loginPage> {
   void keepUserLoggedIn() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     preferences.setBool(kKeepMeLoggedIn, keepMeLoggedIn!);
-  }
-
-  Future signInWithGoogle() async {
-    // Trigger the authentication flow
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
-
-    // Create a new credential
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
-
-    // Once signed in, return the UserCredential
-    await FirebaseAuth.instance.signInWithCredential(credential);
-    Navigator.pushNamed(context, HomeView.id);
   }
 }
