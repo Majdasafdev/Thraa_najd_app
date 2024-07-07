@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:thraa_najd_mobile_app/models/Order.dart';
 import 'package:thraa_najd_mobile_app/models/Product.dart';
 import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
+import 'package:thraa_najd_mobile_app/utils/Extensions.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
-import 'package:thraa_najd_mobile_app/models/oldProduct.dart';
-import 'package:thraa_najd_mobile_app/services/store.dart';
 
 import '../../models/CustomerOrder.dart';
 
@@ -39,9 +39,11 @@ class OrderDeatiels extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                //TODO: Add Localization
                                 Text(
-                                    'product name : ${order.products.elementAt(index).product.productNameEN}',
+                                    context.locale.getProductCategory(order
+                                        .products
+                                        .elementAt(index)
+                                        .product),
                                     style: const TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold)),
@@ -59,7 +61,7 @@ class OrderDeatiels extends StatelessWidget {
                                 ),
                                 //TODO: Add Localization.
                                 Text(
-                                  'product Category : ${order.products.elementAt(index).product.category.nameEN}',
+                                  'product Category : ${context.locale.getProductName(order.products.elementAt(index).product)}',
                                   style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold),
@@ -67,9 +69,8 @@ class OrderDeatiels extends StatelessWidget {
                                 const SizedBox(
                                   height: 10,
                                 ),
-                                //TODO: Retails or wholesale?
                                 Text(
-                                  'Product price : ${order.products.elementAt(index).product.retailPrice}',
+                                  'Product price : ${order.isWholesale ? order.products.elementAt(index).product.wholesalePrice : order.products.elementAt(index).product.retailPrice}',
                                   style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold),

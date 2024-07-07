@@ -78,10 +78,11 @@ class ProductRepository extends AbstractRepository {
           .wait
           .onError((error, stackTrace) {
         if (error is ParallelWaitError) {
-          print((error).errors);
+          print((error as ParallelWaitError).errors);
         }
         throw Exception(error.toString());
       });
+      ;
 
       await docsRefs.map((element) {
         return element.update({Product.firebaseProductId: element.id});
@@ -190,7 +191,6 @@ class ProductRepository extends AbstractRepository {
       return event.docs.map((e) => Product.fromMap(e.data())).toIList();
     });
     return stream;
-
 /*
     return (await firebaseFirestore
             .collection(FirebaseConstants.productsCollection)

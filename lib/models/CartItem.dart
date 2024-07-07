@@ -11,12 +11,15 @@ class CartItem with CartItemMappable {
 
   const CartItem({required this.product, required this.quantity});
 
-  //NOTE: Added total here.
-  //TODO: should we use retails price or wholesale price?
-  double get totalPrice => quantity * product.retailPrice;
+  double get totalRetailPrice => quantity * product.retailPrice;
 
-  static double getListTotalPrice(List<CartItem> items) {
+  double get totalWholeSale => quantity * product.wholesalePrice;
+
+  static double getListTotalPrice(List<CartItem> items, bool isWholesale) {
     return items.fold(
-        0, (previousValue, element) => previousValue + element.totalPrice);
+        0,
+        (previousValue, element) =>
+            previousValue +
+            (isWholesale ? element.totalWholeSale : element.totalRetailPrice));
   }
 }

@@ -5,12 +5,12 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:thraa_najd_mobile_app/models/CartItem.dart';
 import 'package:thraa_najd_mobile_app/models/Order.dart';
+import 'package:thraa_najd_mobile_app/providers/SectionNotifier.dart';
 import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
+import 'package:thraa_najd_mobile_app/utils/Extensions.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
-import 'package:thraa_najd_mobile_app/models/oldProduct.dart';
-import 'package:thraa_najd_mobile_app/providers/cartItem.dart';
-import 'package:thraa_najd_mobile_app/screens/User/product_info.dart';
-import 'package:thraa_najd_mobile_app/services/store.dart';
+import 'package:thraa_najd_mobile_app/providers/CartNotifier.dart';
+import 'package:thraa_najd_mobile_app/screens/User/ProductInfo.dart';
 
 import '../../models/CustomerOrder.dart';
 import '../../models/Product.dart';
@@ -53,8 +53,8 @@ class CartScreen extends StatelessWidget {
           LayoutBuilder(
             builder: (context, constraints) {
               if (currentCartItems.isNotEmpty) {
-                return Column(children: [
-                  ListView.builder(
+                return Container(
+                  child: ListView.builder(
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
@@ -88,9 +88,8 @@ class CartScreen extends StatelessWidget {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        currentCartItems[index]
-                                            .product
-                                            .productNameEN,
+                                        context.locale.getProductName(
+                                            currentCartItems[index].product),
                                         maxLines: 4,
                                         softWrap: true,
                                         overflow: TextOverflow.clip,
@@ -98,13 +97,8 @@ class CartScreen extends StatelessWidget {
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold),
                                       ),
-                                      //Note added retail Price.
-                                      //TODO: Is it retails or wholesale here?
                                       Text(
-                                        currentCartItems[index]
-                                            .product
-                                            .retailPrice
-                                            .toString(),
+                                        "${context.getProductPrice(currentCartItems[index].product)}",
                                         style: const TextStyle(
                                             fontWeight: FontWeight.bold),
                                       ),
@@ -120,6 +114,31 @@ class CartScreen extends StatelessWidget {
                                               fontWeight: FontWeight.bold),
                                         ),
                                       ),
+                                      ButtonTheme(
+                                        minWidth: screenWidth,
+                                        height: screenHeight * .08,
+                                        child: ElevatedButton(
+                                          onPressed: () {
+                                            showCustomDialog(
+                                                currentCartItems, context);
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.green,
+                                            shape: const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.only(
+                                                  topRight: Radius.circular(10),
+                                                  topLeft: Radius.circular(10)),
+                                            ),
+                                          ),
+                                          child: Text(
+                                            "confirmOrder".tr(),
+                                            style: const TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black),
+                                          ),
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -131,33 +150,9 @@ class CartScreen extends StatelessWidget {
                     },
                     itemCount: currentCartItems.length,
                   ),
-                  ButtonTheme(
-                    minWidth: screenWidth,
-                    height: screenHeight * .08,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        showCustomDialog(currentCartItems, context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(10),
-                              topLeft: Radius.circular(10)),
-                        ),
-                      ),
-                      child: Text(
-                        "confirmOrder".tr(),
-                        style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black),
-                      ),
-                    ),
-                  ),
-                ]);
+                );
               } else {
-                return SizedBox(
+                return Container(
                   height: screenHeight -
                       (screenHeight * .08) -
                       appBarHeight -
@@ -210,7 +205,8 @@ class CartScreen extends StatelessWidget {
   //NOTE: Edited workflow.
   //TODO: Assign actual address, clientName, clientNumber.
   void showCustomDialog(List<CartItem> cartItems, context) async {
-    var price = CartItem.getListTotalPrice(cartItems);
+    var price = CartItem.getListTotalPrice(
+        cartItems, Provider.of<SectionNotifier>(context).isWholeSale);
     String address = "";
     String clientName = "";
     String clientNumber = "";
@@ -225,7 +221,10 @@ class CartScreen extends StatelessWidget {
                   clientMobileNumber: clientNumber,
                   address: address,
                   products: cartItems,
-                  orderId: ""));
+                  orderId: "",
+                  orderStatus: false,
+                  isWholesale:
+                      Provider.of<SectionNotifier>(context).isWholeSale));
 
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                 content: Text('Orderd Successfully'),

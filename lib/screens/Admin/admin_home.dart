@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
 import 'package:thraa_najd_mobile_app/screens/Admin/add_product.dart';
 import 'package:thraa_najd_mobile_app/screens/Admin/manage_product.dart';
-import 'package:thraa_najd_mobile_app/screens/Admin/orders_screen.dart';
+import 'package:thraa_najd_mobile_app/screens/Admin/AllOrdersView.dart';
 
 class AdminHome extends StatelessWidget {
   const AdminHome({super.key});

@@ -1,15 +1,15 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
-import 'package:thraa_najd_mobile_app/services/store.dart';
 
 //import 'package:flutter/cupertino.dart';
 import '../../models/CustomerOrder.dart';
 import '../../models/Order.dart';
-import 'oreder_deatiels.dart';
+import 'OrderDetailsView.dart';
 
 // ignore: depend_on_referenced_packages
 import 'package:thraa_najd_mobile_app/models/order.dart' as reusable;
@@ -54,21 +54,20 @@ class OrdersScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Text('Totall Price = ${orders[index].totalPrice}',
+                        Text(
+                            '${'totalPrice'.tr()}: ${orders[index].totalPrice}',
                             style: const TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold)),
                         const SizedBox(
                           height: 5,
                         ),
                         Text(
-                          'Address is ${orders[index].address}',
+                          '${'address'.tr()}: ${orders[index].address}',
                           style: const TextStyle(
                               fontSize: 18, fontWeight: FontWeight.bold),
                         ),
-
-                        //TODO: Why display documentId??
                         Text(
-                          'Id order: ${orders[index].orderId}',
+                          '${'orderStatus'.tr()}: ${orders[index].orderStatus}',
                           style: const TextStyle(
                               fontSize: 18, fontWeight: FontWeight.bold),
                         ),

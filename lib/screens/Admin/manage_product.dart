@@ -1,22 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:thraa_najd_mobile_app/screens/Admin/edit_products.dart';
 import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
+import 'package:thraa_najd_mobile_app/utils/Extensions.dart';
 import 'package:thraa_najd_mobile_app/widgets/cusotme_menu.dart';
 import '../../models/Product.dart';
 import '../../utils/constants.dart';
-import '../../models/oldProduct.dart';
-import '../../services/store.dart';
 
 class ManageProducts extends StatelessWidget {
   static String id = 'ManageProducts';
 
   final GlobalKey<FormState> formkey = GlobalKey<FormState>();
-
-  ManageProducts({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -95,11 +93,10 @@ class ManageProducts extends StatelessWidget {
                                   child: Text(
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
-                                    //NOTE: Changed here to english product name.
-                                    //TODO: Integrate localization by if(english) then english name else arabic name.
-                                    products[index].productNameEN,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold),
+                                    context.locale
+                                        .getProductName(products[index]),
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
                                   ),
                                 ),
                                 Flexible(
@@ -122,7 +119,7 @@ class ManageProducts extends StatelessWidget {
               itemCount: products.length,
             );
           } else {
-            return const Center(child: (Text('Loading...........')));
+            return Center(child: (Text('Loading...........')));
           }
         },
       ),

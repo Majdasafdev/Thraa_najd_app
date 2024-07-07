@@ -39,5 +39,8 @@
     "------------------------------------------------------------": "----------------------------------------------------------------",
     "myCart": "My Cart",
     "emptyCart": "Dear customer your Cart is Empity!",
-    "confirmOrder": "CONFIRM THE OREDER"
+    "confirmOrder": "CONFIRM THE OREDER",
+    "search": "search",
+    "totalPrice": "Total Price",
+    "address": "Address"
 }

@@ -1,75 +1,111 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:thraa_najd_mobile_app/models/Category.dart';
 import 'package:thraa_najd_mobile_app/models/Product.dart';
-import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
-import 'package:thraa_najd_mobile_app/utils/function.dart';
-import 'package:thraa_najd_mobile_app/models/oldProduct.dart';
-import 'package:thraa_najd_mobile_app/screens/User/product_info.dart';
+import 'package:thraa_najd_mobile_app/utils/Extensions.dart';
+import 'package:thraa_najd_mobile_app/screens/User/ProductInfo.dart';
 
-Widget ProductsView(Category category, IList<Product> allProducts) {
-  final IList<Product> products =
-      allProducts.where((element) => element.category == category).toIList();
+class ProductsView extends StatefulWidget {
+  final Category category;
+  final IList<Product> allProducts;
 
-  return GridView.builder(
-    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-      crossAxisCount: 2,
-      childAspectRatio: .8,
-    ),
-    itemBuilder: (context, index) => Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      child: GestureDetector(
-        onTap: () {
-          Navigator.pushNamed(context, ProductInfo.id,
-              arguments: products[index]);
-        },
-        //NOTE: Changed from stack to column
-        child: Column(
-          children: <Widget>[
-            //NOTE: changed image from assets to the cloud image
-            SizedBox(
-              height: 150,
-              child: Image.network(
-                products.elementAt(index).imageLink,
-                fit: BoxFit.fill,
-              ),
+  const ProductsView(
+      {super.key, required this.category, required this.allProducts});
+
+  @override
+  State<ProductsView> createState() => _ProductsViewState();
+}
+
+class _ProductsViewState extends State<ProductsView> {
+  final TextEditingController queryController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    final IList<Product> products = widget.allProducts.where((element) {
+      var query = true;
+      if (queryController.value.text.isNotEmpty) {
+        query = (element.productNameEN
+                .toLowerCase()
+                .contains(queryController.value.text.toLowerCase()) ||
+            element.productNameAR
+                .toLowerCase()
+                .contains(queryController.value.text.toLowerCase()));
+      }
+      return query;
+    }).toIList();
+    return Column(
+      children: [
+        TextFormField(
+            onChanged: (value) => setState(() {}),
+            controller: queryController,
+            decoration: InputDecoration(
+                hintText: 'search'.tr(), labelText: 'search'.tr())),
+        Expanded(
+          child: GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: .8,
             ),
-            Opacity(
-              opacity: .6,
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: 60,
-                color: Colors.white,
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Flexible(
-                        child: Text(
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          //NOTE: Changed here to english product name.
-                          //TODO: Integrate localization by if(english) then english name else arabic name.
-                          products[index].productNameEN,
-                          style: TextStyle(fontWeight: FontWeight.bold),
+            itemBuilder: (context, index) => Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, ProductInfo.id,
+                      arguments: products[index]);
+                },
+                //NOTE: Changed from stack to column
+                child: Column(
+                  children: <Widget>[
+                    //NOTE: changed image from assets to the cloud image
+                    SizedBox(
+                      height: 150,
+                      child: Image.network(
+                        products.elementAt(index).imageLink,
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                    Opacity(
+                      opacity: .6,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 60,
+                        color: Colors.white,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 5),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Flexible(
+                                child: Text(
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  context.locale
+                                      .getProductName(products[index]),
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              Flexible(
+                                  child: Text(
+                                      '\$ ${context.getProductPrice(products[index])}')),
+                              Flexible(
+                                  child: Text(
+                                      '\$  ${context.locale.getProductCategory(products[index])}'))
+                            ],
+                          ),
                         ),
                       ),
-                      Flexible(child: Text('\$ ${products[index].costPrice}')),
-                      //NOTE: added category name
-                      //TODO: Integrate localization
-                      Flexible(
-                          child: Text('\$ ${products[index].category.nameEN}'))
-                    ],
-                  ),
+                    )
+                  ],
                 ),
               ),
-            )
-          ],
+            ),
+            itemCount: products.length,
+          ),
         ),
-      ),
-    ),
-    itemCount: products.length,
-  );
+      ],
+    );
+  }
 }

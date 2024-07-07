@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:thraa_najd_mobile_app/models/CartItem.dart';
-import 'package:thraa_najd_mobile_app/models/oldProduct.dart';
 
 import '../models/Product.dart';
 
