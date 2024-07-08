@@ -24,6 +24,9 @@ class CustomerOrderMapper extends ClassMapperBase<CustomerOrder> {
   static double _$totalPrice(CustomerOrder v) => v.totalPrice;
   static const Field<CustomerOrder, double> _f$totalPrice =
       Field('totalPrice', _$totalPrice);
+  static bool _$isWholesale(CustomerOrder v) => v.isWholesale;
+  static const Field<CustomerOrder, bool> _f$isWholesale =
+      Field('isWholesale', _$isWholesale);
   static String _$clientName(CustomerOrder v) => v.clientName;
   static const Field<CustomerOrder, String> _f$clientName =
       Field('clientName', _$clientName);
@@ -39,25 +42,32 @@ class CustomerOrderMapper extends ClassMapperBase<CustomerOrder> {
   static String _$orderId(CustomerOrder v) => v.orderId;
   static const Field<CustomerOrder, String> _f$orderId =
       Field('orderId', _$orderId);
+  static bool _$orderStatus(CustomerOrder v) => v.orderStatus;
+  static const Field<CustomerOrder, bool> _f$orderStatus =
+      Field('orderStatus', _$orderStatus);
 
   @override
   final MappableFields<CustomerOrder> fields = const {
     #totalPrice: _f$totalPrice,
+    #isWholesale: _f$isWholesale,
     #clientName: _f$clientName,
     #clientMobileNumber: _f$clientMobileNumber,
     #address: _f$address,
     #products: _f$products,
     #orderId: _f$orderId,
+    #orderStatus: _f$orderStatus,
   };
 
   static CustomerOrder _instantiate(DecodingData data) {
     return CustomerOrder(
         totalPrice: data.dec(_f$totalPrice),
+        isWholesale: data.dec(_f$isWholesale),
         clientName: data.dec(_f$clientName),
         clientMobileNumber: data.dec(_f$clientMobileNumber),
         address: data.dec(_f$address),
         products: data.dec(_f$products),
-        orderId: data.dec(_f$orderId));
+        orderId: data.dec(_f$orderId),
+        orderStatus: data.dec(_f$orderStatus));
   }
 
   @override
@@ -117,11 +127,13 @@ abstract class CustomerOrderCopyWith<$R, $In extends CustomerOrder, $Out>
       get products;
   $R call(
       {double? totalPrice,
+      bool? isWholesale,
       String? clientName,
       String? clientMobileNumber,
       String? address,
       List<CartItem>? products,
-      String? orderId});
+      String? orderId,
+      bool? orderStatus});
   CustomerOrderCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
 
@@ -140,28 +152,34 @@ class _CustomerOrderCopyWithImpl<$R, $Out>
   @override
   $R call(
           {double? totalPrice,
+          bool? isWholesale,
           String? clientName,
           String? clientMobileNumber,
           String? address,
           List<CartItem>? products,
-          String? orderId}) =>
+          String? orderId,
+          bool? orderStatus}) =>
       $apply(FieldCopyWithData({
         if (totalPrice != null) #totalPrice: totalPrice,
+        if (isWholesale != null) #isWholesale: isWholesale,
         if (clientName != null) #clientName: clientName,
         if (clientMobileNumber != null) #clientMobileNumber: clientMobileNumber,
         if (address != null) #address: address,
         if (products != null) #products: products,
-        if (orderId != null) #orderId: orderId
+        if (orderId != null) #orderId: orderId,
+        if (orderStatus != null) #orderStatus: orderStatus
       }));
   @override
   CustomerOrder $make(CopyWithData data) => CustomerOrder(
       totalPrice: data.get(#totalPrice, or: $value.totalPrice),
+      isWholesale: data.get(#isWholesale, or: $value.isWholesale),
       clientName: data.get(#clientName, or: $value.clientName),
       clientMobileNumber:
           data.get(#clientMobileNumber, or: $value.clientMobileNumber),
       address: data.get(#address, or: $value.address),
       products: data.get(#products, or: $value.products),
-      orderId: data.get(#orderId, or: $value.orderId));
+      orderId: data.get(#orderId, or: $value.orderId),
+      orderStatus: data.get(#orderStatus, or: $value.orderStatus));
 
   @override
   CustomerOrderCopyWith<$R2, CustomerOrder, $Out2> $chain<$R2, $Out2>(

@@ -4,18 +4,18 @@ import 'package:thraa_najd_mobile_app/providers/SectionNotifier.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
 import 'package:thraa_najd_mobile_app/screens/User/CartView.dart';
 import 'package:thraa_najd_mobile_app/screens/User/HomeView.dart';
-import 'package:thraa_najd_mobile_app/screens/login_screen.dart';
+import 'package:thraa_najd_mobile_app/screens/LoginView.dart';
 
-class WelcomePage extends StatefulWidget {
-  static String id = 'WelcomePage';
+class WelcomeView extends StatefulWidget {
+  static String id = 'WelcomeView';
 
-  const WelcomePage({super.key});
+  const WelcomeView({super.key});
 
   @override
-  _WelcomePageState createState() => _WelcomePageState();
+  _WelcomeViewState createState() => _WelcomeViewState();
 }
 
-class _WelcomePageState extends State<WelcomePage> {
+class _WelcomeViewState extends State<WelcomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,13 +58,13 @@ class _WelcomePageState extends State<WelcomePage> {
           //Provider.of<SectionNotifier>(context).setSection(true);
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const loginPage()),
+            MaterialPageRoute(builder: (context) => const LoginView()),
           );
         } else if (text == 'Retail') {
           //Provider.of<SectionNotifier>(context).setSection(false);
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const loginPage()),
+            MaterialPageRoute(builder: (context) => const LoginView()),
           );
         }
       },
