@@ -92,7 +92,7 @@ class CartScreen extends StatelessWidget {
                                         fontWeight: FontWeight.bold),
                                   ),
                                   Text(
-                                    "${context.getProductPrice(currentCartItems[index].product)}",
+                                    "${currentCartItems[index].product.getProductPrice(context)}",
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold),
                                   ),

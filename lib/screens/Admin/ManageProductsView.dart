@@ -4,7 +4,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:thraa_najd_mobile_app/screens/Admin/edit_products.dart';
+import 'package:thraa_najd_mobile_app/screens/Admin/EditProductView.dart';
 import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
 import 'package:thraa_najd_mobile_app/utils/Extensions.dart';
 import 'package:thraa_najd_mobile_app/widgets/cusotme_menu.dart';
@@ -47,18 +47,23 @@ class ManageProducts extends StatelessWidget {
                       items: [
                         MyPopupMenuItem(
                           onClick: () {
-                            Navigator.pushNamed(context, EditProducts.id,
-                                arguments: products[index]);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => EditProductView(
+                                        product: products[index])));
                           },
                           child: const Text('Edit'),
                         ),
                         MyPopupMenuItem(
-                          onClick: () {
+                          onClick: () async {
                             //NOTE: Here performed Deletion
-                            repositoryClient.productRepository
+                            await repositoryClient.productRepository
                                 .removeProductByProductId(
                                     products.elementAt(index).productId);
-                            Navigator.pop(context);
+                            if (context.mounted) {
+                              Navigator.pop(context);
+                            }
                           },
                           child: const Text('Delete'),
                         ),
@@ -102,11 +107,9 @@ class ManageProducts extends StatelessWidget {
                                 Flexible(
                                     child: Text(
                                         '\$ ${products[index].costPrice}')),
-                                //NOTE: added category name
-                                //TODO: Integrate localization
                                 Flexible(
                                     child: Text(
-                                        '\$ ${products[index].category.nameEN}'))
+                                        '\$ ${products[index].category.name.tr()}'))
                               ],
                             ),
                           ),

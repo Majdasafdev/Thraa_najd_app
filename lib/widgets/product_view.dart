@@ -89,7 +89,7 @@ class _ProductsViewState extends State<ProductsView> {
                               ),
                               Flexible(
                                   child: Text(
-                                      '\$ ${context.getProductPrice(products[index])}')),
+                                      '\$ ${products.elementAt(index).getProductPrice(context)}')),
                               Flexible(
                                   child: Text(
                                       '\$  ${context.locale.getProductCategory(products[index])}'))

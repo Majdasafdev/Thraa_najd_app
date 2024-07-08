@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
-import 'package:thraa_najd_mobile_app/screens/Admin/add_product.dart';
-import 'package:thraa_najd_mobile_app/screens/Admin/manage_product.dart';
+import 'package:thraa_najd_mobile_app/screens/Admin/AddProductView.dart';
+import 'package:thraa_najd_mobile_app/screens/Admin/ManageProductsView.dart';
 import 'package:thraa_najd_mobile_app/screens/Admin/AllOrdersView.dart';
 
-class AdminHome extends StatelessWidget {
-  const AdminHome({super.key});
+class AdminHomeView extends StatelessWidget {
+  const AdminHomeView({super.key});
 
-  static String id = 'AdminHome';
+  static String id = 'AdminHomeView';
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class AdminHome extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: () {
-              Navigator.pushNamed(context, AddProduct.id);
+              Navigator.pushNamed(context, AddProductView.id);
             },
             child: const Text('Add Product'),
           ),

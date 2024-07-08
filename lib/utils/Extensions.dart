@@ -22,11 +22,3 @@ extension ProductsExtension on Locale {
     return product.category.nameAR;
   }
 }
-
-extension ProductPrice on BuildContext {
-  double getProductPrice(Product product) {
-    return Provider.of<SectionNotifier>(this).isWholeSale
-        ? product.wholesalePrice
-        : product.retailPrice;
-  }
-}
