@@ -8,10 +8,11 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:thraa_najd_mobile_app/screens/User/HomeView.dart';
+import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
 import 'package:thraa_najd_mobile_app/providers/model_hud.dart';
-import 'package:thraa_najd_mobile_app/screens/User/home_page.dart';
-import 'package:thraa_najd_mobile_app/screens/registeration_page.dart';
+import 'package:thraa_najd_mobile_app/screens/RegistrationView.dart';
 import 'package:thraa_najd_mobile_app/services/AuthRepository.dart';
 import 'package:thraa_najd_mobile_app/widgets/custom_button.dart';
 import 'package:thraa_najd_mobile_app/widgets/custom_text_form_field.dart';
@@ -22,29 +23,25 @@ import 'package:thraa_najd_mobile_app/widgets/switch_langs.dart';
 import 'Admin/admin_home.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-class loginPage extends StatefulWidget {
-  const loginPage({super.key});
-  static String id = 'loginPage';
+class LoginView extends StatefulWidget {
+  const LoginView({super.key});
+  static String id = 'loginView';
   @override
-  State<loginPage> createState() => _loginPageState();
+  State<LoginView> createState() => _LoginViewState();
 }
 
-class _loginPageState extends State<loginPage> {
+class _LoginViewState extends State<LoginView> {
   bool isLoading = false;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   GlobalKey<FormState> formkey = GlobalKey();
   String? email;
   String? passward;
-
-  final _auth = AuthRepository();
 
   final adminPassword = 'Admin123456';
   bool? keepMeLoggedIn = false;
 
   @override
   Widget build(BuildContext context) {
-    MediaQuery.of(context).size.height * .2;
     return Scaffold(
       backgroundColor: kMainColor,
       body: ModalProgressHUD(
@@ -127,8 +124,9 @@ class _loginPageState extends State<loginPage> {
                         isLoading = true;
                         setState(() {});
                         try {
-                          await loginUser();
-                          Navigator.pushNamed(context, loginPage.id,
+                          await repositoryClient.authRepository
+                              .signIn(email!, passward!);
+                          Navigator.pushNamed(context, LoginView.id,
                               arguments: email);
                         } on FirebaseAuthException catch (e) {
                           if (e.code == 'user-not-found') {
@@ -162,7 +160,7 @@ class _loginPageState extends State<loginPage> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.pushNamed(context, RegisterPage.id);
+                        Navigator.pushNamed(context, RegistrationView.id);
                       },
                       child: Text(
                         'registerationn'.tr(),
@@ -223,11 +221,6 @@ class _loginPageState extends State<loginPage> {
     );
   }
 
-  Future<void> loginUser() async {
-    UserCredential user = await FirebaseAuth.instance
-        .signInWithEmailAndPassword(email: email!, password: passward!);
-  }
-
   void _validate(context) async {
     final modelhud = Provider.of<ModelHud>(context, listen: false);
     modelhud.changeisLoading(true);
@@ -236,7 +229,8 @@ class _loginPageState extends State<loginPage> {
       if (Provider.of<AdminMode>(context, listen: false).isAdmin) {
         if (passward == adminPassword) {
           try {
-            await _auth.sigIn(email!.trim(), passward!.trim());
+            await repositoryClient.authRepository
+                .signIn(email!.trim(), passward!.trim());
             Navigator.pushNamed(context, AdminHome.id);
           } catch (e) {
             modelhud.changeisLoading(false);
@@ -254,8 +248,9 @@ class _loginPageState extends State<loginPage> {
         }
       } else {
         try {
-          await _auth.sigIn(email!.trim(), passward!.trim());
-          Navigator.pushNamed(context, HomePage.id);
+          await repositoryClient.authRepository
+              .signIn(email!.trim(), passward!.trim());
+          Navigator.pushNamed(context, HomeView.id);
         } catch (e) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(e.toString()),

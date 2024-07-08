@@ -8,9 +8,9 @@ import 'package:thraa_najd_mobile_app/screens/Admin/OrderDetailsView.dart';
 import 'package:thraa_najd_mobile_app/screens/User/CartView.dart';
 import 'package:thraa_najd_mobile_app/screens/User/ProductInfo.dart';
 import 'package:thraa_najd_mobile_app/screens/User/ProfileView.dart';
-import 'package:thraa_najd_mobile_app/screens/User/welcomeScreen.dart';
-import 'package:thraa_najd_mobile_app/screens/login_screen.dart';
-import 'package:thraa_najd_mobile_app/screens/registeration_page.dart';
+import 'package:thraa_najd_mobile_app/screens/User/welcomeView.dart';
+import 'package:thraa_najd_mobile_app/screens/LoginView.dart';
+import 'package:thraa_najd_mobile_app/screens/RegistrationView.dart';
 import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
 import 'providers/admin_mode.dart';
@@ -108,11 +108,11 @@ class ThraaNajdApp extends StatelessWidget {
               supportedLocales: context.supportedLocales,
               locale: context.locale,
               debugShowCheckedModeBanner: false,
-              initialRoute: isUserLoggedIn ? WelcomePage.id : WelcomePage.id,
+              initialRoute: isUserLoggedIn ? WelcomeView.id : WelcomeView.id,
               routes: {
                 OrderDeatiels.id: (context) => OrderDeatiels(),
-                loginPage.id: (context) => const loginPage(),
-                RegisterPage.id: (context) => RegisterPage(),
+                LoginView.id: (context) => const LoginView(),
+                RegistrationView.id: (context) => RegistrationView(),
                 HomeView.id: (context) => const HomeView(),
                 AdminHome.id: (context) => const AdminHome(),
                 AddProduct.id: (context) => AddProduct(),
@@ -121,7 +121,7 @@ class ThraaNajdApp extends StatelessWidget {
                 EditProducts.id: (context) => EditProducts(),
                 CartScreen.id: (context) => const CartScreen(),
                 ProductInfo.id: (context) => ProductInfo(),
-                WelcomePage.id: (context) => const WelcomePage(),
+                WelcomeView.id: (context) => const WelcomeView(),
                 ProfileView.id: (context) => ProfileView(),
 
                 //WelcomeScreen
