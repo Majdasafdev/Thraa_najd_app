@@ -3,8 +3,6 @@ import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,13 +10,7 @@ import 'package:thraa_najd_mobile_app/screens/User/HomeView.dart';
 import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
 import 'package:thraa_najd_mobile_app/providers/model_hud.dart';
-<<<<<<< HEAD:lib/screens/login_screen.dart
-import 'package:thraa_najd_mobile_app/screens/User/HomeView.dart';
-import 'package:thraa_najd_mobile_app/screens/registeration_page.dart';
-=======
 import 'package:thraa_najd_mobile_app/screens/RegistrationView.dart';
->>>>>>> 549123fa49905ccbde0624ce842fa575701c498b:lib/screens/LoginView.dart
-import 'package:thraa_najd_mobile_app/services/AuthRepository.dart';
 import 'package:thraa_najd_mobile_app/widgets/custom_button.dart';
 import 'package:thraa_najd_mobile_app/widgets/custom_text_form_field.dart';
 import 'package:thraa_najd_mobile_app/widgets/custome_logo.dart';
@@ -253,12 +245,8 @@ class _LoginViewState extends State<LoginView> {
         }
       } else {
         try {
-<<<<<<< HEAD:lib/screens/login_screen.dart
-          await _auth.sigIn(email!.trim(), passward!.trim());
-=======
           await repositoryClient.authRepository
               .signIn(email!.trim(), passward!.trim());
->>>>>>> 549123fa49905ccbde0624ce842fa575701c498b:lib/screens/LoginView.dart
           Navigator.pushNamed(context, HomeView.id);
         } catch (e) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
