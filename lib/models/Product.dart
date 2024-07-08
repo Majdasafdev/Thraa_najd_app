@@ -1,6 +1,10 @@
 import 'package:dart_mappable/dart_mappable.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 
+import '../providers/SectionNotifier.dart';
 import 'Category.dart';
 
 part 'Product.mapper.dart';
@@ -56,5 +60,11 @@ class Product with ProductMappable {
     return costPrice * (1.30);
   }
 
-  static getTotalPrice(IList<Product> products) {}
+  double getProductPrice(BuildContext context) {
+    return Provider.of<SectionNotifier>(context).isWholeSale
+        ? wholesalePrice
+        : retailPrice;
+  }
+
+  String get isStocked => stocked ? "Yes".tr() : "No".tr();
 }

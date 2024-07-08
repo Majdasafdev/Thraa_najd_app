@@ -10,7 +10,7 @@ import 'package:thraa_najd_mobile_app/utils/constants.dart';
 import 'package:thraa_najd_mobile_app/utils/Extensions.dart';
 import 'package:thraa_najd_mobile_app/screens/User/ProductInfo.dart';
 import 'package:thraa_najd_mobile_app/screens/User/ProfileView.dart';
-import 'package:thraa_najd_mobile_app/screens/login_screen.dart';
+import 'package:thraa_najd_mobile_app/screens/LoginView.dart';
 import 'package:thraa_najd_mobile_app/widgets/custome_discover.dart';
 import 'package:thraa_najd_mobile_app/widgets/product_view.dart';
 import 'package:thraa_najd_mobile_app/services/AuthRepository.dart';

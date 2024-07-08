@@ -6,19 +6,20 @@ import 'package:thraa_najd_mobile_app/providers/CartNotifier.dart';
 import 'package:thraa_najd_mobile_app/providers/SectionNotifier.dart';
 import 'package:thraa_najd_mobile_app/screens/Admin/OrderDetailsView.dart';
 import 'package:thraa_najd_mobile_app/screens/User/CartView.dart';
+import 'package:thraa_najd_mobile_app/screens/User/EditProfileView.dart';
 import 'package:thraa_najd_mobile_app/screens/User/ProductInfo.dart';
 import 'package:thraa_najd_mobile_app/screens/User/ProfileView.dart';
-import 'package:thraa_najd_mobile_app/screens/User/welcomeScreen.dart';
-import 'package:thraa_najd_mobile_app/screens/login_screen.dart';
-import 'package:thraa_najd_mobile_app/screens/registeration_page.dart';
+import 'package:thraa_najd_mobile_app/screens/User/welcomeView.dart';
+import 'package:thraa_najd_mobile_app/screens/LoginView.dart';
+import 'package:thraa_najd_mobile_app/screens/RegistrationView.dart';
 import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
 import 'providers/admin_mode.dart';
 import 'providers/model_hud.dart';
-import 'screens/Admin/add_product.dart';
-import 'screens/Admin/admin_home.dart';
-import 'screens/Admin/manage_product.dart';
-import 'screens/Admin/edit_products.dart';
+import 'screens/Admin/AddProductView.dart';
+import 'screens/Admin/AdminHomeView.dart';
+import 'screens/Admin/ManageProductsView.dart';
+import 'screens/Admin/EditProductView.dart';
 import 'screens/Admin/AllOrdersView.dart';
 import 'screens/User/HomeView.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -108,21 +109,20 @@ class ThraaNajdApp extends StatelessWidget {
               supportedLocales: context.supportedLocales,
               locale: context.locale,
               debugShowCheckedModeBanner: false,
-              initialRoute: isUserLoggedIn ? WelcomePage.id : WelcomePage.id,
+              initialRoute: isUserLoggedIn ? WelcomeView.id : WelcomeView.id,
               routes: {
                 OrderDeatiels.id: (context) => OrderDeatiels(),
-                loginPage.id: (context) => const loginPage(),
-                RegisterPage.id: (context) => RegisterPage(),
+                LoginView.id: (context) => const LoginView(),
+                RegistrationView.id: (context) => const RegistrationView(),
                 HomeView.id: (context) => const HomeView(),
-                AdminHome.id: (context) => const AdminHome(),
-                AddProduct.id: (context) => AddProduct(),
+                AdminHomeView.id: (context) => const AdminHomeView(),
+                AddProductView.id: (context) => const AddProductView(),
                 ManageProducts.id: (context) => ManageProducts(),
                 OrdersScreen.id: (context) => OrdersScreen(),
-                EditProducts.id: (context) => EditProducts(),
                 CartScreen.id: (context) => const CartScreen(),
                 ProductInfo.id: (context) => ProductInfo(),
-                WelcomePage.id: (context) => const WelcomePage(),
-                ProfileView.id: (context) => ProfileView(),
+                WelcomeView.id: (context) => const WelcomeView(),
+                ProfileView.id: (context) => const ProfileView(),
 
                 //WelcomeScreen
               },

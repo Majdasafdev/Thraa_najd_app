@@ -48,124 +48,110 @@ class CartScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: Column(
-        children: [
-          LayoutBuilder(
-            builder: (context, constraints) {
-              if (currentCartItems.isNotEmpty) {
-                return Container(
-                  child: ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: GestureDetector(
-                          onTapUp: (details) {
-                            showCustomMenu(
-                                details, context, currentCartItems[index]);
-                          },
-                          child: Container(
-                            color: kSecondaryColor,
-                            //height: screenHeight * .15,
-                            // width: screenWidth * .8,
-                            child: Row(
-                              children: [
-                                CircleAvatar(
-                                  radius: screenHeight * .15 / 2,
-                                  //NOTE: Changed The Image
-                                  backgroundImage: NetworkImage(
-                                      currentCartItems[index]
-                                          .product
-                                          .imageLink),
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        context.locale.getProductName(
-                                            currentCartItems[index].product),
-                                        maxLines: 4,
-                                        softWrap: true,
-                                        overflow: TextOverflow.clip,
-                                        style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                        "${context.getProductPrice(currentCartItems[index].product)}",
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 20),
-                                        child: Text(
-                                          currentCartItems[index]
-                                              .quantity
-                                              .toString(),
-                                          style: const TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                      ButtonTheme(
-                                        minWidth: screenWidth,
-                                        height: screenHeight * .08,
-                                        child: ElevatedButton(
-                                          onPressed: () {
-                                            showCustomDialog(
-                                                currentCartItems, context);
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.green,
-                                            shape: const RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.only(
-                                                  topRight: Radius.circular(10),
-                                                  topLeft: Radius.circular(10)),
-                                            ),
-                                          ),
-                                          child: Text(
-                                            "confirmOrder".tr(),
-                                            style: const TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.black),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
+      body: currentCartItems.isNotEmpty
+          ? Column(children: [
+              ListView.builder(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                      onTapUp: (details) {
+                        showCustomMenu(
+                            details, context, currentCartItems[index]);
+                      },
+                      child: Container(
+                        color: kSecondaryColor,
+                        //height: screenHeight * .15,
+                        // width: screenWidth * .8,
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              radius: screenHeight * .15 / 2,
+                              //NOTE: Changed The Image
+                              backgroundImage: NetworkImage(
+                                  currentCartItems[index].product.imageLink),
                             ),
-                          ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    context.locale.getProductName(
+                                        currentCartItems[index].product),
+                                    maxLines: 4,
+                                    softWrap: true,
+                                    overflow: TextOverflow.clip,
+                                    style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    "${currentCartItems[index].product.getProductPrice(context)}",
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 20),
+                                    child: Text(
+                                      currentCartItems[index]
+                                          .quantity
+                                          .toString(),
+                                      style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                      );
-                    },
-                    itemCount: currentCartItems.length,
+                      ),
+                    ),
+                  );
+                },
+                itemCount: currentCartItems.length,
+              ),
+              ButtonTheme(
+                minWidth: screenWidth,
+                height: screenHeight * .08,
+                child: ElevatedButton(
+                  onPressed: () {
+                    showCustomDialog(currentCartItems, context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(10),
+                          topLeft: Radius.circular(10)),
+                    ),
                   ),
-                );
-              } else {
-                return Container(
-                  height: screenHeight -
-                      (screenHeight * .08) -
-                      appBarHeight -
-                      statusBarHeight,
-                  child: Center(
-                    child: Text("emptyCart".tr()),
+                  child: Text(
+                    "confirmOrder".tr(),
+                    style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
                   ),
-                );
-              }
-            },
-          ),
-        ],
-      ),
+                ),
+              ),
+            ])
+          : SizedBox(
+              height: screenHeight -
+                  (screenHeight * .08) -
+                  appBarHeight -
+                  statusBarHeight,
+              child: Center(
+                child: Text("emptyCart".tr()),
+              ),
+            ),
     );
   }
 
