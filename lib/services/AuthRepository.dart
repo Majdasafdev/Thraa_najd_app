@@ -3,6 +3,7 @@ import 'dart:async';
 import "package:firebase_auth/firebase_auth.dart";
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:thraa_najd_mobile_app/screens/User/HomeView.dart';
 import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
 import 'package:flutter/material.dart';
 import 'package:thraa_najd_mobile_app/widgets/snack_bar.dart';
@@ -51,8 +52,8 @@ class AuthRepository extends AbstractRepository {
     if (userModel.phoneNumber!.isEmpty) {
       throw Exception("Invalid Phone Number");
     }
-    if (userModel.phoneNumber!.length != 10 ||
-        userModel.phoneNumber!.length != 9 ||
+    if ((userModel.phoneNumber!.length != 10 &&
+            userModel.phoneNumber!.length != 9) ||
         !userModel.phoneNumber!.startsWith("05")) {
       throw Exception("Invalid Phone Number");
     }

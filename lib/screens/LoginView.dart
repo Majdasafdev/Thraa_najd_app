@@ -20,7 +20,7 @@ import 'package:thraa_najd_mobile_app/widgets/custome_logo.dart';
 import 'package:thraa_najd_mobile_app/widgets/snack_bar.dart';
 import 'package:thraa_najd_mobile_app/providers/admin_mode.dart';
 import 'package:thraa_najd_mobile_app/widgets/switch_langs.dart';
-import 'Admin/admin_home.dart';
+import 'Admin/AdminHomeView.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginView extends StatefulWidget {
@@ -231,7 +231,7 @@ class _LoginViewState extends State<LoginView> {
           try {
             await repositoryClient.authRepository
                 .signIn(email!.trim(), passward!.trim());
-            Navigator.pushNamed(context, AdminHome.id);
+            Navigator.pushNamed(context, AdminHomeView.id);
           } catch (e) {
             modelhud.changeisLoading(false);
             ScaffoldMessenger.of(context).showSnackBar(

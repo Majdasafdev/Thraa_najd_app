@@ -95,10 +95,20 @@ class ProductRepository extends AbstractRepository {
     }
   }
 
-  Future<void> addProduct(
+  Future<bool> addProduct(
       {required ExcelProductDTO productDTO,
       required String rawImageLink}) async {
     try {
+      if (productDTO.materialId.isEmpty) {
+        throw Exception("No Empty Material Id Allowed");
+      }
+      if (productDTO.productNameAR.isEmpty ||
+          productDTO.productNameEN.isEmpty) {
+        throw Exception("No Empty Names Allowed!");
+      }
+      if (productDTO.costPrice < 1) {
+        throw Exception("Cost Price is below 0");
+      }
       if (rawImageLink.isEmpty) throw Exception("no image specified");
 
       var imageBytes = await loadNetworkAsset(rawImageLink);
@@ -112,29 +122,45 @@ class ProductRepository extends AbstractRepository {
           .collection(FirebaseConstants.productsCollection)
           .add(product.toMap());
       await doc.update({Product.firebaseProductId: doc.id});
+      return true;
     } catch (e, stk) {
       await firebaseStorage.ref().child(productDTO.materialId).delete();
       rethrow;
     }
   }
 
-  Future<void> updateProduct(ExcelProductDTO updatedProduct) async {
+  Future<bool> updateProduct(Product updatedProduct) async {
     var storageRef = firebaseStorage.ref();
-    String updatedImageLink = "";
-    if (updatedProduct.imageLink != null) {
-      updatedImageLink =
-          await addImage(updatedProduct.imageLink!, updatedProduct.materialId);
+
+    if (updatedProduct.materialId.isEmpty) {
+      throw Exception("No Empty Material Id Allowed");
     }
+    if (updatedProduct.productNameAR.isEmpty ||
+        updatedProduct.productNameEN.isEmpty) {
+      throw Exception("No Empty Names Allowed!");
+    }
+    if (updatedProduct.costPrice < 1) {
+      throw Exception("Cost Price is below 0");
+    }
+    if (updatedProduct.imageLink.isEmpty) throw Exception("no image specified");
 
     var productDoc = firebaseFirestore
         .collection(FirebaseConstants.productsCollection)
         .doc(updatedProduct.productId);
-    var productMap =
-        updatedProduct.toProduct(imageLink: updatedImageLink).toMap();
-    if (updatedImageLink.isEmpty) {
-      productMap.remove(Product.firebaseImageLink);
+    var currentProduct = Product.fromMap((await productDoc.get()).data()!);
+    bool updatedImage = updatedProduct.imageLink != currentProduct.imageLink;
+    String updatedImageLink = "";
+    if (updatedImage) {
+      var imageBytes = await loadNetworkAsset(updatedProduct.imageLink);
+      updatedImageLink = await addImage(
+          imageBytes.buffer.asUint8List(), updatedProduct.materialId);
     }
-    productDoc.update(productMap);
+
+    var productMap = updatedImage
+        ? updatedProduct.copyWith(imageLink: updatedImageLink)
+        : updatedProduct;
+    productDoc.update(productMap.toMap());
+    return true;
   }
 
   Future<void> removeProductByProductId(String productId) async {

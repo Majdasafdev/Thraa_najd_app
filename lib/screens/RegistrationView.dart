@@ -16,7 +16,8 @@ import 'User/HomeView.dart';
 
 class RegistrationView extends StatefulWidget {
   const RegistrationView({super.key});
-  static String id = 'RegistrationView';
+
+  static const String id = 'RegistrationView';
 
   @override
   State<RegistrationView> createState() => _RegistrationViewState();

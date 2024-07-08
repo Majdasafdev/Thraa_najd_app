@@ -86,7 +86,15 @@ class _ProductInfoState extends State<ProductInfo> {
                             height: 10,
                           ),
                           Text(
-                            context.getProductPrice(product).toString(),
+                            product.getProductPrice(context).toString(),
+                            style: const TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            "${"isStocked".tr()}: ${product.isStocked}",
                             style: const TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
