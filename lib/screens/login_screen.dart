@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
 import 'package:thraa_najd_mobile_app/providers/model_hud.dart';
-import 'package:thraa_najd_mobile_app/screens/User/home_page.dart';
+import 'package:thraa_najd_mobile_app/screens/User/HomeView.dart';
 import 'package:thraa_najd_mobile_app/screens/registeration_page.dart';
 import 'package:thraa_najd_mobile_app/services/AuthRepository.dart';
 import 'package:thraa_najd_mobile_app/widgets/custom_button.dart';
@@ -255,7 +255,7 @@ class _loginPageState extends State<loginPage> {
       } else {
         try {
           await _auth.sigIn(email!.trim(), passward!.trim());
-          Navigator.pushNamed(context, HomePage.id);
+          Navigator.pushNamed(context, HomeView.id);
         } catch (e) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(e.toString()),
