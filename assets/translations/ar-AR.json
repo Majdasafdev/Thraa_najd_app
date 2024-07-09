@@ -1,9 +1,10 @@
 {
   "registeration": "مرحبًا بك في صفحة التسجيل",
   "thraaNajd": "ثراء نجد",
-  "writenamehere": "أدخل اسمك هنا",
-  "writeemailhere": "أدخل بريدك الإلكتروني هنا",
-  "writepasslhere": "أدخل كلمة المرور هنا",
+  "writenamehere": " أدخل اسمك ",
+  "writeemailhere": "أدخل بريدك الإلكتروني ",
+  "writepasslhere": "أدخل كلمة المرور ",
+  "writephonehere": "أدخل رقم الهاتف الخاص بك  ",
   "weakpassward": "كلمة المرور المدخلة ضعيفة",
   "email-already-in-use": "هذا البريد الإلكتروني مستخدم بالفعل!",
   "therewaserr": "حدث خطأاثناء التسجيل ",

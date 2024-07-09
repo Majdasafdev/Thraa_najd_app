@@ -11,6 +11,8 @@ import 'package:thraa_najd_mobile_app/screens/User/CartView.dart';
 class ProductInfo extends StatefulWidget {
   static String id = 'ProductInfo';
 
+  const ProductInfo({super.key});
+
   @override
   State<ProductInfo> createState() => _ProductInfoState();
 }
@@ -23,14 +25,15 @@ class _ProductInfoState extends State<ProductInfo> {
     //NOTE: NEVER use as operator;
     Product product = ModalRoute.of(context)!.settings.arguments as Product;
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
-          Container(
+          SizedBox(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             child: Image.network(
               product.imageLink,
-              fit: BoxFit.fill,
+              fit: BoxFit.contain,
             ),
           ),
           Padding(
@@ -64,112 +67,112 @@ class _ProductInfoState extends State<ProductInfo> {
           ),
           Positioned(
             bottom: 0,
-            child: Column(
-              children: [
-                Opacity(
-                  opacity: .5,
-                  child: Container(
-                    color: Colors.white,
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height * .3,
-                    child: Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            context.locale.getProductName(product),
-                            style: const TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            product.getProductPrice(context).toString(),
-                            style: const TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            "${"isStocked".tr()}: ${product.isStocked}",
-                            style: const TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              ClipOval(
-                                child: Material(
-                                  color: kMainColor,
-                                  child: GestureDetector(
-                                    onTap: add,
-                                    child: const SizedBox(
-                                      height: 32,
-                                      width: 32,
-                                      child: Icon(Icons.add),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Opacity(
+                    opacity: .5,
+                    child: Container(
+                      color: Colors.white,
+                      width: MediaQuery.of(context).size.width,
+                      child: Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              context.locale.getProductName(product),
+                              style: const TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              product.getProductPrice(context).toString(),
+                              style: const TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              "${"isStocked".tr()}: ${product.isStocked}",
+                              style: const TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                ClipOval(
+                                  child: Material(
+                                    color: kMainColor,
+                                    child: GestureDetector(
+                                      onTap: add,
+                                      child: const SizedBox(
+                                        height: 32,
+                                        width: 32,
+                                        child: Icon(Icons.add),
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              Text(
-                                _quantity.toString(),
-                                style: const TextStyle(fontSize: 30),
-                              ),
-                              ClipOval(
-                                child: Material(
-                                  color: kMainColor,
-                                  child: GestureDetector(
-                                    onTap: subtract,
-                                    child: const SizedBox(
-                                      height: 32,
-                                      width: 32,
-                                      child: Icon(Icons.remove),
+                                Text(
+                                  _quantity.toString(),
+                                  style: const TextStyle(fontSize: 30),
+                                ),
+                                ClipOval(
+                                  child: Material(
+                                    color: kMainColor,
+                                    child: GestureDetector(
+                                      onTap: subtract,
+                                      child: const SizedBox(
+                                        height: 32,
+                                        width: 32,
+                                        child: Icon(Icons.remove),
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          )
-                        ],
+                              ],
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-                ButtonTheme(
-                  minWidth: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height * .8,
-                  child: Builder(
-                    builder: (context) {
-                      return ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: kMainColor,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(10),
-                                topLeft: Radius.circular(10)),
+                  ButtonTheme(
+                    minWidth: MediaQuery.of(context).size.width,
+                    child: Builder(
+                      builder: (context) {
+                        return ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: kMainColor,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(10),
+                                  topLeft: Radius.circular(10)),
+                            ),
                           ),
-                        ),
-                        onPressed: () {
-                          addToCart(context, product);
-                        },
-                        child: Text(
-                          'Add to Cart'.toUpperCase(),
-                          style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black),
-                        ),
-                      );
-                    },
+                          onPressed: () {
+                            addToCart(context, product);
+                          },
+                          child: Text(
+                            'Add to Cart'.toUpperCase(),
+                            style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
+                          ),
+                        );
+                      },
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],

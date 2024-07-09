@@ -38,112 +38,93 @@ class _RegistrationViewState extends State<RegistrationView> {
 
   @override
   Widget build(BuildContext context) {
-    MediaQuery.of(context).size.height * .2;
     return Scaffold(
       backgroundColor: kMainColor,
       body: ModalProgressHUD(
         inAsyncCall: Provider.of<ModelHud>(context).isLoading,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
+          padding:
+              const EdgeInsets.symmetric(horizontal: 16), // adjusted padding
           child: Form(
             key: formkey,
             child: ListView(
               children: [
                 CustomLogo(),
-                SizedBox(height: 75),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height *
+                      0.1, // responsive height
+                ),
                 Row(
                   children: [
-                    Text(
-                      'registeration'.tr(),
-                      style: TextStyle(
-                        fontSize: 24,
-                        color: Colors.white,
+                    Expanded(
+                      child: Text(
+                        'registeration'.tr(),
+                        style: const TextStyle(
+                          fontSize: 18,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold, // added font weight
+                        ),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
+                const SizedBox(height: 10),
                 Custom_Form_Text_Foeld(
                   onChanged: (data) {
                     name = data;
-                    icon = Icon(Icons.email);
+                    icon = const Icon(Icons.email);
                   },
                   hintText: 'writenamehere'.tr(),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
+                const SizedBox(height: 10),
                 Custom_Form_Text_Foeld(
                   onChanged: (data) {
                     email = data;
                   },
                   hintText: 'writeemailhere'.tr(),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
+                const SizedBox(height: 10),
                 Custom_Form_Text_Foeld(
-                  obscureText: true,
+                  onChanged: (data) {
+                    passward = data;
+                  },
+                  hintText: 'writephonehere'.tr(),
+                ),
+                const SizedBox(height: 10),
+                Custom_Form_Text_Foeld(
                   onChanged: (data) {
                     passward = data;
                   },
                   hintText: 'writepasslhere'.tr(),
                 ),
-                const SizedBox(
-                  height: 15,
-                ),
+                const SizedBox(height: 15),
                 Custome_button(
                   onTap: () async {
-                    if (formkey.currentState!.validate()) {
-                      isLoading = true;
-                      setState(() {});
-                      try {
-                        repositoryClient.authRepository
-                            .signUp(email!, passward!, name!);
-                        Navigator.pushNamed(context, HomeView.id);
-
-                        //  showSnackBar(
-                        //  context,
-                        // "Success",
-                        //);
-                      } on FirebaseAuthException catch (e) {
-                        if (e.code == 'weak-password') {
-                          showSnackBar(context, "weakpassward".tr());
-                        } else if (e.code == 'email-already-in-use') {
-                          showSnackBar(context, "email-already-in-use".tr());
-                        }
-                      } catch (e) {
-                        showSnackBar(context, "therewaserr".tr());
-                      }
-                      isLoading = false;
-
-                      setState(() {});
-                    } else {}
+                    regeisterUser();
+                    Navigator.pop(context, LoginView.id);
                   },
                   text: 'register'.tr(),
                 ),
-                SizedBox(
-                  height: 10,
-                ),
+                const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       'haveaccount'.tr(),
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
+                        fontSize: 16, // adjusted font size
                       ),
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.pop(context, LoginView.id);
+                        Navigator.pop(context, HomeView.id);
                       },
                       child: Text(
                         'logregesiter'.tr(),
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Color(0xffC7EDE6),
+                          fontSize: 16, // adjusted font size
                         ),
                       ),
                     ),

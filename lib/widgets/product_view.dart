@@ -36,75 +36,84 @@ class _ProductsViewState extends State<ProductsView> {
     }).toIList();
     return Column(
       children: [
-        TextFormField(
-            onChanged: (value) => setState(() {}),
-            controller: queryController,
-            decoration: InputDecoration(
-                hintText: 'search'.tr(), labelText: 'search'.tr())),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TextFormField(
+              onChanged: (value) => setState(() {}),
+              controller: queryController,
+              decoration: InputDecoration(
+                  hintText: 'search'.tr(), labelText: 'search'.tr())),
+        ),
         Expanded(
           child: GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               childAspectRatio: .8,
             ),
-            itemBuilder: (context, index) => Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(context, ProductInfo.id,
-                      arguments: products[index]);
-                },
-                //NOTE: Changed from stack to column
-                child: Column(
-                  children: <Widget>[
-                    //NOTE: changed image from assets to the cloud image
-                    SizedBox(
-                      height: 150,
-                      child: Image.network(
-                        products.elementAt(index).imageLink,
-                        fit: BoxFit.fill,
-                      ),
-                    ),
-                    Opacity(
-                      opacity: .6,
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 60,
-                        color: Colors.white,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 5),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Flexible(
-                                child: Text(
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  context.locale
-                                      .getProductName(products[index]),
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold),
+            itemBuilder: (context, index) => LayoutBuilder(
+              builder: (context, constraints) {
+                return ConstrainedBox(
+                  constraints: BoxConstraints(maxHeight: constraints.maxHeight),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 10),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, ProductInfo.id,
+                            arguments: products[index]);
+                      },
+                      child: Column(
+                        children: <Widget>[
+                          //NOTE: changed image from assets to the cloud image
+                          SizedBox(
+                            height: constraints.maxHeight *
+                                0.5, // adjust the height ratio as needed
+                            child: Image.network(
+                              products.elementAt(index).imageLink,
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                          Opacity(
+                            opacity: .6,
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: constraints.maxHeight *
+                                  0.4, // adjust the height ratio as needed
+                              color: Colors.white,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 5),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Flexible(
+                                      child: Text(
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        context.locale
+                                            .getProductName(products[index]),
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                    Flexible(
+                                        child: Text(
+                                            'SAR ${products.elementAt(index).getProductPrice(context)} ')),
+                                  ],
                                 ),
                               ),
-                              Flexible(
-                                  child: Text(
-                                      '\$ ${products.elementAt(index).getProductPrice(context)}')),
-                              Flexible(
-                                  child: Text(
-                                      '\$  ${context.locale.getProductCategory(products[index])}'))
-                            ],
-                          ),
-                        ),
+                            ),
+                          )
+                        ],
                       ),
-                    )
-                  ],
-                ),
-              ),
+                    ),
+                  ),
+                );
+              },
             ),
             itemCount: products.length,
           ),
-        ),
+        )
       ],
     );
   }

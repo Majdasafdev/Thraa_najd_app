@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thraa_najd_mobile_app/models/Category.dart';
@@ -31,6 +32,7 @@ class _HomeViewState extends State<HomeView> {
   int _tabBarIndex = 0;
   int _bottomBarIndex = 0;
   IList<Product> allProducts = IList();
+  final _auth = FirebaseAuth.instance;
 
   @override
   void initState() {
@@ -44,6 +46,7 @@ class _HomeViewState extends State<HomeView> {
         DefaultTabController(
           length: 5,
           child: Scaffold(
+            backgroundColor: Colors.white,
             bottomNavigationBar: BottomNavigationBar(
               type: BottomNavigationBarType.fixed,
               unselectedItemColor: kUnActiveColor,
@@ -52,10 +55,18 @@ class _HomeViewState extends State<HomeView> {
               onTap: (value) async {
                 switch (value) {
                   case 0:
+                    Navigator.pushNamed(context, ProfileView.id);
+                    break;
+
+                  case 1:
                     Navigator.pushNamed(context, HomeView.id);
                     break;
-                  case 1:
-                    Navigator.pushNamed(context, ProfileView.id);
+                  case 2:
+                    SharedPreferences pref =
+                        await SharedPreferences.getInstance();
+                    pref.clear();
+                    await _auth.signOut();
+                    Navigator.popAndPushNamed(context, LoginView.id);
                     break;
                 }
 
@@ -74,6 +85,10 @@ class _HomeViewState extends State<HomeView> {
                   icon: Icon(Icons.person),
                   label: ('Profile'),
                 ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.logout),
+                  label: ('Sign out'),
+                )
               ],
             ),
             appBar: AppBar(
