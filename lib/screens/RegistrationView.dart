@@ -100,7 +100,7 @@ class _RegistrationViewState extends State<RegistrationView> {
                 const SizedBox(height: 15),
                 Custome_button(
                   onTap: () async {
-                    regeisterUser();
+                    registerUser();
                     Navigator.pop(context, LoginView.id);
                   },
                   text: 'register'.tr(),
@@ -138,8 +138,39 @@ class _RegistrationViewState extends State<RegistrationView> {
     );
   }
 
-  Future<void> regeisterUser() async {
-    UserCredential user = await FirebaseAuth.instance
-        .createUserWithEmailAndPassword(email: email!, password: passward!);
+  Future<UserCredential> registerUser() async {
+    // Validate the email format before trying to register
+    if (!isValidEmail(email!)) {
+      throw FirebaseAuthException(
+          code: 'invalid-email', message: 'invalidemailformat');
+    }
+
+    return await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      email: email!.trim(),
+      password: passward!,
+    );
+  }
+
+  bool isValidEmail(String email) {
+    // Use a simple email validation pattern
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    return emailRegex.hasMatch(email);
+  }
+
+  Future<void> showSnackBar(BuildContext context, String message) async {
+    final snackBar = SnackBar(content: Text(message));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  String getErrorMessage(FirebaseAuthException e) {
+    if (e.code == 'weak-password') {
+      return "weakpassward".tr();
+    } else if (e.code == 'email-already-in-use') {
+      return "email-already-in-use".tr();
+    } else if (e.code == 'invalid-email') {
+      return e.message!;
+    } else {
+      return "therewaserr".tr();
+    }
   }
 }

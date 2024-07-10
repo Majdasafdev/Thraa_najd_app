@@ -5,6 +5,8 @@ import 'package:thraa_najd_mobile_app/utils/constants.dart';
 import 'package:thraa_najd_mobile_app/screens/User/CartView.dart';
 import 'package:thraa_najd_mobile_app/screens/User/HomeView.dart';
 import 'package:thraa_najd_mobile_app/screens/LoginView.dart';
+import 'package:thraa_najd_mobile_app/widgets/custome_logo.dart';
+import 'package:thraa_najd_mobile_app/widgets/switch_langs.dart';
 
 class WelcomeView extends StatefulWidget {
   static String id = 'WelcomeView';
@@ -33,7 +35,7 @@ class _WelcomeViewState extends State<WelcomeView> {
       alignment: Alignment.center,
       children: <Widget>[
         _buildGrid(),
-        _buildAvatar(),
+        CustomLogo(),
       ],
     );
   }
@@ -69,13 +71,6 @@ class _WelcomeViewState extends State<WelcomeView> {
         }
       },
       child: Text(text),
-    );
-  }
-
-  Widget _buildAvatar() {
-    return const CircleAvatar(
-      radius: 50,
-      backgroundImage: AssetImage('assets/images/icons/buy_icon.png'),
     );
   }
 }

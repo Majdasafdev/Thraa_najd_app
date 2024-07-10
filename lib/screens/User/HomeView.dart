@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thraa_najd_mobile_app/models/Category.dart';
 import 'package:thraa_najd_mobile_app/models/Product.dart';
+import 'package:thraa_najd_mobile_app/screens/User/CartView.dart';
 import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
 import 'package:thraa_najd_mobile_app/utils/Extensions.dart';
@@ -51,23 +52,19 @@ class _HomeViewState extends State<HomeView> {
               type: BottomNavigationBarType.fixed,
               unselectedItemColor: kUnActiveColor,
               currentIndex: _bottomBarIndex,
-              fixedColor: kSecondaryColor,
+              fixedColor: kUnActiveColor,
               onTap: (value) async {
                 switch (value) {
                   case 0:
                     Navigator.pushNamed(context, ProfileView.id);
                     break;
-
                   case 1:
                     Navigator.pushNamed(context, HomeView.id);
                     break;
                   case 2:
-                    SharedPreferences pref =
-                        await SharedPreferences.getInstance();
-                    pref.clear();
-                    await _auth.signOut();
-                    Navigator.popAndPushNamed(context, LoginView.id);
-                    break;
+                    await FirebaseAuth.instance.signOut();
+                    Navigator.of(context)
+                        .pushNamedAndRemoveUntil("loginView", (route) => false);
                 }
 
                 setState(
@@ -78,12 +75,12 @@ class _HomeViewState extends State<HomeView> {
               },
               items: const [
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.home),
-                  label: ('Store'),
-                ),
-                BottomNavigationBarItem(
                   icon: Icon(Icons.person),
                   label: ('Profile'),
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home),
+                  label: ('Store'),
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.logout),
