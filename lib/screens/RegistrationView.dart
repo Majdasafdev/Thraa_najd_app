@@ -80,6 +80,11 @@ class _RegistrationViewState extends State<RegistrationView> {
                 Custom_Form_Text_Foeld(
                   onChanged: (data) {
                     email = data;
+                    if (!isValidEmail(email!)) {
+                      showSnackBar(context, "Invalid email address");
+                    } else {
+                      showSnackBar(context, "========valid email address");
+                    }
                   },
                   hintText: 'writeemailhere'.tr(),
                 ),
@@ -100,8 +105,32 @@ class _RegistrationViewState extends State<RegistrationView> {
                 const SizedBox(height: 15),
                 Custome_button(
                   onTap: () async {
-                    registerUser();
-                    Navigator.pop(context, LoginView.id);
+                    if (formkey.currentState!.validate()) {
+                      try {
+                        repositoryClient.authRepository
+                            .signUp(email!, passward!, name!);
+                        final credential = await FirebaseAuth.instance
+                            .createUserWithEmailAndPassword(
+                                email: email!, password: passward!);
+                        print(
+                            '================User created=============: ${credential.user!.uid}');
+                        await credential.user!.sendEmailVerification();
+                        print(
+                            '--------------Verification email sent-------------------');
+
+                        Navigator.pushNamed(context, LoginView.id);
+                      } on FirebaseAuthException catch (e) {
+                        if (e.code == 'weak-password') {
+                          showSnackBar(context, "weakpassward".tr());
+                        } else if (e.code == 'email-already-in-use') {
+                          showSnackBar(context, "email-already-in-use".tr());
+                        } else {
+                          showSnackBar(context, "therewaserr".tr());
+                        }
+                      } catch (e) {
+                        showSnackBar(context, "therewaserr".tr());
+                      }
+                    } else {}
                   },
                   text: 'register'.tr(),
                 ),
@@ -118,7 +147,7 @@ class _RegistrationViewState extends State<RegistrationView> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.pop(context, HomeView.id);
+                        Navigator.pop(context, LoginView.id);
                       },
                       child: Text(
                         'logregesiter'.tr(),
@@ -138,17 +167,21 @@ class _RegistrationViewState extends State<RegistrationView> {
     );
   }
 
-  Future<UserCredential> registerUser() async {
-    // Validate the email format before trying to register
-    if (!isValidEmail(email!)) {
-      throw FirebaseAuthException(
-          code: 'invalid-email', message: 'invalidemailformat');
+  Future<void> regeisterUser() async {
+    try {
+      UserCredential user = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email!, password: passward!);
+      await user.user!.sendEmailVerification().then((value) {
+        print(
+            '================ Email verification sent! =====================');
+      }).catchError((e) {
+        print(
+            '================ Error sending email verification: ============== $e');
+      });
+      Navigator.pop(context, LoginView.id);
+    } catch (e) {
+      // Handle registration error
     }
-
-    return await FirebaseAuth.instance.createUserWithEmailAndPassword(
-      email: email!.trim(),
-      password: passward!,
-    );
   }
 
   bool isValidEmail(String email) {

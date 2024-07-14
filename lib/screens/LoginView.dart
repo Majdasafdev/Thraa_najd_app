@@ -121,10 +121,16 @@ class _LoginViewState extends State<LoginView> {
                         isLoading = true;
                         setState(() {});
                         try {
-                          await repositoryClient.authRepository
+                          final credential = await FirebaseAuth.instance
+                              .signInWithEmailAndPassword(
+                                  email: email!, password: passward!);
+                          UserCredential user = await repositoryClient
+                              .authRepository
                               .signIn(email!, passward!);
-                          Navigator.pushNamed(context, LoginView.id,
-                              arguments: email);
+                          if (credential.user!.emailVerified) {
+                            Navigator.pushNamed(context, HomeView.id,
+                                arguments: email);
+                          }
                         } on FirebaseAuthException catch (e) {
                           if (e.code == 'user-not-found') {
                             showSnackBar(

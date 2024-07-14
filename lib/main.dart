@@ -1,3 +1,4 @@
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,7 +36,9 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
+  await FirebaseAppCheck.instance.activate(
+    androidProvider: AndroidProvider.debug,
+  );
   runApp(EasyLocalization(
     supportedLocales: const [
       Locale('en', 'US'),
@@ -53,6 +57,19 @@ class ThraaNajdApp extends StatefulWidget {
 }
 
 class _ThraaNajdAppState extends State<ThraaNajdApp> {
+  @override
+  initState() {
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user == null) {
+        print(
+            '----------------------User is currently signed out!-----------------------');
+      } else {
+        print(
+            '------------------------------User is signed in!--------------------------');
+      }
+    });
+  }
+
   bool isUserLoggedIn = false;
 
   @override
