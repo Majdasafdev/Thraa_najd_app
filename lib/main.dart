@@ -39,6 +39,9 @@ void main() async {
   await FirebaseAppCheck.instance.activate(
     androidProvider: AndroidProvider.debug,
   );
+
+  await FirebaseAuth.instance.signOut();
+
   runApp(EasyLocalization(
     supportedLocales: const [
       Locale('en', 'US'),

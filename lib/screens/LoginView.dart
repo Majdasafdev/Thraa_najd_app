@@ -124,9 +124,8 @@ class _LoginViewState extends State<LoginView> {
                           final credential = await FirebaseAuth.instance
                               .signInWithEmailAndPassword(
                                   email: email!, password: passward!);
-                          UserCredential user = await repositoryClient
-                              .authRepository
-                              .signIn(email!, passward!);
+                          await repositoryClient.authRepository
+                              .signIn(email!, passward!, context);
                           if (credential.user!.emailVerified) {
                             Navigator.pushNamed(context, HomeView.id,
                                 arguments: email);
@@ -233,7 +232,7 @@ class _LoginViewState extends State<LoginView> {
         if (passward == adminPassword) {
           try {
             await repositoryClient.authRepository
-                .signIn(email!.trim(), passward!.trim());
+                .signIn(email!.trim(), passward!.trim(), context);
             Navigator.pushNamed(context, AdminHomeView.id);
           } catch (e) {
             modelhud.changeisLoading(false);
@@ -252,7 +251,7 @@ class _LoginViewState extends State<LoginView> {
       } else {
         try {
           await repositoryClient.authRepository
-              .signIn(email!.trim(), passward!.trim());
+              .signIn(email!.trim(), passward!.trim(), context);
           Navigator.pushNamed(context, HomeView.id);
         } catch (e) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(

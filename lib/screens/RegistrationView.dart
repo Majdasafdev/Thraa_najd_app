@@ -28,11 +28,15 @@ class _RegistrationViewState extends State<RegistrationView> {
 
   String? passward;
 
+  String? phoneNumber;
+
   String? name;
 
   Icon? icon;
 
   bool isLoading = false;
+  final _emailRegExp = RegExp(
+      r"^[a-zA-Z0-9._%+-]+[a-z-AZ0-9.-]+\.[a-zA-Z]{2,}$"); // Declare _emailRegExp here
 
   GlobalKey<FormState> formkey = GlobalKey();
 
@@ -77,21 +81,20 @@ class _RegistrationViewState extends State<RegistrationView> {
                   hintText: 'writenamehere'.tr(),
                 ),
                 const SizedBox(height: 10),
-                Custom_Form_Text_Foeld(
-                  onChanged: (data) {
-                    email = data;
-                    if (!isValidEmail(email!)) {
-                      showSnackBar(context, "Invalid email address");
-                    } else {
-                      showSnackBar(context, "========valid email address");
+                TextFormField(
+                  decoration: const InputDecoration(labelText: 'Email'),
+                  validator: (value) {
+                    if (value!.isEmpty || !_emailRegExp.hasMatch(value)) {
+                      return 'Invalid email address';
                     }
+                    return null;
                   },
-                  hintText: 'writeemailhere'.tr(),
+                  onSaved: (value) => email = value,
                 ),
                 const SizedBox(height: 10),
                 Custom_Form_Text_Foeld(
                   onChanged: (data) {
-                    passward = data;
+                    phoneNumber = data;
                   },
                   hintText: 'writephonehere'.tr(),
                 ),
@@ -108,17 +111,15 @@ class _RegistrationViewState extends State<RegistrationView> {
                     if (formkey.currentState!.validate()) {
                       try {
                         repositoryClient.authRepository
-                            .signUp(email!, passward!, name!);
-                        final credential = await FirebaseAuth.instance
-                            .createUserWithEmailAndPassword(
-                                email: email!, password: passward!);
-                        print(
-                            '================User created=============: ${credential.user!.uid}');
-                        await credential.user!.sendEmailVerification();
-                        print(
-                            '--------------Verification email sent-------------------');
-
-                        Navigator.pushNamed(context, LoginView.id);
+                            .signUp(
+                          email!,
+                          passward!,
+                        )
+                            .then((user) {
+                          if (user != null) {
+                            Navigator.pushNamed(context, LoginView.id);
+                          }
+                        });
                       } on FirebaseAuthException catch (e) {
                         if (e.code == 'weak-password') {
                           showSnackBar(context, "weakpassward".tr());
