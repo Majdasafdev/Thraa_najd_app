@@ -13,24 +13,115 @@ import 'package:thraa_najd_mobile_app/widgets/snack_bar.dart';
 
 import '../models/UserModel.dart';
 import '../utils/FirebaseConstants.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthRepository extends AbstractRepository {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final _emailRegExp = RegExp(
+    r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
+  );
+  Future<String> signupUser(
+      {required String email,
+      required String password,
+      required String name,
+      required String phoneNumber,
+      required BuildContext context}) async {
+    String res = "Some error Occurred";
+    try {
+      email = email.trim(); // trim the email
+      if (email.isNotEmpty && password.isNotEmpty && name.isNotEmpty) {
+        // Validate email address
+        if (!_emailRegExp.hasMatch(email)) {
+          return "Invalid email address";
+        }
 
-  Future<dynamic> signUp(String email, String passward) async {
-    final authResult = await _auth.createUserWithEmailAndPassword(
-        email: email, password: passward);
+        // register user in auth with email and password
+        // ignore: deprecated_member_use
+        final user = await _auth.fetchSignInMethodsForEmail(email);
+        if (user.isNotEmpty) {
+          return "This email is already registered";
+        }
+        // register user in auth with email and password
+        UserCredential cred = await _auth.createUserWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
+        // send email verification
+        await cred.user!.sendEmailVerification();
 
-    // Get the user
-    User? user = authResult.user;
+        // show a dialog to the user to verify their email
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text("Verify your email"),
+            content: Text(
+                "We have sent a verification email to $email. Please verify your email to continue."),
+            actions: [
+              TextButton(
+                child: const Text("OK"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        );
 
-    // Send email verification link only once
-    if (user != null && !user.emailVerified) {
-      await user.sendEmailVerification();
+        // wait for the user to verify their email
+        while (!(cred.user!.emailVerified)) {
+          await Future.delayed(const Duration(seconds: 2));
+        }
+
+        // add user to your  firestore database
+        print(cred.user!.uid);
+        await _firestore.collection("users").doc(cred.user!.uid).set({
+          'name': name,
+          'uid': cred.user!.uid,
+          'email': email,
+          'phoneNumber': phoneNumber,
+        });
+        res = "success";
+      } else {
+        return "Please fill in all the fields";
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        return "The password provided is too weak";
+      } else if (e.code == 'email-already-in-use') {
+        return "The account already exists for that email";
+      } else {
+        return e.message ?? "An unknown error occurred";
+      }
+    } catch (err) {
+      return err.toString();
     }
+    return res;
+  }
 
-    return authResult;
+  //LOGIN
+  Future<String> loginUser({
+    required String email,
+    required String password,
+  }) async {
+    String res = "Some error Occurred";
+    try {
+      if (email.isNotEmpty || password.isNotEmpty) {
+        // logging in user with email and password
+        await _auth.signInWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
+        res = "success";
+      } else {
+        res = "Please enter all the fields";
+      }
+    } catch (err) {
+      return err.toString();
+    }
+    return res;
   }
 
   Stream<UserModel> getCurrentUserInfo() {

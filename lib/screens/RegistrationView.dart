@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
+import 'package:thraa_najd_mobile_app/services/AuthRepository.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
 import 'package:thraa_najd_mobile_app/providers/model_hud.dart';
 import 'package:thraa_najd_mobile_app/screens/LoginView.dart';
 import 'package:thraa_najd_mobile_app/widgets/custom_button.dart';
 import 'package:thraa_najd_mobile_app/widgets/custom_text_form_field.dart';
+import 'package:thraa_najd_mobile_app/widgets/custome_input_text_field.dart';
 import 'package:thraa_najd_mobile_app/widgets/custome_logo.dart';
 import 'package:thraa_najd_mobile_app/widgets/snack_bar.dart';
 
@@ -24,21 +26,57 @@ class RegistrationView extends StatefulWidget {
 }
 
 class _RegistrationViewState extends State<RegistrationView> {
-  String? email;
-
-  String? passward;
-
-  String? phoneNumber;
-
-  String? name;
-
-  Icon? icon;
+  TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController phoneNumberController = TextEditingController();
 
   bool isLoading = false;
   final _emailRegExp = RegExp(
       r"^[a-zA-Z0-9._%+-]+[a-z-AZ0-9.-]+\.[a-zA-Z]{2,}$"); // Declare _emailRegExp here
 
   GlobalKey<FormState> formkey = GlobalKey();
+  @override
+  void dispose() {
+    super.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    nameController.dispose();
+    phoneNumberController.dispose();
+  }
+
+  void signupUser() async {
+    // set is loading to true.
+    setState(() {
+      isLoading = true;
+    });
+    // signup user using our authmethod
+    String res = await AuthRepository().signupUser(
+      email: emailController.text,
+      password: passwordController.text,
+      phoneNumber: phoneNumberController.text,
+      name: nameController.text,
+      context: context, // Pass the context here
+    );
+    // if string return is success, user has been creaded and navigate to next screen other witse show error.
+    if (res == "success") {
+      setState(() {
+        isLoading = false;
+      });
+      //navigate to the next screen
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const HomeView(),
+        ),
+      );
+    } else {
+      setState(() {
+        isLoading = false;
+      });
+      // show error
+      showSnackBar(context, res);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +94,7 @@ class _RegistrationViewState extends State<RegistrationView> {
                 CustomLogo(),
                 SizedBox(
                   height: MediaQuery.of(context).size.height *
-                      0.1, // responsive height
+                      0.04, // responsive height
                 ),
                 Row(
                   children: [
@@ -73,69 +111,41 @@ class _RegistrationViewState extends State<RegistrationView> {
                   ],
                 ),
                 const SizedBox(height: 10),
-                Custom_Form_Text_Foeld(
-                  onChanged: (data) {
-                    name = data;
-                    icon = const Icon(Icons.email);
-                  },
-                  hintText: 'writenamehere'.tr(),
-                ),
+                TextFieldInput(
+                    icon: Icons.person,
+                    textEditingController: nameController,
+                    hintText: 'Enter your name',
+                    textInputType: TextInputType.text),
+                TextFieldInput(
+                    icon: Icons.email,
+                    textEditingController: emailController,
+                    hintText: 'Enter your email',
+                    textInputType: TextInputType.text),
                 const SizedBox(height: 10),
-                TextFormField(
-                  decoration: const InputDecoration(labelText: 'Email'),
+                TextFieldInput(
+                  icon: Icons.phone,
+                  textEditingController: phoneNumberController,
+                  hintText: 'Enter your phone number',
+                  textInputType: TextInputType.phone,
                   validator: (value) {
-                    if (value!.isEmpty || !_emailRegExp.hasMatch(value)) {
-                      return 'Invalid email address';
+                    String pattern = r'^05[0-9]{8}$';
+                    RegExp regex = RegExp(pattern);
+                    if (!regex.hasMatch(value!)) {
+                      return 'Please enter a valid phone number (05xxxxxxxx)';
+                    } else {
+                      return null;
                     }
-                    return null;
                   },
-                  onSaved: (value) => email = value,
                 ),
                 const SizedBox(height: 10),
-                Custom_Form_Text_Foeld(
-                  onChanged: (data) {
-                    phoneNumber = data;
-                  },
-                  hintText: 'writephonehere'.tr(),
+                TextFieldInput(
+                  icon: Icons.lock,
+                  textEditingController: passwordController,
+                  hintText: 'Enter your passord',
+                  textInputType: TextInputType.text,
+                  isPass: true,
                 ),
-                const SizedBox(height: 10),
-                Custom_Form_Text_Foeld(
-                  onChanged: (data) {
-                    passward = data;
-                  },
-                  hintText: 'writepasslhere'.tr(),
-                ),
-                const SizedBox(height: 15),
-                Custome_button(
-                  onTap: () async {
-                    if (formkey.currentState!.validate()) {
-                      try {
-                        repositoryClient.authRepository
-                            .signUp(
-                          email!,
-                          passward!,
-                        )
-                            .then((user) {
-                          if (user != null) {
-                            Navigator.pushNamed(context, LoginView.id);
-                          }
-                        });
-                      } on FirebaseAuthException catch (e) {
-                        if (e.code == 'weak-password') {
-                          showSnackBar(context, "weakpassward".tr());
-                        } else if (e.code == 'email-already-in-use') {
-                          showSnackBar(context, "email-already-in-use".tr());
-                        } else {
-                          showSnackBar(context, "therewaserr".tr());
-                        }
-                      } catch (e) {
-                        showSnackBar(context, "therewaserr".tr());
-                      }
-                    } else {}
-                  },
-                  text: 'register'.tr(),
-                ),
-                const SizedBox(height: 10),
+                Custome_button(onTap: signupUser, text: "Sign Up"),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -168,6 +178,7 @@ class _RegistrationViewState extends State<RegistrationView> {
     );
   }
 
+/*
   Future<void> regeisterUser() async {
     try {
       UserCredential user = await FirebaseAuth.instance
@@ -184,7 +195,7 @@ class _RegistrationViewState extends State<RegistrationView> {
       // Handle registration error
     }
   }
-
+*/
   bool isValidEmail(String email) {
     // Use a simple email validation pattern
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');

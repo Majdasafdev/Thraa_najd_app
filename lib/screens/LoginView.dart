@@ -8,12 +8,15 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thraa_najd_mobile_app/screens/User/HomeView.dart';
 import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
+import 'package:thraa_najd_mobile_app/services/AuthRepository.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
 import 'package:thraa_najd_mobile_app/providers/model_hud.dart';
 import 'package:thraa_najd_mobile_app/screens/RegistrationView.dart';
 import 'package:thraa_najd_mobile_app/widgets/custom_button.dart';
 import 'package:thraa_najd_mobile_app/widgets/custom_text_form_field.dart';
+import 'package:thraa_najd_mobile_app/widgets/custome_input_text_field.dart';
 import 'package:thraa_najd_mobile_app/widgets/custome_logo.dart';
+import 'package:thraa_najd_mobile_app/widgets/customebutton1.dart';
 import 'package:thraa_najd_mobile_app/widgets/snack_bar.dart';
 import 'package:thraa_najd_mobile_app/providers/admin_mode.dart';
 import 'package:thraa_najd_mobile_app/widgets/switch_langs.dart';
@@ -28,6 +31,8 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
   bool isLoading = false;
 
   GlobalKey<FormState> formkey = GlobalKey();
@@ -36,6 +41,40 @@ class _LoginViewState extends State<LoginView> {
 
   final adminPassword = 'Admin123456';
   bool? keepMeLoggedIn = false;
+
+  @override
+  void dispose() {
+    super.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+  }
+
+  void loginUser() async {
+    setState(() {
+      isLoading = true;
+    });
+    // signup user using our authmethod
+    String res = await AuthRepository().loginUser(
+        email: emailController.text, password: passwordController.text);
+
+    if (res == "success") {
+      setState(() {
+        isLoading = false;
+      });
+      //navigate to the home screen
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const HomeView(),
+        ),
+      );
+    } else {
+      setState(() {
+        isLoading = false;
+      });
+      // show error
+      showSnackBar(context, res);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +90,10 @@ class _LoginViewState extends State<LoginView> {
               children: [
                 LanguageSwitchButton(context: context),
                 CustomLogo(),
-                const SizedBox(height: 50),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height *
+                      0.03, // responsive height
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -67,12 +109,11 @@ class _LoginViewState extends State<LoginView> {
                 const SizedBox(
                   height: 15,
                 ),
-                Custom_Form_Text_Foeld(
-                  onChanged: (data) {
-                    email = data;
-                  },
-                  hintText: 'email'.tr(),
-                ),
+                TextFieldInput(
+                    icon: Icons.email,
+                    textEditingController: emailController,
+                    hintText: 'Enter your email',
+                    textInputType: TextInputType.text),
                 Padding(
                   padding: const EdgeInsets.only(left: 20),
                   child: Row(
@@ -99,55 +140,57 @@ class _LoginViewState extends State<LoginView> {
                     ],
                   ),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Custom_Form_Text_Foeld(
-                  obscureText: true,
-                  onChanged: (data) {
-                    passward = data;
-                  },
-                  hintText: 'password'.tr(),
+                TextFieldInput(
+                  icon: Icons.lock,
+                  textEditingController: passwordController,
+                  hintText: 'Enter your passord',
+                  textInputType: TextInputType.text,
+                  isPass: true,
                 ),
                 const SizedBox(
                   height: 15,
                 ),
-                Custome_button(
-                    onTap: () async {
-                      if (keepMeLoggedIn == true) {
-                        keepUserLoggedIn();
-                      }
-                      if (formkey.currentState!.validate()) {
+                Custome_button1(
+                  onTap: () async {
+                    if (keepMeLoggedIn == true) {
+                      keepUserLoggedIn();
+                    }
+                    if (formkey.currentState!.validate()) {
+                      setState(() {
                         isLoading = true;
-                        setState(() {});
-                        try {
-                          final credential = await FirebaseAuth.instance
-                              .signInWithEmailAndPassword(
-                                  email: email!, password: passward!);
-                          await repositoryClient.authRepository
-                              .signIn(email!, passward!, context);
-                          if (credential.user!.emailVerified) {
-                            Navigator.pushNamed(context, HomeView.id,
-                                arguments: email);
-                          }
-                        } on FirebaseAuthException catch (e) {
-                          if (e.code == 'user-not-found') {
-                            showSnackBar(
-                                context, "No user found for that email.".tr());
-                          } else if (e.code == 'wrong-password') {
-                            showSnackBar(context,
-                                "Wrong password provided for that user.".tr());
-                          }
-                        } catch (e) {
-                          showSnackBar(context, "therewaserr".tr());
+                      });
+                      try {
+                        final credential = await FirebaseAuth.instance
+                            .signInWithEmailAndPassword(
+                                email: emailController.text,
+                                password: passwordController.text);
+                        await repositoryClient.authRepository.signIn(
+                            emailController.text,
+                            passwordController.text,
+                            context);
+                        if (credential.user!.emailVerified) {
+                          Navigator.pushNamed(context, HomeView.id,
+                              arguments: emailController.text);
                         }
+                      } on FirebaseAuthException catch (e) {
+                        if (e.code == 'user-not-found') {
+                          showSnackBar(
+                              context, "No user found for that email.".tr());
+                        } else if (e.code == 'wrong-password') {
+                          showSnackBar(context,
+                              "Wrong password provided for that user.".tr());
+                        }
+                      } catch (e) {
+                        showSnackBar(context, "therewaserr".tr());
+                      }
+                      setState(() {
                         isLoading = false;
-
-                        setState(() {});
-                      } else {}
-                      _validate(context);
-                    },
-                    text: 'login'.tr()),
+                      });
+                    } else {}
+                    _validate(context);
+                  },
+                  text: 'login'.tr(),
+                ),
                 const SizedBox(
                   height: 10,
                 ),
@@ -228,6 +271,8 @@ class _LoginViewState extends State<LoginView> {
     modelhud.changeisLoading(true);
     if (formkey.currentState!.validate()) {
       formkey.currentState!.save();
+      email = emailController.text;
+      passward = passwordController.text;
       if (Provider.of<AdminMode>(context, listen: false).isAdmin) {
         if (passward == adminPassword) {
           try {
