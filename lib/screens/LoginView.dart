@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:thraa_najd_mobile_app/screens/Forget_password.dart';
 import 'package:thraa_najd_mobile_app/screens/User/HomeView.dart';
 import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
 import 'package:thraa_najd_mobile_app/services/AuthRepository.dart';
@@ -49,150 +50,97 @@ class _LoginViewState extends State<LoginView> {
     passwordController.dispose();
   }
 
-  void loginUser() async {
-    setState(() {
-      isLoading = true;
-    });
-    // signup user using our authmethod
-    String res = await AuthRepository().loginUser(
-        email: emailController.text, password: passwordController.text);
-
-    if (res == "success") {
-      setState(() {
-        isLoading = false;
-      });
-      //navigate to the home screen
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const HomeView(),
-        ),
-      );
-    } else {
-      setState(() {
-        isLoading = false;
-      });
-      // show error
-      showSnackBar(context, res);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+    final textScaleFactor = MediaQuery.of(context).textScaleFactor;
+
     return Scaffold(
       backgroundColor: kMainColor,
       body: ModalProgressHUD(
         inAsyncCall: Provider.of<ModelHud>(context).isLoading,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
+          padding: EdgeInsets.symmetric(
+            horizontal: 16.0 * textScaleFactor,
+          ),
           child: Form(
             key: formkey,
             child: ListView(
               children: [
                 LanguageSwitchButton(context: context),
                 CustomLogo(),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height *
-                      0.03, // responsive height
-                ),
+                SizedBox(height: 10 * textScaleFactor),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       'logwelcome'.tr(),
-                      style: const TextStyle(
-                        fontSize: 24,
+                      style: TextStyle(
+                        fontSize: 24 * textScaleFactor,
                         color: Colors.white,
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(
-                  height: 15,
-                ),
+                SizedBox(height: 10 * textScaleFactor),
                 TextFieldInput(
-                    icon: Icons.email,
-                    textEditingController: emailController,
-                    hintText: 'Enter your email',
-                    textInputType: TextInputType.text),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: Row(
-                    children: <Widget>[
-                      Theme(
-                        data: ThemeData(unselectedWidgetColor: Colors.white),
-                        child: Checkbox(
-                          checkColor: kSecondaryColor,
-                          activeColor: kMainColor,
-                          value: keepMeLoggedIn,
-                          onChanged: (value) {
-                            setState(
-                              () {
-                                keepMeLoggedIn = value;
-                              },
-                            );
-                          },
-                        ),
-                      ),
-                      Text(
-                        'remember'.tr(),
-                        style: const TextStyle(color: Colors.white),
-                      )
-                    ],
-                  ),
+                  icon: Icons.email,
+                  textEditingController: emailController,
+                  hintText: 'Enter your email',
+                  textInputType: TextInputType.text,
                 ),
                 TextFieldInput(
                   icon: Icons.lock,
                   textEditingController: passwordController,
-                  hintText: 'Enter your passord',
+                  hintText: 'Enter your password',
                   textInputType: TextInputType.text,
                   isPass: true,
                 ),
-                const SizedBox(
-                  height: 15,
+                SizedBox(
+                  height: 8 * textScaleFactor,
                 ),
-                Custome_button1(
-                  onTap: () async {
-                    if (keepMeLoggedIn == true) {
-                      keepUserLoggedIn();
-                    }
-                    if (formkey.currentState!.validate()) {
-                      setState(() {
-                        isLoading = true;
-                      });
-                      try {
-                        final credential = await FirebaseAuth.instance
-                            .signInWithEmailAndPassword(
-                                email: emailController.text,
-                                password: passwordController.text);
-                        await repositoryClient.authRepository.signIn(
-                            emailController.text,
-                            passwordController.text,
-                            context);
-                        if (credential.user!.emailVerified) {
-                          Navigator.pushNamed(context, HomeView.id,
-                              arguments: emailController.text);
-                        }
-                      } on FirebaseAuthException catch (e) {
-                        if (e.code == 'user-not-found') {
-                          showSnackBar(
-                              context, "No user found for that email.".tr());
-                        } else if (e.code == 'wrong-password') {
-                          showSnackBar(context,
-                              "Wrong password provided for that user.".tr());
-                        }
-                      } catch (e) {
-                        showSnackBar(context, "therewaserr".tr());
-                      }
-                      setState(() {
-                        isLoading = false;
-                      });
-                    } else {}
-                    _validate(context);
-                  },
+                const ForgotPassword(),
+                SizedBox(
+                  height: 8 * textScaleFactor,
+                ),
+                Custome_button(
                   text: 'login'.tr(),
+                  onTap: loginUser,
                 ),
-                const SizedBox(
-                  height: 10,
+                SizedBox(
+                  height: 10 * textScaleFactor,
+                ),
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    return Expanded(
+                      child: Row(
+                        children: <Widget>[
+                          Theme(
+                            data:
+                                ThemeData(unselectedWidgetColor: Colors.white),
+                            child: Checkbox(
+                              checkColor: kSecondaryColor,
+                              activeColor: kMainColor,
+                              value: keepMeLoggedIn,
+                              onChanged: (value) {
+                                setState(() {
+                                  keepMeLoggedIn = value;
+                                });
+                              },
+                            ),
+                          ),
+                          Text(
+                            'remember'.tr(),
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                          SizedBox(
+                            width: constraints.maxWidth -
+                                100, // adjust the width as needed
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -216,9 +164,54 @@ class _LoginViewState extends State<LoginView> {
                     ),
                   ],
                 ),
+                SizedBox(height: 10 * textScaleFactor),
+                /*     Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 25 * textScaleFactor,
+                    vertical: 10 * textScaleFactor,
+                  ),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blueGrey,
+                    ),
+                    onPressed: () async {
+                      await AuthRepository().signInWithGoogle();
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const HomeView(),
+                        ),
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 8 * textScaleFactor,
+                          ),
+                          child: Image.network(
+                            "https://ouch-cdn2.icons8.com/VGHyfDgzIiyEwg3RIll1nYupfj653vnEPRLr0AeoJ8g/rs:fit:456:456/czM6Ly9pY29uczgu/b3VjaC1wcm9kLmFz/c2V0cy9wbmcvODg2/LzRjNzU2YThjLTQx/MjgtNGZlZS04MDNl/LTAwMTM0YzEwOTMy/Ny5wbmc.png",
+                            height: 35 * textScaleFactor,
+                          ),
+                        ),
+                        SizedBox(width: 10 * textScaleFactor),
+                        Text(
+                          "Continue with Google",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20 * textScaleFactor,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),*/
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 30 * textScaleFactor,
+                    vertical: 10 * textScaleFactor,
+                  ),
                   child: Row(
                     children: <Widget>[
                       Expanded(
@@ -231,9 +224,10 @@ class _LoginViewState extends State<LoginView> {
                             'adminpanel'.tr(),
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                                color: Provider.of<AdminMode>(context).isAdmin
-                                    ? kMainColor
-                                    : Colors.white),
+                              color: Provider.of<AdminMode>(context).isAdmin
+                                  ? kMainColor
+                                  : Colors.white,
+                            ),
                           ),
                         ),
                       ),
@@ -247,11 +241,12 @@ class _LoginViewState extends State<LoginView> {
                             'userpanel'.tr(),
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                                color: Provider.of<AdminMode>(context,
-                                            listen: true)
-                                        .isAdmin
-                                    ? Colors.white
-                                    : kMainColor),
+                              color:
+                                  Provider.of<AdminMode>(context, listen: true)
+                                          .isAdmin
+                                      ? Colors.white
+                                      : kMainColor,
+                            ),
                           ),
                         ),
                       ),
@@ -266,6 +261,45 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 
+  void loginUser() async {
+    if (keepMeLoggedIn == true) {
+      keepUserLoggedIn();
+    }
+    if (formkey.currentState!.validate()) {
+      setState(() {
+        isLoading = true;
+      });
+      try {
+        final credential =
+            await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text,
+        );
+        await repositoryClient.authRepository.signIn(
+          emailController.text,
+          passwordController.text,
+          context,
+        );
+        if (credential.user!.emailVerified) {
+          Navigator.pushNamed(context, HomeView.id,
+              arguments: emailController.text);
+        }
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'user-not-found') {
+          showSnackBar(context, "No user found for that email.".tr());
+        } else if (e.code == 'wrong-password') {
+          showSnackBar(context, "Wrong password provided for that user.".tr());
+        }
+      } catch (e) {
+        showSnackBar(context, "therewaserr".tr());
+      }
+      setState(() {
+        isLoading = false;
+      });
+    } else {}
+    _validate(context);
+  }
+
   void _validate(context) async {
     final modelhud = Provider.of<ModelHud>(context, listen: false);
     modelhud.changeisLoading(true);
@@ -276,40 +310,41 @@ class _LoginViewState extends State<LoginView> {
       if (Provider.of<AdminMode>(context, listen: false).isAdmin) {
         if (passward == adminPassword) {
           try {
-            await repositoryClient.authRepository
-                .signIn(email!.trim(), passward!.trim(), context);
+            await repositoryClient.authRepository.signIn(
+              email!.trim(),
+              passward!.trim(),
+              context,
+            );
             Navigator.pushNamed(context, AdminHomeView.id);
           } catch (e) {
             modelhud.changeisLoading(false);
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(e.toString()),
+                content: Text('invalid entry'.tr()),
               ),
             );
           }
         } else {
           modelhud.changeisLoading(false);
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text('therewaserr'.tr()),
-          ));
-        }
-      } else {
-        try {
-          await repositoryClient.authRepository
-              .signIn(email!.trim(), passward!.trim(), context);
-          Navigator.pushNamed(context, HomeView.id);
-        } catch (e) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(e.toString()),
-          ));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('therewaserr'.tr()),
+            ),
+          );
         }
       }
+    } else {
+      modelhud.changeisLoading(false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Invalid input'.tr()),
+        ),
+      );
     }
-    modelhud.changeisLoading(false);
   }
 
   void keepUserLoggedIn() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    preferences.setBool(kKeepMeLoggedIn, keepMeLoggedIn!);
+    preferences.setBool('KeepMeLoggedIn', true);
   }
 }

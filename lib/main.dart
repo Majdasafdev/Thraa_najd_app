@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thraa_najd_mobile_app/providers/CartNotifier.dart';
 import 'package:thraa_najd_mobile_app/providers/SectionNotifier.dart';
 import 'package:thraa_najd_mobile_app/screens/Admin/OrderDetailsView.dart';
+import 'package:thraa_najd_mobile_app/screens/Forget_password.dart';
 import 'package:thraa_najd_mobile_app/screens/User/CartView.dart';
 import 'package:thraa_najd_mobile_app/screens/User/EditProfileView.dart';
 import 'package:thraa_najd_mobile_app/screens/User/ProductInfo.dart';
@@ -154,6 +155,7 @@ class _ThraaNajdAppState extends State<ThraaNajdApp> {
                 ProductInfo.id: (context) => const ProductInfo(),
                 WelcomeView.id: (context) => const WelcomeView(),
                 ProfileView.id: (context) => const ProfileView(),
+                ForgotPassword.id: (context) => const ForgotPassword(),
 
                 //WelcomeScreen
               },

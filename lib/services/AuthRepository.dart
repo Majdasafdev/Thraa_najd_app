@@ -23,6 +23,8 @@ class AuthRepository extends AbstractRepository {
   final _emailRegExp = RegExp(
     r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
   );
+
+  //SIGN UP
   Future<String> signupUser(
       {required String email,
       required String password,
@@ -101,27 +103,22 @@ class AuthRepository extends AbstractRepository {
     return res;
   }
 
-  //LOGIN
-  Future<String> loginUser({
-    required String email,
-    required String password,
-  }) async {
-    String res = "Some error Occurred";
+  signInWithGoogle() async {
     try {
-      if (email.isNotEmpty || password.isNotEmpty) {
-        // logging in user with email and password
-        await _auth.signInWithEmailAndPassword(
-          email: email,
-          password: password,
+      final GoogleSignInAccount? googleSignInAccount =
+          await _googleSignIn.signIn();
+      if (googleSignInAccount != null) {
+        final GoogleSignInAuthentication googleSignInAuthentication =
+            await googleSignInAccount.authentication;
+        final AuthCredential authCredential = GoogleAuthProvider.credential(
+          accessToken: googleSignInAuthentication.accessToken,
+          idToken: googleSignInAuthentication.idToken,
         );
-        res = "success";
-      } else {
-        res = "Please enter all the fields";
+        await _auth.signInWithCredential(authCredential);
       }
-    } catch (err) {
-      return err.toString();
+    } on FirebaseAuthException catch (e) {
+      print(e.toString());
     }
-    return res;
   }
 
   Stream<UserModel> getCurrentUserInfo() {
