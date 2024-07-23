@@ -53,6 +53,7 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
+    // ignore: deprecated_member_use
     final textScaleFactor = MediaQuery.of(context).textScaleFactor;
 
     return Scaffold(
@@ -69,7 +70,7 @@ class _LoginViewState extends State<LoginView> {
               children: [
                 LanguageSwitchButton(context: context),
                 CustomLogo(),
-                SizedBox(height: 10 * textScaleFactor),
+                SizedBox(height: 5 * textScaleFactor),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -88,6 +89,29 @@ class _LoginViewState extends State<LoginView> {
                   textEditingController: emailController,
                   hintText: 'Enter your email',
                   textInputType: TextInputType.text,
+                ),
+                Row(
+                  children: <Widget>[
+                    Theme(
+                      data: ThemeData(unselectedWidgetColor: Colors.white),
+                      child: Checkbox(
+                        checkColor: kSecondaryColor,
+                        activeColor: kMainColor,
+                        value: keepMeLoggedIn,
+                        onChanged: (value) {
+                          setState(() {
+                            keepMeLoggedIn = value;
+                          });
+                        },
+                      ),
+                    ),
+                    Text(
+                      'remember'.tr(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
                 ),
                 TextFieldInput(
                   icon: Icons.lock,
@@ -109,38 +133,6 @@ class _LoginViewState extends State<LoginView> {
                 ),
                 SizedBox(
                   height: 10 * textScaleFactor,
-                ),
-                LayoutBuilder(
-                  builder: (context, constraints) {
-                    return Expanded(
-                      child: Row(
-                        children: <Widget>[
-                          Theme(
-                            data:
-                                ThemeData(unselectedWidgetColor: Colors.white),
-                            child: Checkbox(
-                              checkColor: kSecondaryColor,
-                              activeColor: kMainColor,
-                              value: keepMeLoggedIn,
-                              onChanged: (value) {
-                                setState(() {
-                                  keepMeLoggedIn = value;
-                                });
-                              },
-                            ),
-                          ),
-                          Text(
-                            'remember'.tr(),
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                          SizedBox(
-                            width: constraints.maxWidth -
-                                100, // adjust the width as needed
-                          ),
-                        ],
-                      ),
-                    );
-                  },
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,

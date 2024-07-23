@@ -7,7 +7,9 @@ class TextFieldInput extends StatelessWidget {
   final String hintText;
   final IconData? icon;
   final TextInputType textInputType;
-  final String? Function(String?)? validator; // Add this line
+  final String? Function(String?)? validator;
+  final bool? obscureText;
+// Add this line
 
   const TextFieldInput({
     super.key,
@@ -17,6 +19,7 @@ class TextFieldInput extends StatelessWidget {
     this.icon,
     required this.textInputType,
     this.validator,
+    this.obscureText,
   });
 
   @override

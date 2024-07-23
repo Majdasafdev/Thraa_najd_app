@@ -139,6 +139,8 @@ class _RegistrationViewState extends State<RegistrationView> {
                 ),
                 const SizedBox(height: 10),
                 TextFieldInput(
+                  obscureText: true,
+// Set this to false to show the password characters
                   icon: Icons.lock,
                   textEditingController: passwordController,
                   hintText: 'Enter your passord',
