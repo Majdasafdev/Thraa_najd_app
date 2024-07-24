@@ -52,9 +52,9 @@ class _RegistrationViewState extends State<RegistrationView> {
     });
     // signup user using our authmethod
     String res = await AuthRepository().signupUser(
-      email: emailController.text,
-      password: passwordController.text,
-      phoneNumber: phoneNumberController.text,
+      email: emailController.text.trim(),
+      password: passwordController.text.trim(),
+      phoneNumber: phoneNumberController.text.trim(),
       name: nameController.text,
       context: context, // Pass the context here
     );

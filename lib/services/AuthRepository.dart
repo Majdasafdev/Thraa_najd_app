@@ -4,6 +4,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import "package:firebase_auth/firebase_auth.dart";
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:thraa_najd_mobile_app/providers/model_hud.dart';
 import 'package:thraa_najd_mobile_app/screens/LoginView.dart';
 import 'package:thraa_najd_mobile_app/screens/User/CartView.dart';
 import 'package:thraa_najd_mobile_app/screens/User/HomeView.dart';
@@ -164,7 +165,9 @@ class AuthRepository extends AbstractRepository {
       String email, String password, BuildContext context) async {
     try {
       final credential = await firebaseAuth.signInWithEmailAndPassword(
-          email: email, password: password);
+        email: email.trim(),
+        password: password.trim(),
+      );
       if (credential.user!.emailVerified) {
         Navigator.pushNamed(context, HomeView.id);
       } else {
@@ -193,12 +196,53 @@ class AuthRepository extends AbstractRepository {
           ).show();
         }
       }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.error,
+          animType: AnimType.rightSlide,
+          title: "Error",
+          desc: "User not found",
+        ).show();
+      } else if (e.code == 'wrong-password') {
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.error,
+          animType: AnimType.rightSlide,
+          title: "Error",
+          desc: "Wrong password",
+        ).show();
+      } else if (e.code == 'invalid-email') {
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.error,
+          animType: AnimType.rightSlide,
+          title: "Error",
+          desc: "Invalid email",
+        ).show();
+      } else {
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.error,
+          animType: AnimType.rightSlide,
+          title: "Error",
+          desc: "An unknown error occurred",
+        ).show();
+      }
     } catch (e) {
-      // handle sign in error
+      AwesomeDialog(
+        context: context,
+        dialogType: DialogType.error,
+        animType: AnimType.rightSlide,
+        title: "Error",
+        desc: "An unknown error occurred",
+      ).show();
     }
   }
 
-  Future<void> signOut() async {
+  Future<void> signOut(ModelHud modelHud) async {
     await firebaseAuth.signOut();
+    modelHud.changeisLoading(false);
   }
 }
