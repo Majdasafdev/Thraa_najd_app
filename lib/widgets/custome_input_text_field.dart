@@ -8,6 +8,7 @@ class TextFieldInput extends StatelessWidget {
   final IconData? icon;
   final TextInputType textInputType;
   final String? Function(String?)? validator;
+  final Function(String)? onChanged;
 
 // Add this line
 
@@ -19,6 +20,7 @@ class TextFieldInput extends StatelessWidget {
     this.icon,
     required this.textInputType,
     this.validator,
+    this.onChanged,
   });
 
   @override
@@ -49,6 +51,7 @@ class TextFieldInput extends StatelessWidget {
         ),
         keyboardType: textInputType,
         obscureText: isPass,
+        onChanged: onChanged,
       ),
     );
   }

@@ -1,8 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
+import 'package:thraa_najd_mobile_app/models/phoneNumberValid.dart';
 import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
 import 'package:thraa_najd_mobile_app/services/AuthRepository.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
@@ -31,7 +33,7 @@ class _RegistrationViewState extends State<RegistrationView> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController phoneNumberController = TextEditingController();
 
-  bool isLoading = false;
+  bool isPhoneNumberValid = false;
   final _emailRegExp = RegExp(
       r"^[a-zA-Z0-9._%+-]+[a-z-AZ0-9.-]+\.[a-zA-Z]{2,}$"); // Declare _emailRegExp here
 
@@ -66,6 +68,16 @@ class _RegistrationViewState extends State<RegistrationView> {
       // show error
       showSnackBar(context, res);
     }
+  }
+
+  bool _validatePhoneNumber(String value) {
+    final phoneRegExp = RegExp(r"^05\d{8}$");
+    if (!phoneRegExp.hasMatch(value)) {
+      showSnackBar(context,
+          'Invalid phone number. Please enter a valid number starting with 05 and followed by 8 digits.');
+      return false;
+    }
+    return true;
   }
 
   @override
@@ -114,14 +126,10 @@ class _RegistrationViewState extends State<RegistrationView> {
                 textEditingController: phoneNumberController,
                 hintText: 'Enter your phone number',
                 textInputType: TextInputType.phone,
-                validator: (value) {
-                  String pattern = r'^05[0-9]{8}$';
-                  RegExp regex = RegExp(pattern);
-                  if (!regex.hasMatch(value!)) {
-                    return 'Please enter a valid phone number (05xxxxxxxx)';
-                  } else {
-                    return null;
-                  }
+                onChanged: (value) {
+                  setState(() {
+                    isPhoneNumberValid = _validatePhoneNumber(value);
+                  });
                 },
               ),
               const SizedBox(height: 10),
