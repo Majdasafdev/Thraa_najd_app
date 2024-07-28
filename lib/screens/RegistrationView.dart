@@ -46,10 +46,6 @@ class _RegistrationViewState extends State<RegistrationView> {
   }
 
   void signupUser() async {
-    // set is loading to true.
-    setState(() {
-      isLoading = true;
-    });
     // signup user using our authmethod
     String res = await AuthRepository().signupUser(
       email: emailController.text.trim(),
@@ -60,19 +56,13 @@ class _RegistrationViewState extends State<RegistrationView> {
     );
     // if string return is success, user has been creaded and navigate to next screen other witse show error.
     if (res == "success") {
-      setState(() {
-        isLoading = false;
-      });
-      //navigate to the next screen
+//navigate to the next screen
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => const HomeView(),
+          builder: (context) => const LoginView(),
         ),
       );
     } else {
-      setState(() {
-        isLoading = false;
-      });
       // show error
       showSnackBar(context, res);
     }
@@ -82,126 +72,97 @@ class _RegistrationViewState extends State<RegistrationView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kMainColor,
-      body: ModalProgressHUD(
-        inAsyncCall: Provider.of<ModelHud>(context).isLoading,
-        child: Padding(
-          padding:
-              const EdgeInsets.symmetric(horizontal: 16), // adjusted padding
-          child: Form(
-            key: formkey,
-            child: ListView(
-              children: [
-                CustomLogo(),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height *
-                      0.04, // responsive height
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        'registeration'.tr(),
-                        style: const TextStyle(
-                          fontSize: 18,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold, // added font weight
-                        ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16), // adjusted padding
+        child: Form(
+          key: formkey,
+          child: ListView(
+            children: [
+              CustomLogo(),
+              SizedBox(
+                height: MediaQuery.of(context).size.height *
+                    0.04, // responsive height
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      'registeration'.tr(),
+                      style: const TextStyle(
+                        fontSize: 18,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold, // added font weight
                       ),
                     ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                TextFieldInput(
-                    icon: Icons.person,
-                    textEditingController: nameController,
-                    hintText: 'Enter your name',
-                    textInputType: TextInputType.text),
-                TextFieldInput(
-                    icon: Icons.email,
-                    textEditingController: emailController,
-                    hintText: 'Enter your email',
-                    textInputType: TextInputType.text),
-                const SizedBox(height: 10),
-                TextFieldInput(
-                  icon: Icons.phone,
-                  textEditingController: phoneNumberController,
-                  hintText: 'Enter your phone number',
-                  textInputType: TextInputType.phone,
-                  validator: (value) {
-                    String pattern = r'^05[0-9]{8}$';
-                    RegExp regex = RegExp(pattern);
-                    if (!regex.hasMatch(value!)) {
-                      return 'Please enter a valid phone number (05xxxxxxxx)';
-                    } else {
-                      return null;
-                    }
-                  },
-                ),
-                const SizedBox(height: 10),
-                TextFieldInput(
-                  obscureText: true,
-// Set this to false to show the password characters
-                  icon: Icons.lock,
-                  textEditingController: passwordController,
-                  hintText: 'Enter your passord',
-                  textInputType: TextInputType.text,
-                  isPass: true,
-                ),
-                Custome_button(onTap: signupUser, text: "Sign Up"),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'haveaccount'.tr(),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              TextFieldInput(
+                  icon: Icons.person,
+                  textEditingController: nameController,
+                  hintText: 'Enter your name',
+                  textInputType: TextInputType.text),
+              TextFieldInput(
+                  icon: Icons.email,
+                  textEditingController: emailController,
+                  hintText: 'Enter your email',
+                  textInputType: TextInputType.text),
+              const SizedBox(height: 10),
+              TextFieldInput(
+                icon: Icons.phone,
+                textEditingController: phoneNumberController,
+                hintText: 'Enter your phone number',
+                textInputType: TextInputType.phone,
+                validator: (value) {
+                  String pattern = r'^05[0-9]{8}$';
+                  RegExp regex = RegExp(pattern);
+                  if (!regex.hasMatch(value!)) {
+                    return 'Please enter a valid phone number (05xxxxxxxx)';
+                  } else {
+                    return null;
+                  }
+                },
+              ),
+              const SizedBox(height: 10),
+              TextFieldInput(
+                // Set this to false to show the password characters
+                icon: Icons.lock,
+                textEditingController: passwordController,
+                hintText: 'Enter your passord',
+                textInputType: TextInputType.text,
+                isPass: false,
+              ),
+              Custome_button(onTap: signupUser, text: "Sign Up"),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'haveaccount'.tr(),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16, // adjusted font size
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context, LoginView.id);
+                    },
+                    child: Text(
+                      'logregesiter'.tr(),
                       style: const TextStyle(
-                        color: Colors.white,
+                        color: Color(0xffC7EDE6),
                         fontSize: 16, // adjusted font size
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context, LoginView.id);
-                      },
-                      child: Text(
-                        'logregesiter'.tr(),
-                        style: const TextStyle(
-                          color: Color(0xffC7EDE6),
-                          fontSize: 16, // adjusted font size
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),
     );
-  }
-
-/*
-  Future<void> regeisterUser() async {
-    try {
-      UserCredential user = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email!, password: passward!);
-      await user.user!.sendEmailVerification().then((value) {
-        print(
-            '================ Email verification sent! =====================');
-      }).catchError((e) {
-        print(
-            '================ Error sending email verification: ============== $e');
-      });
-      Navigator.pop(context, LoginView.id);
-    } catch (e) {
-      // Handle registration error
-    }
-  }
-*/
-  bool isValidEmail(String email) {
-    // Use a simple email validation pattern
-    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-    return emailRegex.hasMatch(email);
   }
 
   Future<void> showSnackBar(BuildContext context, String message) async {
@@ -209,15 +170,22 @@ class _RegistrationViewState extends State<RegistrationView> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  String getErrorMessage(FirebaseAuthException e) {
-    if (e.code == 'weak-password') {
-      return "weakpassward".tr();
-    } else if (e.code == 'email-already-in-use') {
-      return "email-already-in-use".tr();
-    } else if (e.code == 'invalid-email') {
-      return e.message!;
-    } else {
-      return "therewaserr".tr();
-    }
+  void showLoadingIndicator(BuildContext context) {
+    // Show a loading indicator in the UI, e.g., using a CircularProgressIndicator
+    // You can use a package like 'flutter_spinkit' or create your own custom loading indicator
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
+  }
+
+  void hideLoadingIndicator(BuildContext context) {
+    // Hide the loading indicator
+    Navigator.of(context, rootNavigator: true);
   }
 }

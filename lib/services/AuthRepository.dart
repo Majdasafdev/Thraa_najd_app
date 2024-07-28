@@ -4,6 +4,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import "package:firebase_auth/firebase_auth.dart";
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
 import 'package:thraa_najd_mobile_app/providers/model_hud.dart';
 import 'package:thraa_najd_mobile_app/screens/LoginView.dart';
 import 'package:thraa_najd_mobile_app/screens/User/CartView.dart';
@@ -20,18 +21,21 @@ import 'package:firebase_auth/firebase_auth.dart';
 class AuthRepository extends AbstractRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final _auth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  bool isLoading = false;
+
   final _emailRegExp = RegExp(
     r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
   );
 
   //SIGN UP
-  Future<String> signupUser(
-      {required String email,
-      required String password,
-      required String name,
-      required String phoneNumber,
-      required BuildContext context}) async {
+  Future<String> signupUser({
+    // Set loading to true when signup starts
+    required String email,
+    required String password,
+    required String name,
+    required String phoneNumber,
+    required BuildContext context,
+  }) async {
     String res = "Some error Occurred";
     try {
       email = email.trim(); // trim the email
@@ -40,6 +44,7 @@ class AuthRepository extends AbstractRepository {
         if (!_emailRegExp.hasMatch(email)) {
           return "Invalid email address";
         }
+        showLoadingIndicator(context);
 
         // register user in auth with email and password
         // ignore: deprecated_member_use
@@ -47,6 +52,8 @@ class AuthRepository extends AbstractRepository {
         if (user.isNotEmpty) {
           return "This email is already registered";
         }
+        // Set loading to true in context
+
         // register user in auth with email and password
         UserCredential cred = await _auth.createUserWithEmailAndPassword(
           email: email,
@@ -54,7 +61,9 @@ class AuthRepository extends AbstractRepository {
         );
         // send email verification
         await cred.user!.sendEmailVerification();
+        bool isLoading = false;
 
+        hideLoadingIndicator(context);
         // show a dialog to the user to verify their email
         showDialog(
           context: context,
@@ -66,17 +75,23 @@ class AuthRepository extends AbstractRepository {
               TextButton(
                 child: const Text("OK"),
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.pushNamed(context, LoginView.id);
                 },
               ),
             ],
           ),
         );
-
         // wait for the user to verify their email
         while (!(cred.user!.emailVerified)) {
           await Future.delayed(const Duration(seconds: 2));
         }
+
+        /*  // Wait for the user to verify their email
+        HERE TO SAVE ONLY VERIFIYNG EMAILS IN USERS COLLECTION 
+        await cred.user!.reload(); // Reload user to get latest email verification status
+        if (!cred.user!.emailVerified) {
+          return "Email not verified. Please verify your email.";
+        }*/
 
         // add user to your  firestore database
         print(cred.user!.uid);
@@ -86,6 +101,7 @@ class AuthRepository extends AbstractRepository {
           'email': email,
           'phoneNumber': phoneNumber,
         });
+
         res = "success";
       } else {
         return "Please fill in all the fields";
@@ -103,24 +119,7 @@ class AuthRepository extends AbstractRepository {
     }
     return res;
   }
-
-  signInWithGoogle() async {
-    try {
-      final GoogleSignInAccount? googleSignInAccount =
-          await _googleSignIn.signIn();
-      if (googleSignInAccount != null) {
-        final GoogleSignInAuthentication googleSignInAuthentication =
-            await googleSignInAccount.authentication;
-        final AuthCredential authCredential = GoogleAuthProvider.credential(
-          accessToken: googleSignInAuthentication.accessToken,
-          idToken: googleSignInAuthentication.idToken,
-        );
-        await _auth.signInWithCredential(authCredential);
-      }
-    } on FirebaseAuthException catch (e) {
-      print(e.toString());
-    }
-  }
+// Utility functions to show and hide the loading indicator
 
   Stream<UserModel> getCurrentUserInfo() {
     return firebaseFirestore
@@ -244,5 +243,24 @@ class AuthRepository extends AbstractRepository {
   Future<void> signOut(ModelHud modelHud) async {
     await firebaseAuth.signOut();
     modelHud.changeisLoading(false);
+  }
+
+  void showLoadingIndicator(BuildContext context) {
+    // Show a loading indicator in the UI, e.g., using a CircularProgressIndicator
+    // You can use a package like 'flutter_spinkit' or create your own custom loading indicator
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
+  }
+
+  void hideLoadingIndicator(BuildContext context) {
+    // Hide the loading indicator
+    Navigator.of(context, rootNavigator: true).pop();
   }
 }

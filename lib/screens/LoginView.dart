@@ -249,8 +249,8 @@ class _LoginViewState extends State<LoginView> {
     modelhud.changeisLoading(true);
     if (formkey.currentState!.validate()) {
       formkey.currentState!.save();
-      email = emailController.text;
-      passward = passwordController.text;
+      email = emailController.text.trim();
+      passward = passwordController.text.trim();
       if (Provider.of<AdminMode>(context, listen: false).isAdmin) {
         if (passward == adminPassword) {
           try {
@@ -285,6 +285,7 @@ class _LoginViewState extends State<LoginView> {
         ),
       );
     }
+    modelhud.changeisLoading(false);
   }
 
   void keepUserLoggedIn() async {
