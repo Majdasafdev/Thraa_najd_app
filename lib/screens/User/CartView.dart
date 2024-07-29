@@ -215,6 +215,8 @@ class CartScreen extends StatelessWidget {
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                 content: Text('Orderd Successfully'),
               ));
+              Provider.of<CartNotifier>(context, listen: false)
+                  .clearCart(); // Add this line
               Navigator.pop(context);
             } catch (ex) {
               print(ex);

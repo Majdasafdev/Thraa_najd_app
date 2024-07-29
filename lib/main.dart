@@ -1,3 +1,5 @@
+import 'package:firebase_app_check/firebase_app_check.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -5,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thraa_najd_mobile_app/providers/CartNotifier.dart';
 import 'package:thraa_najd_mobile_app/providers/SectionNotifier.dart';
 import 'package:thraa_najd_mobile_app/screens/Admin/OrderDetailsView.dart';
+import 'package:thraa_najd_mobile_app/screens/Forget_password.dart';
 import 'package:thraa_najd_mobile_app/screens/User/CartView.dart';
 import 'package:thraa_najd_mobile_app/screens/User/EditProfileView.dart';
 import 'package:thraa_najd_mobile_app/screens/User/ProductInfo.dart';
@@ -25,6 +28,8 @@ import 'screens/User/HomeView.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,20 +38,44 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  await FirebaseAppCheck.instance.activate(
+    androidProvider: AndroidProvider.debug,
+  );
+
+  await FirebaseAuth.instance.signOut();
+
   runApp(EasyLocalization(
     supportedLocales: const [
       Locale('en', 'US'),
       Locale('ar', 'AR'),
     ],
     path: 'assets/translations',
-    child: ThraaNajdApp(),
+    child: const ThraaNajdApp(),
   ));
 }
 
-class ThraaNajdApp extends StatelessWidget {
-  bool isUserLoggedIn = false;
+class ThraaNajdApp extends StatefulWidget {
+  const ThraaNajdApp({super.key});
 
-  ThraaNajdApp({super.key});
+  @override
+  State<ThraaNajdApp> createState() => _ThraaNajdAppState();
+}
+
+class _ThraaNajdAppState extends State<ThraaNajdApp> {
+  @override
+  initState() {
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user == null) {
+        print(
+            '----------------------User is currently signed out!-----------------------');
+      } else {
+        print(
+            '------------------------------User is signed in!--------------------------');
+      }
+    });
+  }
+
+  bool isUserLoggedIn = false;
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +138,11 @@ class ThraaNajdApp extends StatelessWidget {
               supportedLocales: context.supportedLocales,
               locale: context.locale,
               debugShowCheckedModeBanner: false,
-              initialRoute: isUserLoggedIn ? WelcomeView.id : WelcomeView.id,
+              home: (FirebaseAuth.instance.currentUser != null &&
+                      FirebaseAuth.instance.currentUser!.emailVerified)
+                  ? const WelcomeView()
+                  : const LoginView(),
+              // initialRoute: isUserLoggedIn ? WelcomeView.id : WelcomeView.id,
               routes: {
                 OrderDeatiels.id: (context) => OrderDeatiels(),
                 LoginView.id: (context) => const LoginView(),
@@ -120,9 +153,10 @@ class ThraaNajdApp extends StatelessWidget {
                 ManageProducts.id: (context) => ManageProducts(),
                 OrdersScreen.id: (context) => OrdersScreen(),
                 CartScreen.id: (context) => const CartScreen(),
-                ProductInfo.id: (context) => ProductInfo(),
+                ProductInfo.id: (context) => const ProductInfo(),
                 WelcomeView.id: (context) => const WelcomeView(),
                 ProfileView.id: (context) => const ProfileView(),
+                ForgotPassword.id: (context) => const ForgotPassword(),
 
                 //WelcomeScreen
               },
