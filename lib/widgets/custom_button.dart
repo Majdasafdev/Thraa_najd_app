@@ -7,23 +7,41 @@ class Custome_button extends StatelessWidget {
     super.key,
     required this.onTap,
     required this.text,
+    required double height,
+    required double fontSize,
   });
 
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
+
     return InkWell(
-        onTap: onTap,
-        child: Container(
-          alignment: Alignment.center,
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          decoration: ShapeDecoration(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              color: const Color(0xff7CAC4A)),
-          width: double.infinity,
-          height: 60,
-          child: Center(child: Text(text)),
-        ));
+      onTap: onTap,
+      child: Container(
+        alignment: Alignment.center,
+        padding: EdgeInsets.symmetric(
+          vertical: screenHeight * 0.02,
+        ),
+        decoration: ShapeDecoration(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+              screenWidth * 0.04,
+            ),
+          ),
+          color: const Color(0xff7CAC4A),
+        ),
+        width: screenWidth,
+        height: screenHeight * 0.08,
+        child: Center(
+          child: Text(
+            text,
+            style: TextStyle(
+              fontSize: screenWidth * 0.04,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
