@@ -1,6 +1,7 @@
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,6 +30,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:device_preview/device_preview.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,14 +45,19 @@ void main() async {
 
   await FirebaseAuth.instance.signOut();
 
-  runApp(EasyLocalization(
-    supportedLocales: const [
-      Locale('en', 'US'),
-      Locale('ar', 'AR'),
-    ],
-    path: 'assets/translations',
-    child: const ThraaNajdApp(),
-  ));
+  runApp(
+    DevicePreview(
+      enabled: !kReleaseMode,
+      builder: (context) => EasyLocalization(
+        supportedLocales: const [
+          Locale('en', 'US'),
+          Locale('ar', 'AR'),
+        ],
+        path: 'assets/translations',
+        child: const ThraaNajdApp(),
+      ),
+    ),
+  );
 }
 
 class ThraaNajdApp extends StatefulWidget {
@@ -107,7 +114,9 @@ class _ThraaNajdAppState extends State<ThraaNajdApp> {
             child: MaterialApp(
               localizationsDelegates: context.localizationDelegates,
               supportedLocales: context.supportedLocales,
-              locale: context.locale,
+              useInheritedMediaQuery: true,
+              locale: DevicePreview.locale(context),
+              builder: DevicePreview.appBuilder,
               home: const Scaffold(
                 body: Center(
                   child: Text('Loading....'),
