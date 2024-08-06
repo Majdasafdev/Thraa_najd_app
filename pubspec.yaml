@@ -28,6 +28,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  archive: ^3.6.1
   awesome_dialog: ^3.2.1
   cloud_firestore: ^5.1.0
   csv: ^6.0.0
@@ -48,7 +49,7 @@ dependencies:
   flutter_notifire: ^0.0.1
   flutter_screenutil: ^5.9.1
   flutter_snackbar_content: ^0.0.3
-  freezed_annotation: ^2.4.1
+  freezed_annotation: ^2.4.4
   google_sign_in: ^6.2.1
   modal_progress_hud_nsn: ^0.5.1
   provider: ^6.1.1
@@ -62,7 +63,6 @@ dev_dependencies:
   flutter_lints: ^4.0.0
   flutter_test:
     sdk: flutter
-
 
 dependency_overrides:
   freezed_annotation: ^0.14.1 # Force the version needed by firebase_database_rest
