@@ -33,6 +33,8 @@ class CustomLogo extends StatelessWidget {
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
+    final double iconSize;
+    final screenSize = MediaQuery.of(context).size;
 
     return SingleChildScrollView(
       // Increased height to accommodate all content
@@ -65,12 +67,14 @@ class CustomLogo extends StatelessWidget {
                 icon: const Icon(Feather.phone,
                     color: Colors.white), // Use Feather's phone icon
                 onPressed: _makePhoneCall,
+                iconSize: 26.0 * (screenSize.width / 375.0),
               ),
               SizedBox(width: screenWidth * 0.08), // Space between icons
               IconButton(
                 icon: const Icon(FontAwesome5Brands.whatsapp,
                     color: Colors.white), // Use FontAwesome's WhatsApp icon
                 onPressed: _launchWhatsApp,
+                iconSize: 26.0 * (screenSize.width / 375.0),
               ),
             ],
           ),

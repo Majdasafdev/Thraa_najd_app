@@ -57,8 +57,8 @@ class _LoginViewState extends State<LoginView> {
           inAsyncCall: modelHud.isLoading,
           child: Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: 16.0 * (screenSize.width / 375.0),
-              vertical: 20.0 * (screenSize.height / 800.0),
+              horizontal: 12.0 * (screenSize.width / 375.0),
+              vertical: 16.0 * (screenSize.height / 800.0),
             ),
             child: Form(
               key: formkey,
@@ -69,11 +69,13 @@ class _LoginViewState extends State<LoginView> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        'logwelcome'.tr(),
-                        style: TextStyle(
-                          fontSize: 16 * (screenSize.width / 375.0),
-                          color: Colors.white,
+                      Flexible(
+                        child: Text(
+                          'logwelcome'.tr(),
+                          style: TextStyle(
+                            fontSize: 16 * (screenSize.width / 375.0),
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ],
@@ -102,11 +104,13 @@ class _LoginViewState extends State<LoginView> {
                           },
                         ),
                       ),
-                      Text(
-                        'remember'.tr(),
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16 * (screenSize.width / 375.0),
+                      Flexible(
+                        child: Text(
+                          'remember'.tr(),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16 * (screenSize.width / 375.0),
+                          ),
                         ),
                       ),
                     ],
@@ -132,36 +136,34 @@ class _LoginViewState extends State<LoginView> {
                   SizedBox(height: 10 * (screenSize.height / 800.0)),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment:
+                        CrossAxisAlignment.start, // Add this line
+
                     children: [
-                      Expanded(
-                        child: Center(
-                          child: Text(
-                            'donthaveaccount'.tr(),
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 12.0 * (screenSize.width / 375.0),
-                            ),
-                            textAlign: TextAlign.center,
-                            overflow: TextOverflow.ellipsis,
+                      Flexible(
+                        child: Text(
+                          'donthaveaccount'.tr(),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12.0 * (screenSize.width / 375.0),
                           ),
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      const SizedBox(
-                          width: 0), // Explicitly set the space between widgets
                       GestureDetector(
                         onTap: () {
                           Navigator.pushNamed(context, RegistrationView.id);
                         },
-                        child: Center(
-                          child: Text(
-                            'registerationn'.tr(),
-                            style: TextStyle(
-                              fontSize: 12.0 * (screenSize.width / 375.0),
-                              color: const Color(0xffC7EDE6),
-                            ),
-                            textAlign: TextAlign.center,
-                            overflow: TextOverflow.ellipsis,
+                        child: Text(
+                          'registerationn'.tr(),
+                          style: TextStyle(
+                            fontSize: 12.0 * (screenSize.width / 375.0),
+                            color: const Color(0xffC7EDE6),
                           ),
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ],
