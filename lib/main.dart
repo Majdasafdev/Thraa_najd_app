@@ -107,20 +107,16 @@ class _ThraaNajdAppState extends State<ThraaNajdApp> {
       future: SharedPreferences.getInstance(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return ScreenUtilInit(
-            designSize: const Size(360, 690),
-            minTextAdapt: true,
-            splitScreenMode: true,
-            child: MaterialApp(
-              localizationsDelegates: context.localizationDelegates,
-              supportedLocales: context.supportedLocales,
-              useInheritedMediaQuery: true,
-              locale: DevicePreview.locale(context),
-              builder: DevicePreview.appBuilder,
-              home: const Scaffold(
-                body: Center(
-                  child: Text('Loading....'),
-                ),
+          return MaterialApp(
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            // ignore: deprecated_member_use
+            useInheritedMediaQuery: true,
+            locale: DevicePreview.locale(context),
+            builder: DevicePreview.appBuilder,
+            home: const Scaffold(
+              body: Center(
+                child: Text('Loading....'),
               ),
             ),
           );
@@ -144,7 +140,10 @@ class _ThraaNajdAppState extends State<ThraaNajdApp> {
             child: MaterialApp(
               localizationsDelegates: context.localizationDelegates,
               supportedLocales: context.supportedLocales,
-              locale: context.locale,
+              // ignore: deprecated_member_use
+              useInheritedMediaQuery: true,
+              locale: DevicePreview.locale(context),
+              builder: DevicePreview.appBuilder,
               debugShowCheckedModeBanner: false,
               home: (FirebaseAuth.instance.currentUser != null &&
                       FirebaseAuth.instance.currentUser!.emailVerified)

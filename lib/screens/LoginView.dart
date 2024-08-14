@@ -66,7 +66,6 @@ class _LoginViewState extends State<LoginView> {
                 children: [
                   LanguageSwitchButton(context: context),
                   const CustomLogo(),
-                  SizedBox(height: 10 * (screenSize.height / 800.0)),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -87,8 +86,8 @@ class _LoginViewState extends State<LoginView> {
                     textEditingController: emailController,
                     hintText: 'Enter your email',
                     textInputType: TextInputType.text,
-                    iconSize: 24.0 * (screenSize.width / 375.0),
-                    fontSize: 24 * (screenSize.width / 375.0),
+                    iconSize: 20.0 * (screenSize.width / 375.0),
+                    fontSize: 20 * (screenSize.width / 375.0),
                   ),
                   Row(
                     children: <Widget>[
@@ -122,17 +121,17 @@ class _LoginViewState extends State<LoginView> {
                     hintText: 'Enter your password',
                     textInputType: TextInputType.text,
                     isPass: true,
-                    iconSize: 24.0 * (screenSize.width / 375.0),
-                    fontSize: 24 * (screenSize.width / 375.0),
+                    iconSize: 20.0 * (screenSize.width / 375.0),
+                    fontSize: 20 * (screenSize.width / 375.0),
                   ),
-                  SizedBox(height: 10 * (screenSize.height / 800.0)),
+                  SizedBox(height: 5 * (screenSize.height / 800.0)),
                   const ForgotPassword(),
-                  SizedBox(height: 10 * (screenSize.height / 800.0)),
+                  SizedBox(height: 5 * (screenSize.height / 800.0)),
                   Custome_button(
                     text: 'login'.tr(),
                     onTap: () => loginUser(modelHud),
                     height: 50.0 * (screenSize.height / 800.0),
-                    fontSize: 24 * (screenSize.width / 375.0),
+                    fontSize: 20 * (screenSize.width / 375.0),
                   ),
                   SizedBox(height: 10 * (screenSize.height / 800.0)),
                   Row(
@@ -177,36 +176,48 @@ class _LoginViewState extends State<LoginView> {
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        GestureDetector(
-                          onTap: () {
-                            Provider.of<AdminMode>(context, listen: false)
-                                .changeIsAdmin(true);
-                          },
-                          child: Text(
-                            'adminpanel'.tr(),
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Provider.of<AdminMode>(context).isAdmin
-                                  ? kMainColor
-                                  : Colors.white,
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              Provider.of<AdminMode>(context, listen: false)
+                                  .changeIsAdmin(true);
+                            },
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                'adminpanel'.tr(),
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Provider.of<AdminMode>(context).isAdmin
+                                      ? kMainColor
+                                      : Colors.white,
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            Provider.of<AdminMode>(context, listen: false)
-                                .changeIsAdmin(false);
-                          },
-                          child: Text(
-                            'userpanel'.tr(),
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color:
-                                  Provider.of<AdminMode>(context, listen: true)
+                        const SizedBox(width: 16.0),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              Provider.of<AdminMode>(context, listen: false)
+                                  .changeIsAdmin(false);
+                            },
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                'userpanel'.tr(),
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Provider.of<AdminMode>(context,
+                                              listen: true)
                                           .isAdmin
                                       ? Colors.white
                                       : kMainColor,
+                                ),
+                              ),
                             ),
                           ),
                         ),
