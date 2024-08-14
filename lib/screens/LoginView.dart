@@ -70,13 +70,6 @@ class _LoginViewState extends State<LoginView> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-<<<<<<< HEAD
-                      Text(
-                        'logwelcome'.tr(),
-                        style: TextStyle(
-                          fontSize: 24 * (screenSize.width / 375.0),
-                          color: Colors.white,
-=======
                       Flexible(
                         child: Text(
                           'logwelcome'.tr(),
@@ -84,7 +77,6 @@ class _LoginViewState extends State<LoginView> {
                             fontSize: 16 * (screenSize.width / 375.0),
                             color: Colors.white,
                           ),
->>>>>>> f10cdee (Responsive & Adaptive Login, Signup views)
                         ),
                       ),
                     ],
@@ -113,12 +105,6 @@ class _LoginViewState extends State<LoginView> {
                           },
                         ),
                       ),
-<<<<<<< HEAD
-                      Text(
-                        'remember'.tr(),
-                        style: const TextStyle(
-                          color: Colors.white,
-=======
                       Flexible(
                         child: Text(
                           'remember'.tr(),
@@ -126,7 +112,6 @@ class _LoginViewState extends State<LoginView> {
                             color: Colors.white,
                             fontSize: 16 * (screenSize.width / 375.0),
                           ),
->>>>>>> f10cdee (Responsive & Adaptive Login, Signup views)
                         ),
                       ),
                     ],
@@ -157,13 +142,6 @@ class _LoginViewState extends State<LoginView> {
                         CrossAxisAlignment.start, // Add this line
 
                     children: [
-<<<<<<< HEAD
-                      Text(
-                        'donthaveaccount'.tr(),
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16.0 * (screenSize.width / 375.0),
-=======
                       Flexible(
                         child: Text(
                           'donthaveaccount'.tr(),
@@ -173,7 +151,6 @@ class _LoginViewState extends State<LoginView> {
                           ),
                           textAlign: TextAlign.center,
                           overflow: TextOverflow.ellipsis,
->>>>>>> f10cdee (Responsive & Adaptive Login, Signup views)
                         ),
                       ),
                       GestureDetector(
@@ -182,14 +159,9 @@ class _LoginViewState extends State<LoginView> {
                         },
                         child: Text(
                           'registerationn'.tr(),
-<<<<<<< HEAD
-                          style: const TextStyle(
-                            color: Color(0xffC7EDE6),
-=======
                           style: TextStyle(
                             fontSize: 12.0 * (screenSize.width / 375.0),
                             color: const Color(0xffC7EDE6),
->>>>>>> f10cdee (Responsive & Adaptive Login, Signup views)
                           ),
                           textAlign: TextAlign.center,
                           overflow: TextOverflow.ellipsis,
