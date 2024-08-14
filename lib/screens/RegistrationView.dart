@@ -82,6 +82,7 @@ class _RegistrationViewState extends State<RegistrationView> {
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
+    final screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
       backgroundColor: kMainColor,
@@ -98,12 +99,13 @@ class _RegistrationViewState extends State<RegistrationView> {
                 height: screenHeight * 0.04,
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Expanded(
+                  Flexible(
                     child: Text(
                       'registeration'.tr(),
                       style: TextStyle(
-                        fontSize: screenWidth * 0.045,
+                        fontSize: 16 * (screenSize.width / 375.0),
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
@@ -164,11 +166,13 @@ class _RegistrationViewState extends State<RegistrationView> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    'haveaccount'.tr(),
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: screenWidth * 0.04,
+                  Flexible(
+                    child: Text(
+                      'haveaccount'.tr(),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: screenWidth * 0.04,
+                      ),
                     ),
                   ),
                   GestureDetector(
