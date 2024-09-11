@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -7,25 +8,49 @@ class CustomLogo extends StatelessWidget {
   const CustomLogo({super.key});
 
   // Method to launch WhatsApp
-  Future<void> _launchWhatsApp() async {
+  Future<void> _launchWhatsApp(BuildContext context) async {
     const whatsappUrl =
         'https://api.whatsapp.com/send/?phone=966543498392&text&app_absent=0'; // Replace with your WhatsApp number
     final Uri whatsappUri = Uri.parse(whatsappUrl);
-    if (await canLaunchUrl(whatsappUri)) {
-      await launchUrl(whatsappUri);
-    } else {
-      throw 'Could not launch WhatsApp';
+    try {
+      if (await canLaunchUrl(whatsappUri)) {
+        await launchUrl(whatsappUri);
+      } else {
+        throw 'Could not launch WhatsApp';
+      }
+    } on PlatformException catch (e) {
+      // Catch platform-specific exceptions
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error going to whatsapp link : ${e.message}')),
+      );
+    } catch (e) {
+      // Catch any other exceptions
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error going to whatsappp link $e')),
+      );
     }
   }
 
   // Method to make a phone call
-  Future<void> _makePhoneCall() async {
+  Future<void> _makePhoneCall(BuildContext context) async {
     const phoneNumber = 'tel:+966597005649'; // Replace with your phone number
     final Uri phoneUri = Uri.parse(phoneNumber);
-    if (await canLaunchUrl(phoneUri)) {
-      await launchUrl(phoneUri);
-    } else {
-      throw 'Could not make a call';
+    try {
+      if (await canLaunchUrl(phoneUri)) {
+        await launchUrl(phoneUri);
+      } else {
+        throw 'Could not make a call';
+      }
+    } on PlatformException catch (e) {
+      // Catch platform-specific exceptions
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error making phone call: ${e.message}')),
+      );
+    } catch (e) {
+      // Catch any other exceptions
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error making phone call: $e')),
+      );
     }
   }
 
@@ -47,8 +72,12 @@ class CustomLogo extends StatelessWidget {
             child: CircleAvatar(
               radius: screenWidth * 0.375,
               backgroundColor: Colors.black,
-              backgroundImage:
-                  const AssetImage('assets/images/icons/buy_icon.png'),
+              backgroundImage: ResizeImage(
+                const AssetImage('assets/images/icons/buy_icon.png'),
+                width: (screenWidth * 0.375).toInt(), // Cache width adjustment
+                height:
+                    (screenWidth * 0.375).toInt(), // Cache height adjustment
+              ),
             ),
           ),
           Text(
@@ -56,7 +85,7 @@ class CustomLogo extends StatelessWidget {
             style: TextStyle(
               fontFamily: 'Pacifico',
               fontSize: screenWidth * 0.06,
-              color: Colors.white,
+              color: Colors.black,
             ),
           ),
           // Space between text and icons
@@ -65,19 +94,36 @@ class CustomLogo extends StatelessWidget {
             children: <Widget>[
               IconButton(
                 icon: const Icon(Feather.phone,
-                    color: Colors.white), // Use Feather's phone icon
-                onPressed: _makePhoneCall,
+                    color: Colors.black), // Use Feather's phone icon
+                onPressed: () async {
+                  await _makePhoneCall(context);
+                },
                 iconSize: 26.0 * (screenSize.width / 375.0),
               ),
               SizedBox(width: screenWidth * 0.08), // Space between icons
               IconButton(
                 icon: const Icon(FontAwesome5Brands.whatsapp,
-                    color: Colors.white), // Use FontAwesome's WhatsApp icon
-                onPressed: _launchWhatsApp,
+                    color: Colors.black), // Use FontAwesome's WhatsApp icon
+                onPressed: () async {
+                  await _launchWhatsApp(context);
+                },
                 iconSize: 26.0 * (screenSize.width / 375.0),
               ),
             ],
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'thraanajdksa@gmail.com',
+                style: TextStyle(
+                  fontSize: screenWidth * 0.06,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+            ],
+          )
         ],
       ),
     );

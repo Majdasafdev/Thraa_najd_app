@@ -88,8 +88,10 @@ class _HomeViewState extends State<HomeView> {
                 ],
               ),
               appBar: AppBar(
-                backgroundColor: Colors.white,
-                elevation: 0,
+                // forceMaterialTransparency: true,
+                automaticallyImplyLeading: false,
+                title:
+                    const CustomeDiscoverbar(), // Add the CustomDiscoverbar here
                 bottom: TabBar(
                   isScrollable: true,
                   tabAlignment: TabAlignment.center,

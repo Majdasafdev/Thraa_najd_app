@@ -10,21 +10,24 @@ class CustomeDiscoverbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+
     return Material(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-        child: Container(
-          color: Colors.white,
+        child: SizedBox(
           height: MediaQuery.of(context).size.height * .1,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'discover'.tr(),
-                style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: kSecondaryColor),
+              Flexible(
+                child: Text(
+                  'discover'.tr(),
+                  style: TextStyle(
+                      fontSize: 16 * (screenSize.width / 375.0),
+                      fontWeight: FontWeight.bold,
+                      color: kSecondaryColor),
+                ),
               ),
               GestureDetector(
                 onTap: () {

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
 
 class TextFieldInput extends StatelessWidget {

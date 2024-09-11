@@ -22,8 +22,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: 16.0 * (screenSize.width / 375.0),
-        vertical: 20.0 * (screenSize.height / 800.0),
+        horizontal: 12.0 * (screenSize.width / 375.0),
+        vertical: 12.0 * (screenSize.height / 800.0),
       ),
       child: Align(
         alignment: Alignment.centerRight,

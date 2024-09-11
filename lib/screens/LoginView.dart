@@ -109,7 +109,7 @@ class _LoginViewState extends State<LoginView> {
                           'remember'.tr(),
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 16 * (screenSize.width / 375.0),
+                            fontSize: 14 * (screenSize.width / 375.0),
                           ),
                         ),
                       ),
@@ -124,7 +124,7 @@ class _LoginViewState extends State<LoginView> {
                     iconSize: 20.0 * (screenSize.width / 375.0),
                     fontSize: 20 * (screenSize.width / 375.0),
                   ),
-                  SizedBox(height: 5 * (screenSize.height / 800.0)),
+                  //SizedBox(height: 5 * (screenSize.height / 800.0)),
                   const ForgotPassword(),
                   SizedBox(height: 5 * (screenSize.height / 800.0)),
                   Custome_button(

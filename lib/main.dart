@@ -39,11 +39,11 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  await FirebaseAppCheck.instance.activate(
-    androidProvider: AndroidProvider.debug,
-  );
+  // await FirebaseAppCheck.instance.activate(
+  //androidProvider: AndroidProvider.debug,
+  //);
 
-  await FirebaseAuth.instance.signOut();
+  //await FirebaseAuth.instance.signOut();
 
   runApp(
     DevicePreview(

@@ -11,6 +11,7 @@ import 'package:thraa_najd_mobile_app/utils/Extensions.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
 import 'package:thraa_najd_mobile_app/providers/CartNotifier.dart';
 import 'package:thraa_najd_mobile_app/screens/User/ProductInfo.dart';
+import 'package:thraa_najd_mobile_app/widgets/custome_logo.dart';
 
 import '../../models/CustomerOrder.dart';
 import '../../models/Product.dart';
@@ -32,11 +33,12 @@ class CartScreen extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        backgroundColor: kMainColor,
+        backgroundColor: kSecondaryColor,
         elevation: 0,
         title: Text(
           'myCart'.tr(),
-          style: const TextStyle(color: Colors.black),
+          style:
+              const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         leading: GestureDetector(
           onTap: () {
@@ -126,7 +128,7 @@ class CartScreen extends StatelessWidget {
                     showCustomDialog(currentCartItems, context);
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
+                    backgroundColor: kMainColor,
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.only(
                           topRight: Radius.circular(10),
@@ -142,6 +144,7 @@ class CartScreen extends StatelessWidget {
                   ),
                 ),
               ),
+              const CustomLogo()
             ])
           : SizedBox(
               height: screenHeight -
