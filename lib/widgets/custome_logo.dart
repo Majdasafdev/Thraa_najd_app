@@ -54,6 +54,33 @@ class CustomLogo extends StatelessWidget {
     }
   }
 
+  Future<void> _launchEmail(BuildContext context) async {
+    final Uri emailUri = Uri(
+      scheme: 'mailto',
+      path: 'example@example.com', // Replace with the recipient's email address
+      query:
+          'subject=Hello&body=Message body here', // Optional: subject and body
+    );
+
+    try {
+      // ignore: deprecated_member_use
+      if (await canLaunch(emailUri.toString())) {
+        // ignore: deprecated_member_use
+        await launch(emailUri.toString());
+      } else {
+        throw 'Could not launch email client';
+      }
+    } on PlatformException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error opening email client: ${e.message}')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error opening email client: $e')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
@@ -85,7 +112,7 @@ class CustomLogo extends StatelessWidget {
             style: TextStyle(
               fontFamily: 'Pacifico',
               fontSize: screenWidth * 0.06,
-              color: Colors.black,
+              color: Colors.white,
             ),
           ),
           // Space between text and icons
@@ -94,7 +121,7 @@ class CustomLogo extends StatelessWidget {
             children: <Widget>[
               IconButton(
                 icon: const Icon(Feather.phone,
-                    color: Colors.black), // Use Feather's phone icon
+                    color: Colors.white), // Use Feather's phone icon
                 onPressed: () async {
                   await _makePhoneCall(context);
                 },
@@ -102,8 +129,18 @@ class CustomLogo extends StatelessWidget {
               ),
               SizedBox(width: screenWidth * 0.08), // Space between icons
               IconButton(
+                icon: const Icon(Icons.email,
+                    color: Colors.white), // Use FontAwesome's WhatsApp icon
+                onPressed: () async {
+                  await _launchEmail(context);
+                },
+                iconSize: 26.0 * (screenSize.width / 375.0),
+              ),
+              SizedBox(width: screenWidth * 0.08), // Space between icons
+
+              IconButton(
                 icon: const Icon(FontAwesome5Brands.whatsapp,
-                    color: Colors.black), // Use FontAwesome's WhatsApp icon
+                    color: Colors.white), // Use FontAwesome's WhatsApp icon
                 onPressed: () async {
                   await _launchWhatsApp(context);
                 },
@@ -111,19 +148,6 @@ class CustomLogo extends StatelessWidget {
               ),
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'thraanajdksa@gmail.com',
-                style: TextStyle(
-                  fontSize: screenWidth * 0.06,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-            ],
-          )
         ],
       ),
     );

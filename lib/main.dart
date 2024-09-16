@@ -70,6 +70,8 @@ class ThraaNajdApp extends StatefulWidget {
 class _ThraaNajdAppState extends State<ThraaNajdApp> {
   @override
   initState() {
+    super.initState(); // <- Added super.initState()
+
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user == null) {
         print(
@@ -140,6 +142,13 @@ class _ThraaNajdAppState extends State<ThraaNajdApp> {
             child: MaterialApp(
               localizationsDelegates: context.localizationDelegates,
               supportedLocales: context.supportedLocales,
+              localeResolutionCallback: (locale, supportedLocales) {
+                if (locale?.languageCode == 'ar') {
+                  return const Locale('ar', 'SA'); // Arabic language code
+                } else {
+                  return const Locale('en', 'US'); // English language code
+                }
+              },
               // ignore: deprecated_member_use
               useInheritedMediaQuery: true,
               locale: DevicePreview.locale(context),

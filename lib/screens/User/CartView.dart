@@ -31,6 +31,7 @@ class CartScreen extends StatelessWidget {
     final double appBarHeight = AppBar().preferredSize.height;
     final double statusBarHeight = MediaQuery.of(context).padding.top;
     return Scaffold(
+      backgroundColor: kUnActiveColor,
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: kSecondaryColor,
@@ -128,7 +129,7 @@ class CartScreen extends StatelessWidget {
                     showCustomDialog(currentCartItems, context);
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: kMainColor,
+                    backgroundColor: kSecondaryColor,
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.only(
                           topRight: Radius.circular(10),
@@ -218,9 +219,9 @@ class CartScreen extends StatelessWidget {
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                 content: Text('Orderd Successfully'),
               ));
-              Provider.of<CartNotifier>(context, listen: false)
-                  .clearCart(); // Add this line
-              Navigator.pop(context);
+              //      Provider.of<CartNotifier>(context, listen: false)
+              ////          .clearCart(); // Add this line
+              //      Navigator.pop(context);
             } catch (ex) {
               print(ex);
             }
