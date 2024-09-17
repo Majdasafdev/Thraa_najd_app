@@ -27,7 +27,7 @@ class _AddProductViewState extends State<AddProductView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kMainColor,
+      backgroundColor: Colors.white,
       body: Form(
         key: formkey,
         child: ListView(
