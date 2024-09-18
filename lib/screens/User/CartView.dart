@@ -11,6 +11,7 @@ import 'package:thraa_najd_mobile_app/utils/Extensions.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
 import 'package:thraa_najd_mobile_app/providers/CartNotifier.dart';
 import 'package:thraa_najd_mobile_app/screens/User/ProductInfo.dart';
+import 'package:thraa_najd_mobile_app/widgets/custome_logo.dart';
 
 import '../../models/CustomerOrder.dart';
 import '../../models/Product.dart';
@@ -30,13 +31,15 @@ class CartScreen extends StatelessWidget {
     final double appBarHeight = AppBar().preferredSize.height;
     final double statusBarHeight = MediaQuery.of(context).padding.top;
     return Scaffold(
+      backgroundColor: kUnActiveColor,
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        backgroundColor: kMainColor,
+        backgroundColor: kSecondaryColor,
         elevation: 0,
         title: Text(
           'myCart'.tr(),
-          style: const TextStyle(color: Colors.black),
+          style:
+              const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         leading: GestureDetector(
           onTap: () {
@@ -126,7 +129,7 @@ class CartScreen extends StatelessWidget {
                     showCustomDialog(currentCartItems, context);
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
+                    backgroundColor: kSecondaryColor,
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.only(
                           topRight: Radius.circular(10),
@@ -142,6 +145,7 @@ class CartScreen extends StatelessWidget {
                   ),
                 ),
               ),
+              const CustomLogo()
             ])
           : SizedBox(
               height: screenHeight -
@@ -215,9 +219,9 @@ class CartScreen extends StatelessWidget {
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                 content: Text('Orderd Successfully'),
               ));
-              Provider.of<CartNotifier>(context, listen: false)
-                  .clearCart(); // Add this line
-              Navigator.pop(context);
+              //      Provider.of<CartNotifier>(context, listen: false)
+              ////          .clearCart(); // Add this line
+              //      Navigator.pop(context);
             } catch (ex) {
               print(ex);
             }

@@ -15,25 +15,30 @@ import 'OrderDetailsView.dart';
 import 'package:thraa_najd_mobile_app/models/order.dart' as reusable;
 
 class OrdersScreen extends StatelessWidget {
-  OrdersScreen({super.key});
+  const OrdersScreen({super.key});
 
   static String id = 'OrdersScreen';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: kUnActiveColor,
+        title: const Text('Orders screen'),
+      ),
+
       //NOTE: Used the new load orders here.
       body: StreamBuilder<List<CustomerOrder>>(
         stream: repositoryClient.ordersRepository.loadOrders(),
         builder: (context, AsyncSnapshot snapshot) {
           if (!snapshot.hasData) {
             return const Center(
-              child: Text('there is no orders'),
+              child: Text('There is no orders'),
             );
           }
           if ((snapshot.data as List<CustomerOrder>).isEmpty) {
             return const Center(
-              child: Text('there is no orders'),
+              child: Text('There is no orders'),
             );
           }
           List<CustomerOrder> orders = snapshot.data;

@@ -1,5 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -11,7 +10,6 @@ import 'package:thraa_najd_mobile_app/utils/constants.dart';
 import 'package:thraa_najd_mobile_app/providers/model_hud.dart';
 import 'package:thraa_najd_mobile_app/screens/LoginView.dart';
 import 'package:thraa_najd_mobile_app/widgets/custom_button.dart';
-import 'package:thraa_najd_mobile_app/widgets/custom_text_form_field.dart';
 import 'package:thraa_najd_mobile_app/widgets/custome_input_text_field.dart';
 import 'package:thraa_najd_mobile_app/widgets/custome_logo.dart';
 import 'package:thraa_najd_mobile_app/widgets/snack_bar.dart';
@@ -82,45 +80,58 @@ class _RegistrationViewState extends State<RegistrationView> {
 
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
+    final screenSize = MediaQuery.of(context).size;
+
     return Scaffold(
       backgroundColor: kMainColor,
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16), // adjusted padding
+        padding: EdgeInsets.symmetric(
+          horizontal: screenWidth * 0.04,
+        ),
         child: Form(
           key: formkey,
           child: ListView(
             children: [
-              CustomLogo(),
+              const CustomLogo(),
               SizedBox(
-                height: MediaQuery.of(context).size.height *
-                    0.04, // responsive height
+                height: screenHeight * 0.04,
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Expanded(
+                  Flexible(
                     child: Text(
                       'registeration'.tr(),
-                      style: const TextStyle(
-                        fontSize: 18,
+                      style: TextStyle(
+                        fontSize: 16 * (screenSize.width / 375.0),
                         color: Colors.white,
-                        fontWeight: FontWeight.bold, // added font weight
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: screenHeight * 0.02),
               TextFieldInput(
-                  icon: Icons.person,
-                  textEditingController: nameController,
-                  hintText: 'Enter your name',
-                  textInputType: TextInputType.text),
+                icon: Icons.person,
+                textEditingController: nameController,
+                hintText: 'Enter your name',
+                textInputType: TextInputType.text,
+                iconSize: screenWidth * 0.06,
+                fontSize: screenWidth * 0.04,
+              ),
+              SizedBox(height: screenHeight * 0.02),
               TextFieldInput(
-                  icon: Icons.email,
-                  textEditingController: emailController,
-                  hintText: 'Enter your email',
-                  textInputType: TextInputType.text),
-              const SizedBox(height: 10),
+                icon: Icons.email,
+                textEditingController: emailController,
+                hintText: 'Enter your email',
+                textInputType: TextInputType.text,
+                iconSize: screenWidth * 0.06,
+                fontSize: screenWidth * 0.04,
+              ),
+              SizedBox(height: screenHeight * 0.02),
               TextFieldInput(
                 icon: Icons.phone,
                 textEditingController: phoneNumberController,
@@ -131,25 +142,37 @@ class _RegistrationViewState extends State<RegistrationView> {
                     isPhoneNumberValid = _validatePhoneNumber(value);
                   });
                 },
+                iconSize: screenWidth * 0.06,
+                fontSize: screenWidth * 0.04,
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: screenHeight * 0.02),
               TextFieldInput(
-                // Set this to false to show the password characters
                 icon: Icons.lock,
                 textEditingController: passwordController,
                 hintText: 'Enter your passord',
                 textInputType: TextInputType.text,
                 isPass: false,
+                iconSize: screenWidth * 0.06,
+                fontSize: screenWidth * 0.04,
               ),
-              Custome_button(onTap: signupUser, text: "Sign Up"),
+              SizedBox(height: screenHeight * 0.02),
+              Custome_button(
+                onTap: signupUser,
+                text: "Sign Up",
+                height: screenHeight * 0.07,
+                fontSize: screenWidth * 0.045,
+              ),
+              SizedBox(height: screenHeight * 0.02),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    'haveaccount'.tr(),
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16, // adjusted font size
+                  Flexible(
+                    child: Text(
+                      'haveaccount'.tr(),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: screenWidth * 0.04,
+                      ),
                     ),
                   ),
                   GestureDetector(
@@ -158,9 +181,9 @@ class _RegistrationViewState extends State<RegistrationView> {
                     },
                     child: Text(
                       'logregesiter'.tr(),
-                      style: const TextStyle(
-                        color: Color(0xffC7EDE6),
-                        fontSize: 16, // adjusted font size
+                      style: TextStyle(
+                        color: const Color(0xffC7EDE6),
+                        fontSize: screenWidth * 0.04,
                       ),
                     ),
                   ),

@@ -24,23 +24,27 @@ class _ProductInfoState extends State<ProductInfo> {
   Widget build(BuildContext context) {
     //NOTE: NEVER use as operator;
     Product product = ModalRoute.of(context)!.settings.arguments as Product;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
         children: [
           SizedBox(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
+            height: screenHeight,
+            width: screenWidth,
             child: Image.network(
               product.imageLink,
               fit: BoxFit.contain,
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
+            padding: EdgeInsets.fromLTRB(
+                screenWidth * 0.05, screenHeight * 0.05, screenWidth * 0.05, 0),
             child: Container(
-              color: Colors.white,
-              height: MediaQuery.of(context).size.height * .1,
+              color: Colors.transparent,
+              height: screenHeight * 0.1,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -48,17 +52,19 @@ class _ProductInfoState extends State<ProductInfo> {
                     onTap: () {
                       Navigator.pop(context);
                     },
-                    child: const Icon(
+                    child: Icon(
                       Icons.arrow_back,
+                      size: screenWidth * 0.08,
                     ),
                   ),
                   GestureDetector(
                     onTap: () {
                       Navigator.pushNamed(context, CartScreen.id);
                     },
-                    child: const Icon(
+                    child: Icon(
                       Icons.shopping_cart,
                       color: kSecondaryColor,
+                      size: screenWidth * 0.08,
                     ),
                   ),
                 ],
@@ -74,36 +80,35 @@ class _ProductInfoState extends State<ProductInfo> {
                     opacity: .5,
                     child: Container(
                       color: Colors.white,
-                      width: MediaQuery.of(context).size.width,
+                      width: screenWidth,
                       child: Padding(
-                        padding: const EdgeInsets.all(20),
+                        padding: EdgeInsets.all(screenWidth * 0.05),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               context.locale.getProductName(product),
-                              style: const TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
-                            const SizedBox(
-                              height: 10,
+                              style: TextStyle(
+                                fontSize: screenWidth * 0.06,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                             Text(
                               product.getProductPrice(context).toString(),
-                              style: const TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                fontSize: screenWidth * 0.06,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                            const SizedBox(
-                              height: 10,
-                            ),
+                            SizedBox(height: screenHeight * 0.02),
                             Text(
                               "${"isStocked".tr()}: ${product.isStocked}",
-                              style: const TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                  fontSize: screenWidth * 0.06,
+                                  fontWeight: FontWeight.bold,
+                                  color: kSecondaryColor),
                             ),
-                            const SizedBox(
-                              height: 10,
-                            ),
+                            SizedBox(height: screenHeight * 0.02),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -112,27 +117,32 @@ class _ProductInfoState extends State<ProductInfo> {
                                     color: kMainColor,
                                     child: GestureDetector(
                                       onTap: add,
-                                      child: const SizedBox(
-                                        height: 32,
-                                        width: 32,
-                                        child: Icon(Icons.add),
+                                      child: SizedBox(
+                                        height: screenWidth * 0.08,
+                                        width: screenWidth * 0.08,
+                                        child: Icon(Icons.add,
+                                            size: screenWidth * 0.06),
                                       ),
                                     ),
                                   ),
                                 ),
+                                SizedBox(width: screenWidth * 0.05),
                                 Text(
                                   _quantity.toString(),
-                                  style: const TextStyle(fontSize: 30),
+                                  style:
+                                      TextStyle(fontSize: screenWidth * 0.08),
                                 ),
+                                SizedBox(width: screenWidth * 0.05),
                                 ClipOval(
                                   child: Material(
                                     color: kMainColor,
                                     child: GestureDetector(
                                       onTap: subtract,
-                                      child: const SizedBox(
-                                        height: 32,
-                                        width: 32,
-                                        child: Icon(Icons.remove),
+                                      child: SizedBox(
+                                        height: screenWidth * 0.08,
+                                        width: screenWidth * 0.08,
+                                        child: Icon(Icons.remove,
+                                            size: screenWidth * 0.06),
                                       ),
                                     ),
                                   ),
@@ -145,7 +155,7 @@ class _ProductInfoState extends State<ProductInfo> {
                     ),
                   ),
                   ButtonTheme(
-                    minWidth: MediaQuery.of(context).size.width,
+                    minWidth: screenWidth * 0.8,
                     child: Builder(
                       builder: (context) {
                         return ElevatedButton(
@@ -153,8 +163,9 @@ class _ProductInfoState extends State<ProductInfo> {
                             backgroundColor: kMainColor,
                             shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(10),
-                                  topLeft: Radius.circular(10)),
+                                topRight: Radius.circular(10),
+                                topLeft: Radius.circular(10),
+                              ),
                             ),
                           ),
                           onPressed: () {
@@ -162,10 +173,11 @@ class _ProductInfoState extends State<ProductInfo> {
                           },
                           child: Text(
                             'Add to Cart'.toUpperCase(),
-                            style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
+                            style: TextStyle(
+                              fontSize: screenWidth * 0.05,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
                           ),
                         );
                       },

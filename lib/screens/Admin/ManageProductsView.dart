@@ -16,10 +16,19 @@ class ManageProducts extends StatelessWidget {
 
   final GlobalKey<FormState> formkey = GlobalKey<FormState>();
 
+  ManageProducts({super.key});
+
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      backgroundColor: kMainColor,
+      appBar: AppBar(
+        backgroundColor: kUnActiveColor,
+        title: const Text('Products screen'),
+      ),
+
+      backgroundColor: Colors.white,
       //NOTE: Changed from stream builder to future builder.
       //because there is no reason to use streams here.
       body: StreamBuilder(
@@ -76,7 +85,7 @@ class ManageProducts extends StatelessWidget {
                     children: <Widget>[
                       //NOTE: changed image from assets to the cloud image
                       SizedBox(
-                        height: 150,
+                        height: screenHeight * .150,
                         child: Image.network(
                           products.elementAt(index).imageLink,
                           fit: BoxFit.fill,
@@ -86,7 +95,7 @@ class ManageProducts extends StatelessWidget {
                         opacity: .6,
                         child: Container(
                           width: MediaQuery.of(context).size.width,
-                          height: 60,
+                          height: screenHeight * .1,
                           color: Colors.white,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
@@ -100,8 +109,8 @@ class ManageProducts extends StatelessWidget {
                                     overflow: TextOverflow.ellipsis,
                                     context.locale
                                         .getProductName(products[index]),
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold),
                                   ),
                                 ),
                                 Flexible(
@@ -109,7 +118,7 @@ class ManageProducts extends StatelessWidget {
                                         '\$ ${products[index].costPrice}')),
                                 Flexible(
                                     child: Text(
-                                        '\$ ${products[index].category.name.tr()}'))
+                                        ' ${products[index].category.name.tr()}'))
                               ],
                             ),
                           ),
@@ -122,7 +131,7 @@ class ManageProducts extends StatelessWidget {
               itemCount: products.length,
             );
           } else {
-            return Center(child: (Text('Loading...........')));
+            return const Center(child: (Text('Loading...........')));
           }
         },
       ),

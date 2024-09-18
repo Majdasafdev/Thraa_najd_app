@@ -48,15 +48,15 @@ class _ProductsViewState extends State<ProductsView> {
           child: GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              childAspectRatio: .8,
+              childAspectRatio: 1.3,
             ),
             itemBuilder: (context, index) => LayoutBuilder(
               builder: (context, constraints) {
                 return ConstrainedBox(
                   constraints: BoxConstraints(maxHeight: constraints.maxHeight),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 10),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     child: GestureDetector(
                       onTap: () {
                         Navigator.pushNamed(context, ProductInfo.id,

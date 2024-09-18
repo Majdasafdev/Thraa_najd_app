@@ -1,6 +1,7 @@
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,7 +30,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_app_check/firebase_app_check.dart';
+import 'package:device_preview/device_preview.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,20 +39,25 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  await FirebaseAppCheck.instance.activate(
-    androidProvider: AndroidProvider.debug,
+  // await FirebaseAppCheck.instance.activate(
+  //androidProvider: AndroidProvider.debug,
+  //);
+
+  //await FirebaseAuth.instance.signOut();
+
+  runApp(
+    DevicePreview(
+      enabled: !kReleaseMode,
+      builder: (context) => EasyLocalization(
+        supportedLocales: const [
+          Locale('en', 'US'),
+          Locale('ar', 'AR'),
+        ],
+        path: 'assets/translations',
+        child: const ThraaNajdApp(),
+      ),
+    ),
   );
-
-  await FirebaseAuth.instance.signOut();
-
-  runApp(EasyLocalization(
-    supportedLocales: const [
-      Locale('en', 'US'),
-      Locale('ar', 'AR'),
-    ],
-    path: 'assets/translations',
-    child: const ThraaNajdApp(),
-  ));
 }
 
 class ThraaNajdApp extends StatefulWidget {
@@ -64,6 +70,8 @@ class ThraaNajdApp extends StatefulWidget {
 class _ThraaNajdAppState extends State<ThraaNajdApp> {
   @override
   initState() {
+    super.initState(); // <- Added super.initState()
+
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user == null) {
         print(
@@ -101,18 +109,16 @@ class _ThraaNajdAppState extends State<ThraaNajdApp> {
       future: SharedPreferences.getInstance(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return ScreenUtilInit(
-            designSize: const Size(360, 690),
-            minTextAdapt: true,
-            splitScreenMode: true,
-            child: MaterialApp(
-              localizationsDelegates: context.localizationDelegates,
-              supportedLocales: context.supportedLocales,
-              locale: context.locale,
-              home: const Scaffold(
-                body: Center(
-                  child: Text('Loading....'),
-                ),
+          return MaterialApp(
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            // ignore: deprecated_member_use
+            useInheritedMediaQuery: true,
+            locale: DevicePreview.locale(context),
+            builder: DevicePreview.appBuilder,
+            home: const Scaffold(
+              body: Center(
+                child: Text('Loading....'),
               ),
             ),
           );
@@ -136,7 +142,17 @@ class _ThraaNajdAppState extends State<ThraaNajdApp> {
             child: MaterialApp(
               localizationsDelegates: context.localizationDelegates,
               supportedLocales: context.supportedLocales,
-              locale: context.locale,
+              localeResolutionCallback: (locale, supportedLocales) {
+                if (locale?.languageCode == 'ar') {
+                  return const Locale('ar', 'SA'); // Arabic language code
+                } else {
+                  return const Locale('en', 'US'); // English language code
+                }
+              },
+              // ignore: deprecated_member_use
+              useInheritedMediaQuery: true,
+              locale: DevicePreview.locale(context),
+              builder: DevicePreview.appBuilder,
               debugShowCheckedModeBanner: false,
               home: (FirebaseAuth.instance.currentUser != null &&
                       FirebaseAuth.instance.currentUser!.emailVerified)

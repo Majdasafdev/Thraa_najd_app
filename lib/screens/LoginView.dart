@@ -57,33 +57,37 @@ class _LoginViewState extends State<LoginView> {
           inAsyncCall: modelHud.isLoading,
           child: Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: 16.0 * textScaleFactor,
+              horizontal: 12.0 * (screenSize.width / 375.0),
+              vertical: 16.0 * (screenSize.height / 800.0),
             ),
             child: Form(
               key: formkey,
               child: ListView(
                 children: [
                   LanguageSwitchButton(context: context),
-                  CustomLogo(),
-                  SizedBox(height: 5 * textScaleFactor),
+                  const CustomLogo(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        'logwelcome'.tr(),
-                        style: TextStyle(
-                          fontSize: 24 * textScaleFactor,
-                          color: Colors.white,
+                      Flexible(
+                        child: Text(
+                          'logwelcome'.tr(),
+                          style: TextStyle(
+                            fontSize: 16 * (screenSize.width / 375.0),
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 10 * textScaleFactor),
+                  SizedBox(height: 10 * (screenSize.height / 800.0)),
                   TextFieldInput(
                     icon: Icons.email,
                     textEditingController: emailController,
                     hintText: 'Enter your email',
                     textInputType: TextInputType.text,
+                    iconSize: 20.0 * (screenSize.width / 375.0),
+                    fontSize: 20 * (screenSize.width / 375.0),
                   ),
                   Row(
                     children: <Widget>[
@@ -100,10 +104,13 @@ class _LoginViewState extends State<LoginView> {
                           },
                         ),
                       ),
-                      Text(
-                        'remember'.tr(),
-                        style: const TextStyle(
-                          color: Colors.white,
+                      Flexible(
+                        child: Text(
+                          'remember'.tr(),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14 * (screenSize.width / 375.0),
+                          ),
                         ),
                       ),
                     ],
@@ -114,28 +121,35 @@ class _LoginViewState extends State<LoginView> {
                     hintText: 'Enter your password',
                     textInputType: TextInputType.text,
                     isPass: true,
+                    iconSize: 20.0 * (screenSize.width / 375.0),
+                    fontSize: 20 * (screenSize.width / 375.0),
                   ),
-                  SizedBox(
-                    height: 8 * textScaleFactor,
-                  ),
+                  //SizedBox(height: 5 * (screenSize.height / 800.0)),
                   const ForgotPassword(),
-                  SizedBox(
-                    height: 8 * textScaleFactor,
-                  ),
+                  SizedBox(height: 5 * (screenSize.height / 800.0)),
                   Custome_button(
                     text: 'login'.tr(),
                     onTap: () => loginUser(modelHud),
+                    height: 50.0 * (screenSize.height / 800.0),
+                    fontSize: 20 * (screenSize.width / 375.0),
                   ),
-                  SizedBox(
-                    height: 10 * textScaleFactor,
-                  ),
+                  SizedBox(height: 10 * (screenSize.height / 800.0)),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment:
+                        CrossAxisAlignment.start, // Add this line
+
                     children: [
-                      Text(
-                        'donthaveaccount'.tr(),
-                        style: const TextStyle(
-                          color: Colors.white,
+                      Flexible(
+                        child: Text(
+                          'donthaveaccount'.tr(),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12.0 * (screenSize.width / 375.0),
+                          ),
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       GestureDetector(
@@ -144,20 +158,25 @@ class _LoginViewState extends State<LoginView> {
                         },
                         child: Text(
                           'registerationn'.tr(),
-                          style: const TextStyle(
-                            color: Color(0xffC7EDE6),
+                          style: TextStyle(
+                            fontSize: 12.0 * (screenSize.width / 375.0),
+                            color: const Color(0xffC7EDE6),
                           ),
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 10 * textScaleFactor),
+                  SizedBox(height: 10 * (screenSize.height / 800.0)),
                   Padding(
                     padding: EdgeInsets.symmetric(
-                      horizontal: 30 * textScaleFactor,
-                      vertical: 10 * textScaleFactor,
+                      horizontal: 16.0 * (screenSize.width / 375.0),
+                      vertical: 20.0 * (screenSize.height / 800.0),
                     ),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Expanded(
                           child: GestureDetector(
@@ -165,32 +184,39 @@ class _LoginViewState extends State<LoginView> {
                               Provider.of<AdminMode>(context, listen: false)
                                   .changeIsAdmin(true);
                             },
-                            child: Text(
-                              'adminpanel'.tr(),
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Provider.of<AdminMode>(context).isAdmin
-                                    ? kMainColor
-                                    : Colors.white,
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                'adminpanel'.tr(),
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Provider.of<AdminMode>(context).isAdmin
+                                      ? kMainColor
+                                      : Colors.white,
+                                ),
                               ),
                             ),
                           ),
                         ),
+                        const SizedBox(width: 16.0),
                         Expanded(
                           child: GestureDetector(
                             onTap: () {
                               Provider.of<AdminMode>(context, listen: false)
                                   .changeIsAdmin(false);
                             },
-                            child: Text(
-                              'userpanel'.tr(),
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Provider.of<AdminMode>(context,
-                                            listen: true)
-                                        .isAdmin
-                                    ? Colors.white
-                                    : kMainColor,
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                'userpanel'.tr(),
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Provider.of<AdminMode>(context,
+                                              listen: true)
+                                          .isAdmin
+                                      ? Colors.white
+                                      : kMainColor,
+                                ),
                               ),
                             ),
                           ),

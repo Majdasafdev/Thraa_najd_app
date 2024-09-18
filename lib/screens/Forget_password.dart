@@ -18,33 +18,29 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final screenWidth = MediaQuery.of(context).size.width;
+    final screenSize = MediaQuery.of(context).size;
 
-        final horizontalPadding = screenWidth * 0.1;
-
-        return Padding(
-          padding:
-              EdgeInsets.symmetric(horizontal: screenWidth < 600 ? 16.0 : 32.0),
-          child: Align(
-            alignment: Alignment.centerRight,
-            child: InkWell(
-              onTap: () {
-                myDialogBox(context);
-              },
-              child: Text(
-                "Forget Password?",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: screenWidth < 600 ? 14.0 : 16.0,
-                  color: kUnActiveColor,
-                ),
-              ),
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: 12.0 * (screenSize.width / 375.0),
+        vertical: 12.0 * (screenSize.height / 800.0),
+      ),
+      child: Align(
+        alignment: Alignment.centerRight,
+        child: InkWell(
+          onTap: () {
+            myDialogBox(context);
+          },
+          child: Text(
+            "Forget Password?",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 14.0 * (screenSize.width / 375.0),
+              color: kUnActiveColor,
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 
@@ -52,63 +48,85 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        final screenSize = MediaQuery.of(context).size;
+
         return Dialog(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius:
+                BorderRadius.circular(20 * (screenSize.width / 375.0)),
           ),
           child: Container(
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
+              borderRadius:
+                  BorderRadius.circular(20 * (screenSize.width / 375.0)),
             ),
-            padding: const EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(16.0 * (screenSize.width / 375.0)),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      "Forget Your Password",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(Icons.close),
-                    ),
-                  ],
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          constraints: BoxConstraints(
+                              maxWidth: constraints.maxWidth -
+                                  50), // Adjust as needed
+                          child: Text(
+                            "Forget Your Password",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18.0 * (screenSize.width / 375.0),
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: const Icon(Icons.close),
+                        ),
+                      ],
+                    );
+                  },
                 ),
-                const SizedBox(height: 16.0),
+                SizedBox(height: 16.0 * (screenSize.height / 800.0)),
                 TextField(
                   controller: emailController,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
                     labelText: "Enter the Email",
                     hintText: "eg abc@gmail.com",
+                    labelStyle: TextStyle(
+                      fontSize: 14.0 * (screenSize.width / 375.0),
+                    ),
+                    hintStyle: TextStyle(
+                      fontSize: 14.0 * (screenSize.width / 375.0),
+                    ),
                   ),
                 ),
-                const SizedBox(height: 16.0),
+                SizedBox(height: 16.0 * (screenSize.height / 800.0)),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
-                    padding: const EdgeInsets.symmetric(vertical: 12.0),
+                    padding: EdgeInsets.symmetric(
+                      vertical: 12.0 * (screenSize.height / 800.0),
+                    ),
                   ),
                   onPressed: _isLoading ? null : resetPassword,
                   child: _isLoading
                       ? const CircularProgressIndicator(
                           color: Colors.white,
                         )
-                      : const Text(
+                      : Text(
                           "Send",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 16,
+                            fontSize: 16.0 * (screenSize.width / 375.0),
                             color: Colors.white,
                           ),
                         ),
