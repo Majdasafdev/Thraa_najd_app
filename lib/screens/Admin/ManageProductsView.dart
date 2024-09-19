@@ -25,7 +25,7 @@ class ManageProducts extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: kUnActiveColor,
-        title: const Text('Products screen'),
+        title: Text('products-Screen'.tr()),
       ),
 
       backgroundColor: Colors.white,
@@ -62,7 +62,7 @@ class ManageProducts extends StatelessWidget {
                                     builder: (context) => EditProductView(
                                         product: products[index])));
                           },
-                          child: const Text('Edit'),
+                          child: Text('Edit'.tr()),
                         ),
                         MyPopupMenuItem(
                           onClick: () async {
@@ -74,7 +74,7 @@ class ManageProducts extends StatelessWidget {
                               Navigator.pop(context);
                             }
                           },
-                          child: const Text('Delete'),
+                          child: Text('Delete'.tr()),
                         ),
                       ],
                     );
@@ -131,7 +131,7 @@ class ManageProducts extends StatelessWidget {
               itemCount: products.length,
             );
           } else {
-            return const Center(child: (Text('Loading...........')));
+            return Center(child: (Text('loading'.tr())));
           }
         },
       ),

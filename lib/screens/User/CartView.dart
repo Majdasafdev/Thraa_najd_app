@@ -178,7 +178,7 @@ class CartScreen extends StatelessWidget {
             Navigator.pushNamed(context, ProductInfo.id,
                 arguments: product.product);
           },
-          child: const Text('Edit'),
+          child: Text('edit'.tr()),
         ),
         MyPopupMenuItem(
           onClick: () {
@@ -216,8 +216,8 @@ class CartScreen extends StatelessWidget {
                   isWholesale:
                       Provider.of<SectionNotifier>(context).isWholeSale));
 
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text('Orderd Successfully'),
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text('orderd-Successfully'.tr()),
               ));
               //      Provider.of<CartNotifier>(context, listen: false)
               ////          .clearCart(); // Add this line
@@ -226,7 +226,7 @@ class CartScreen extends StatelessWidget {
               print(ex);
             }
           },
-          child: const Text('Confirm'),
+          child: Text('confirm'.tr()),
         )
       ],
       content: SingleChildScrollView(
@@ -236,25 +236,24 @@ class CartScreen extends StatelessWidget {
               onChanged: (value) {
                 address = value;
               },
-              decoration: const InputDecoration(hintText: 'Enter your Address'),
+              decoration: InputDecoration(hintText: 'writeadress'.tr()),
             ),
             TextField(
               onChanged: (value) {
                 clientName = value;
               },
-              decoration: const InputDecoration(hintText: 'Enter your Name'),
+              decoration: InputDecoration(hintText: 'writenamehere'.tr()),
             ),
             TextField(
               onChanged: (value) {
                 clientNumber = value;
               },
-              decoration:
-                  const InputDecoration(hintText: 'Enter your Phone number'),
+              decoration: InputDecoration(hintText: 'writephonehere'.tr()),
             ),
           ],
         ),
       ),
-      title: Text('Totall Price  =  $price'),
+      title: Text('totalPrice  =  $price'.tr()),
     );
     await showDialog(
       context: context,

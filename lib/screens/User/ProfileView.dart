@@ -1,4 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:snackbar/snackbar.dart';
+import 'package:thraa_najd_mobile_app/main.dart';
 import 'package:thraa_najd_mobile_app/models/UserModel.dart';
 import 'package:thraa_najd_mobile_app/screens/User/EditProfileView.dart';
 import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
@@ -25,7 +28,7 @@ class _ProfileViewState extends State<ProfileView> {
             Navigator.pop(context);
           },
         ),
-        title: const Text('Profile'),
+        title: Text('my-Profile'.tr()),
         actions: [
           IconButton(
               onPressed: () {
@@ -53,19 +56,19 @@ class _ProfileViewState extends State<ProfileView> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Name: ${userModel!.name}',
+                        Text('Name: ${userModel!.name}'.tr(),
                             style:
                                 const TextStyle(fontWeight: FontWeight.bold)),
                       ],
                     ),
                     const SizedBox(height: 16),
-                    Text('E-mail: ${userModel!.email}',
+                    Text('email ${userModel!.email}'.tr(),
                         style: const TextStyle(fontWeight: FontWeight.bold)),
                     const SizedBox(height: 16),
-                    Text('Phone Number: ${userModel!.phoneNumber ?? "--"}',
+                    Text('phone ${userModel!.phoneNumber ?? "--"}'.tr(),
                         style: const TextStyle(fontWeight: FontWeight.bold)),
                     const SizedBox(height: 16),
-                    Text('Address: ${userModel!.address ?? "--"}',
+                    Text('address ${userModel!.address ?? "--"}'.tr(),
                         style: const TextStyle(fontWeight: FontWeight.bold)),
                     const SizedBox(height: 16),
                   ],
@@ -75,8 +78,8 @@ class _ProfileViewState extends State<ProfileView> {
             if (snapshot.hasError) {
               return Center(child: Text(snapshot.error.toString()));
             }
-            return const Center(
-              child: Text("loading"),
+            return Center(
+              child: Text("loading".tr()),
             );
           }),
     );

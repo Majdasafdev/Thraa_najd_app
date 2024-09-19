@@ -35,7 +35,7 @@ class _WelcomeViewState extends State<WelcomeView> {
       alignment: Alignment.center,
       children: <Widget>[
         _buildGrid(),
-        CustomLogo(),
+        const CustomLogo(),
       ],
     );
   }
@@ -47,8 +47,8 @@ class _WelcomeViewState extends State<WelcomeView> {
       crossAxisSpacing: 20,
       padding: const EdgeInsets.all(20),
       children: <Widget>[
-        _buildButton('Wholesale'),
-        _buildButton('Retail'),
+        _buildButton('Wholesale section '),
+        _buildButton('Retail section '),
       ],
     );
   }

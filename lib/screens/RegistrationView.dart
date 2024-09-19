@@ -117,7 +117,7 @@ class _RegistrationViewState extends State<RegistrationView> {
               TextFieldInput(
                 icon: Icons.person,
                 textEditingController: nameController,
-                hintText: 'Enter your name',
+                hintText: 'writenamehere'.tr(),
                 textInputType: TextInputType.text,
                 iconSize: screenWidth * 0.06,
                 fontSize: screenWidth * 0.04,
@@ -126,7 +126,7 @@ class _RegistrationViewState extends State<RegistrationView> {
               TextFieldInput(
                 icon: Icons.email,
                 textEditingController: emailController,
-                hintText: 'Enter your email',
+                hintText: 'writeemailhere'.tr(),
                 textInputType: TextInputType.text,
                 iconSize: screenWidth * 0.06,
                 fontSize: screenWidth * 0.04,
@@ -135,7 +135,7 @@ class _RegistrationViewState extends State<RegistrationView> {
               TextFieldInput(
                 icon: Icons.phone,
                 textEditingController: phoneNumberController,
-                hintText: 'Enter your phone number',
+                hintText: 'writephonehere'.tr(),
                 textInputType: TextInputType.phone,
                 onChanged: (value) {
                   setState(() {
@@ -149,7 +149,7 @@ class _RegistrationViewState extends State<RegistrationView> {
               TextFieldInput(
                 icon: Icons.lock,
                 textEditingController: passwordController,
-                hintText: 'Enter your passord',
+                hintText: 'writepasslhere'.tr(),
                 textInputType: TextInputType.text,
                 isPass: false,
                 iconSize: screenWidth * 0.06,
@@ -158,7 +158,7 @@ class _RegistrationViewState extends State<RegistrationView> {
               SizedBox(height: screenHeight * 0.02),
               Custome_button(
                 onTap: signupUser,
-                text: "Sign Up",
+                text: "register".tr(),
                 height: screenHeight * 0.07,
                 fontSize: screenWidth * 0.045,
               ),

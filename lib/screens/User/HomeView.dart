@@ -43,6 +43,7 @@ class _HomeViewState extends State<HomeView> {
       children: [
         DefaultTabController(
           length: 5,
+          // ignore: deprecated_member_use
           child: WillPopScope(
             onWillPop: () async => false, // Return false to prevent the pop
             child: Scaffold(
@@ -181,7 +182,7 @@ class _HomeViewState extends State<HomeView> {
                         ],
                       );
                     } else {
-                      return const Center(child: (Text('Loading...........')));
+                      return Center(child: (Text('loading'.tr())));
                     }
                   }),
             ),

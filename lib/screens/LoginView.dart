@@ -84,7 +84,7 @@ class _LoginViewState extends State<LoginView> {
                   TextFieldInput(
                     icon: Icons.email,
                     textEditingController: emailController,
-                    hintText: 'Enter your email',
+                    hintText: 'Enter-your-email'.tr(),
                     textInputType: TextInputType.text,
                     iconSize: 20.0 * (screenSize.width / 375.0),
                     fontSize: 20 * (screenSize.width / 375.0),
@@ -118,7 +118,7 @@ class _LoginViewState extends State<LoginView> {
                   TextFieldInput(
                     icon: Icons.lock,
                     textEditingController: passwordController,
-                    hintText: 'Enter your password',
+                    hintText: 'Enter-your-password'.tr(),
                     textInputType: TextInputType.text,
                     isPass: true,
                     iconSize: 20.0 * (screenSize.width / 375.0),
