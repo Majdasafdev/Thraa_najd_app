@@ -1,23 +1,25 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:thraa_najd_mobile_app/providers/admin_mode.dart';
+import 'package:thraa_najd_mobile_app/providers/model_hud.dart';
 import 'package:thraa_najd_mobile_app/screens/Forget_password.dart';
-import 'package:thraa_najd_mobile_app/screens/User/HomeView.dart';
+import 'package:thraa_najd_mobile_app/screens/RegistrationView.dart';
 import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
-import 'package:thraa_najd_mobile_app/providers/model_hud.dart';
-import 'package:thraa_najd_mobile_app/screens/RegistrationView.dart';
 import 'package:thraa_najd_mobile_app/widgets/custom_button.dart';
 import 'package:thraa_najd_mobile_app/widgets/custome_input_text_field.dart';
 import 'package:thraa_najd_mobile_app/widgets/custome_logo.dart';
 import 'package:thraa_najd_mobile_app/widgets/snack_bar.dart';
-import 'package:thraa_najd_mobile_app/providers/admin_mode.dart';
 import 'package:thraa_najd_mobile_app/widgets/switch_langs.dart';
+
 import 'Admin/AdminHomeView.dart';
 
 class LoginView extends StatefulWidget {
@@ -36,6 +38,7 @@ class _LoginViewState extends State<LoginView> {
   String? email;
   String? passward;
   bool? keepMeLoggedIn = false;
+  Uint8List bytes = Uint8List(0);
 
   @override
   void dispose() {
@@ -50,6 +53,19 @@ class _LoginViewState extends State<LoginView> {
     // ignore: deprecated_member_use
     final textScaleFactor = MediaQuery.of(context).textScaleFactor;
 
+    Future(() async {
+      var link =
+          "https://th.bing.com/th/id/R.cc01aa868d1cef6d9529c066ac7ec371?rik=cOAAiJWK9GDr2Q&pid=ImgRaw&r=0";
+      var imageBytes =
+          await NetworkAssetBundle(Uri.parse(link.trim())).load(link.trim());
+      try {
+        var result =
+            await instantiateImageCodec(imageBytes.buffer.asUint8List());
+        var next = await result.getNextFrame();
+      } catch (e, stk) {
+        print(e);
+      }
+    });
     return Scaffold(
       backgroundColor: kMainColor,
       body: Consumer<ModelHud>(
@@ -240,21 +256,12 @@ class _LoginViewState extends State<LoginView> {
     if (formkey.currentState!.validate()) {
       modelHud.changeisLoading(true);
       try {
-        final credential =
-            await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: emailController.text.trim(),
-          password: passwordController.text.trim(),
-        );
         await Future.delayed(const Duration(seconds: 5));
         await repositoryClient.authRepository.signIn(
           emailController.text.trim(),
           passwordController.text.trim(),
           context,
         );
-        if (credential.user!.emailVerified) {
-          Navigator.pushNamed(context, HomeView.id,
-              arguments: emailController.text.trim());
-        }
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
           showSnackBar(context, "No user found for that email.".tr());

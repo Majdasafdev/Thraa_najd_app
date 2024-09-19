@@ -1,22 +1,16 @@
 import 'dart:async';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:firebase_auth/firebase_auth.dart";
-import 'package:flutter/services.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
 import 'package:thraa_najd_mobile_app/providers/model_hud.dart';
 import 'package:thraa_najd_mobile_app/screens/LoginView.dart';
-import 'package:thraa_najd_mobile_app/screens/User/CartView.dart';
 import 'package:thraa_najd_mobile_app/screens/User/HomeView.dart';
 import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
-import 'package:flutter/material.dart';
-import 'package:thraa_najd_mobile_app/widgets/snack_bar.dart';
 
 import '../models/UserModel.dart';
 import '../utils/FirebaseConstants.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthRepository extends AbstractRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -59,9 +53,17 @@ class AuthRepository extends AbstractRepository {
           email: email,
           password: password,
         );
+        await _firestore
+            .collection(FirebaseConstants.usersCollection)
+            .doc(cred.user!.uid)
+            .set(UserModel(
+                    id: cred.user!.uid,
+                    email: email,
+                    name: name,
+                    phoneNumber: phoneNumber)
+                .toMap());
         // send email verification
         await cred.user!.sendEmailVerification();
-        bool isLoading = false;
 
         hideLoadingIndicator(context);
         // show a dialog to the user to verify their email
@@ -81,28 +83,15 @@ class AuthRepository extends AbstractRepository {
             ],
           ),
         );
-        // wait for the user to verify their email
-        while (!(cred.user!.emailVerified)) {
-          await Future.delayed(const Duration(seconds: 2));
-        }
 
         /*  // Wait for the user to verify their email
-        HERE TO SAVE ONLY VERIFIYNG EMAILS IN USERS COLLECTION 
+        HERE TO SAVE ONLY VERIFIYNG EMAILS IN USERS COLLECTION
         await cred.user!.reload(); // Reload user to get latest email verification status
         if (!cred.user!.emailVerified) {
           return "Email not verified. Please verify your email.";
         }*/
 
-        // add user to your  firestore database
-        print(cred.user!.uid);
-        await _firestore.collection("users").doc(cred.user!.uid).set({
-          'name': name,
-          'uid': cred.user!.uid,
-          'email': email,
-          'phoneNumber': phoneNumber,
-        });
-
-        res = "success";
+        return res = "success";
       } else {
         return "Please fill in all the fields";
       }
@@ -117,8 +106,8 @@ class AuthRepository extends AbstractRepository {
     } catch (err) {
       return err.toString();
     }
-    return res;
   }
+
 // Utility functions to show and hide the loading indicator
 
   Stream<UserModel> getCurrentUserInfo() {
@@ -171,27 +160,14 @@ class AuthRepository extends AbstractRepository {
         Navigator.pushNamed(context, HomeView.id);
       } else {
         // Check if the user has already been sent a verification email
-        final userDoc = await firebaseFirestore
-            .collection(FirebaseConstants.usersCollection)
-            .doc(credential.user!.uid)
-            .get();
-        if (userDoc.exists && userDoc.get('emailVerifiedSent')) {
+        if (!credential.user!.emailVerified) {
+          await credential.user!.sendEmailVerification();
           AwesomeDialog(
             context: context,
             dialogType: DialogType.error,
             animType: AnimType.rightSlide,
             title: "Error",
             desc: "Please check your inbox and activate your email",
-          ).show();
-        } else {
-          await credential.user!.sendEmailVerification();
-          await userDoc.reference.update({'emailVerifiedSent': true});
-          AwesomeDialog(
-            context: context,
-            dialogType: DialogType.error,
-            animType: AnimType.rightSlide,
-            title: "Error",
-            desc: "Go to your inbox and activate your email",
           ).show();
         }
       }
@@ -226,7 +202,7 @@ class AuthRepository extends AbstractRepository {
           dialogType: DialogType.error,
           animType: AnimType.rightSlide,
           title: "Error",
-          desc: "An unknown error occurred",
+          desc: e.message,
         ).show();
       }
     } catch (e) {

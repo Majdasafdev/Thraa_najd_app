@@ -1,19 +1,15 @@
 import 'dart:async';
-import 'dart:io';
-import 'dart:typed_data';
-import 'dart:ui';
 
 import 'package:excel/excel.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../models/Product.dart';
-import '../models/ExcelProductDTO.dart';
 import '../models/Category.dart';
-import 'AbstractRepository.dart';
+import '../models/ExcelProductDTO.dart';
+import '../models/Product.dart';
 import '../utils/FirebaseConstants.dart';
+import 'AbstractRepository.dart';
 
 class ProductRepository extends AbstractRepository {
   Future<ByteData> loadNetworkAsset(String rawImageLink) async {
