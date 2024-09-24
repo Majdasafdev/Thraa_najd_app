@@ -11,7 +11,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thraa_najd_mobile_app/providers/admin_mode.dart';
 import 'package:thraa_najd_mobile_app/providers/model_hud.dart';
 import 'package:thraa_najd_mobile_app/screens/Forget_password.dart';
-import 'package:thraa_najd_mobile_app/screens/RegistrationView.dart';
 import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
 import 'package:thraa_najd_mobile_app/widgets/custom_button.dart';
@@ -100,7 +99,7 @@ class _LoginViewState extends State<LoginView> {
                   TextFieldInput(
                     icon: Icons.email,
                     textEditingController: emailController,
-                    hintText: 'Enter your email',
+                    hintText: 'Enter-your-email'.tr(),
                     textInputType: TextInputType.text,
                     iconSize: 20.0 * (screenSize.width / 375.0),
                     fontSize: 20 * (screenSize.width / 375.0),
@@ -134,7 +133,7 @@ class _LoginViewState extends State<LoginView> {
                   TextFieldInput(
                     icon: Icons.lock,
                     textEditingController: passwordController,
-                    hintText: 'Enter your password',
+                    hintText: 'Enter-your-password'.tr(),
                     textInputType: TextInputType.text,
                     isPass: true,
                     iconSize: 20.0 * (screenSize.width / 375.0),

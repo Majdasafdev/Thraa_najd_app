@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
-class SectionNotifier extends ChangeNotifier {
-  bool isWholeSale = false;
+class SectionNotifier with ChangeNotifier {
+  bool _wholeSale = false;
 
-  void setSection(bool isWholeSale) {
-    this.isWholeSale = isWholeSale;
+  bool get isWholeSale => _wholeSale;
+
+  void setSection(bool value) {
+    _wholeSale = value;
     notifyListeners();
   }
 }

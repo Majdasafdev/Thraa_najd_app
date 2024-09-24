@@ -6,7 +6,6 @@ import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
 import '../../widgets/snack_bar.dart';
 
 class EditProfileView extends StatefulWidget {
-
   final UserModel userModel;
 
   const EditProfileView({super.key, required this.userModel});
@@ -43,11 +42,11 @@ class _EditProfileViewState extends State<EditProfileView> {
             children: [
               TextField(
                 controller: nameController,
-                decoration: const InputDecoration(hintText: "Name"),
+                decoration: InputDecoration(hintText: "name".tr()),
               ),
               TextField(
                 controller: addressController,
-                decoration: const InputDecoration(hintText: "Address"),
+                decoration: InputDecoration(hintText: "address".tr()),
               ),
               Row(
                 children: [

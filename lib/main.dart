@@ -149,11 +149,11 @@ class _ThraaNajdAppState extends State<ThraaNajdApp> {
               locale: DevicePreview.locale(context),
               builder: DevicePreview.appBuilder,
               debugShowCheckedModeBanner: false,
-              home: (FirebaseAuth.instance.currentUser != null &&
-                      FirebaseAuth.instance.currentUser!.emailVerified)
-                  ? const WelcomeView()
-                  : const LoginView(),
-              // initialRoute: isUserLoggedIn ? WelcomeView.id : WelcomeView.id,
+              //    home: ( FirebaseAuth.instance.currentUser != null &&
+              //            FirebaseAuth.instance.currentUser!.emailVerified)
+              //       ? const WelcomeView()
+              //        : const LoginView(),
+              initialRoute: isUserLoggedIn ? WelcomeView.id : LoginView.id,
               routes: {
                 OrderDeatiels.id: (context) => OrderDeatiels(),
                 LoginView.id: (context) => const LoginView(),

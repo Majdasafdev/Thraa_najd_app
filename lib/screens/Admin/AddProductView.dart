@@ -39,7 +39,7 @@ class _AddProductViewState extends State<AddProductView> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 CustomTextField(
-                  hintText: "Material ID",
+                  hintText: "material-ID".tr(),
                   onChanged: (data) {
                     materialId = data;
                   },
@@ -48,7 +48,7 @@ class _AddProductViewState extends State<AddProductView> {
                   height: 10,
                 ),
                 CustomTextField(
-                  hintText: "Product name English",
+                  hintText: "product-Name-English".tr(),
                   onChanged: (data) {
                     productNameEN = data;
                   },
@@ -57,7 +57,7 @@ class _AddProductViewState extends State<AddProductView> {
                   height: 10,
                 ),
                 CustomTextField(
-                  hintText: "Product name Arabic",
+                  hintText: "product-Name-Arabic".tr(),
                   onChanged: (data) {
                     productNameAR = data;
                   },
@@ -66,7 +66,7 @@ class _AddProductViewState extends State<AddProductView> {
                   height: 10,
                 ),
                 CustomTextField(
-                  hintText: "Product Image URL",
+                  hintText: "product-Image-URL".tr(),
                   onChanged: (data) {
                     imageLink = data;
                   },
@@ -75,15 +75,15 @@ class _AddProductViewState extends State<AddProductView> {
                   height: 10,
                 ),
                 CustomTextField(
-                  hintText: "Product price",
+                  hintText: "product-Price".tr(),
                   onChanged: (data) {
                     costPrice = data;
                   },
                 ),
                 DropdownButton(
-                  hint: const Align(
+                  hint: Align(
                       alignment: Alignment.centerLeft,
-                      child: Text("Product Category")),
+                      child: Text("Product Category".tr())),
                   isExpanded: true,
                   underline: Container(),
                   alignment: Alignment.bottomCenter,
@@ -132,7 +132,7 @@ class _AddProductViewState extends State<AddProductView> {
                       try {
                         double? parsedCost = double.tryParse(costPrice);
                         if (parsedCost == null) {
-                          throw Exception("Incorrect price");
+                          throw Exception("incorrect-price".tr());
                         }
 
                         var result = await repositoryClient.productRepository
@@ -160,7 +160,7 @@ class _AddProductViewState extends State<AddProductView> {
                       }
                     }
                   },
-                  child: const Text('Add Product'),
+                  child: Text('add-Product'.tr()),
                 )
               ],
             )

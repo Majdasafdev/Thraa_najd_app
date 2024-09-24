@@ -1,4 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:snackbar/snackbar.dart';
+import 'package:thraa_najd_mobile_app/main.dart';
 import 'package:thraa_najd_mobile_app/screens/LoginView.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
 import 'package:thraa_najd_mobile_app/screens/Admin/AddProductView.dart';
@@ -18,7 +21,7 @@ class AdminHomeView extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: kUnActiveColor,
-          title: const Text('Admin Panel'),
+          title: Text('admin-Panel'.tr()),
         ),
         backgroundColor: kSecondaryColor,
         body: Column(
@@ -28,7 +31,7 @@ class AdminHomeView extends StatelessWidget {
             const CustomLogo(),
             ElevatedButton(
               onPressed: () {},
-              child: const Text('Welcome To Admin Panel'),
+              child: Text('Welcome-Admin-Panel'.tr()),
             ),
             const SizedBox(
               width: double.infinity,
@@ -37,25 +40,25 @@ class AdminHomeView extends StatelessWidget {
               onPressed: () {
                 Navigator.pushNamed(context, AddProductView.id);
               },
-              child: const Text('Add Product'),
+              child: Text('add-Product'.tr()),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, ManageProducts.id);
               },
-              child: const Text('Edit Products'),
+              child: Text('edit-Products'.tr()),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, OrdersScreen.id);
               },
-              child: const Text('View Orders'),
+              child: Text('view-Orders'.tr()),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, LoginView.id);
               },
-              child: const Text('Log out '),
+              child: Text('logOut'.tr()),
             ),
           ],
         ),
