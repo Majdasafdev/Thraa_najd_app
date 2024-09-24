@@ -1,5 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:thraa_najd_mobile_app/main.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
 import 'package:thraa_najd_mobile_app/widgets/snack_bar.dart';
 
@@ -76,7 +78,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                               maxWidth: constraints.maxWidth -
                                   50), // Adjust as needed
                           child: Text(
-                            "Forget Your Password",
+                            'Forget-Your-Password'.tr(),
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18.0 * (screenSize.width / 375.0),
@@ -99,7 +101,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   controller: emailController,
                   decoration: InputDecoration(
                     border: const OutlineInputBorder(),
-                    labelText: "Enter the Email",
+                    labelText: "Enter-your-email".tr(),
                     hintText: "eg abc@gmail.com",
                     labelStyle: TextStyle(
                       fontSize: 14.0 * (screenSize.width / 375.0),
@@ -123,7 +125,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           color: Colors.white,
                         )
                       : Text(
-                          "Send",
+                          "Send".tr(),
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16.0 * (screenSize.width / 375.0),
@@ -147,8 +149,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     try {
       await auth.sendPasswordResetEmail(email: emailController.text.trim());
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Password reset email sent. Please check your inbox.'),
+        SnackBar(
+          content: Text('Password-reset'.tr()),
         ),
       );
       Navigator.pop(context);

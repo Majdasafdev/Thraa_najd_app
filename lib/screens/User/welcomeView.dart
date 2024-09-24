@@ -30,7 +30,7 @@ class _WelcomeViewState extends State<WelcomeView> {
       alignment: Alignment.center,
       children: <Widget>[
         _buildGrid(),
-        CustomLogo(),
+        const CustomLogo(),
       ],
     );
   }
@@ -42,23 +42,27 @@ class _WelcomeViewState extends State<WelcomeView> {
       crossAxisSpacing: 20,
       padding: const EdgeInsets.all(20),
       children: <Widget>[
-        _buildButton('Wholesale'),
-        _buildButton('Retail'),
+        _buildButton('Wholesale section '),
+        _buildButton('Retail section '),
       ],
     );
   }
 
   Widget _buildButton(String text) {
+    SectionNotifier sectionNotifier =
+        Provider.of<SectionNotifier>(context, listen: false);
+
     return ElevatedButton(
       onPressed: () {
-        if (text == 'Wholesale') {
-          //Provider.of<SectionNotifier>(context).setSection(true);
+        if (text == 'Wholesale section ') {
+          sectionNotifier.setSection(true);
+
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const LoginView()),
           );
-        } else if (text == 'Retail') {
-          //Provider.of<SectionNotifier>(context).setSection(false);
+        } else if (text == 'Retail section ') {
+          sectionNotifier.setSection(false);
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const LoginView()),

@@ -172,7 +172,7 @@ class _ProductInfoState extends State<ProductInfo> {
                             addToCart(context, product);
                           },
                           child: Text(
-                            'Add to Cart'.toUpperCase(),
+                            'Add-to-Cart'.toUpperCase().tr(),
                             style: TextStyle(
                               fontSize: screenWidth * 0.05,
                               fontWeight: FontWeight.bold,
@@ -205,15 +205,15 @@ class _ProductInfoState extends State<ProductInfo> {
     }
     if (exist) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('you\'ve added this item before'),
+        SnackBar(
+          content: Text('already-add-before'.tr()),
         ),
       );
     } else {
       cartNotifier.addCartItem(CartItem(product: product, quantity: _quantity));
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Added to Cart'),
+        SnackBar(
+          content: Text('Add-to-Cart'.tr()),
         ),
       );
     }
