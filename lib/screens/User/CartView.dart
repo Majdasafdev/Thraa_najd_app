@@ -1,20 +1,16 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:thraa_najd_mobile_app/models/CartItem.dart';
-import 'package:thraa_najd_mobile_app/models/Order.dart';
+import 'package:thraa_najd_mobile_app/providers/CartNotifier.dart';
 import 'package:thraa_najd_mobile_app/providers/SectionNotifier.dart';
+import 'package:thraa_najd_mobile_app/screens/User/ProductInfo.dart';
 import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
 import 'package:thraa_najd_mobile_app/utils/Extensions.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
-import 'package:thraa_najd_mobile_app/providers/CartNotifier.dart';
-import 'package:thraa_najd_mobile_app/screens/User/ProductInfo.dart';
 import 'package:thraa_najd_mobile_app/widgets/custome_logo.dart';
 
 import '../../models/CustomerOrder.dart';
-import '../../models/Product.dart';
 import '../../widgets/cusotme_menu.dart';
 
 class CartScreen extends StatelessWidget {
@@ -66,8 +62,6 @@ class CartScreen extends StatelessWidget {
                       },
                       child: Container(
                         color: kSecondaryColor,
-                        //height: screenHeight * .15,
-                        // width: screenWidth * .8,
                         child: Row(
                           children: [
                             CircleAvatar(
@@ -83,6 +77,7 @@ class CartScreen extends StatelessWidget {
                               child: Column(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     context.locale.getProductName(
@@ -95,16 +90,14 @@ class CartScreen extends StatelessWidget {
                                         fontWeight: FontWeight.bold),
                                   ),
                                   Text(
-                                    "${currentCartItems[index].product.getProductPrice(context)}",
+                                    "total Price: ${currentCartItems[index].product.getProductPrice(context)}",
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(right: 20),
                                     child: Text(
-                                      currentCartItems[index]
-                                          .quantity
-                                          .toString(),
+                                      "Quantity: ${currentCartItems[index].quantity.toString()}",
                                       style: const TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold),
@@ -145,7 +138,7 @@ class CartScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              const CustomLogo()
+              CustomLogo()
             ])
           : SizedBox(
               height: screenHeight -
@@ -195,8 +188,9 @@ class CartScreen extends StatelessWidget {
   //NOTE: Edited workflow.
   //TODO: Assign actual address, clientName, clientNumber.
   void showCustomDialog(List<CartItem> cartItems, context) async {
-    var price = CartItem.getListTotalPrice(
-        cartItems, Provider.of<SectionNotifier>(context).isWholeSale);
+    //TODO: HOT FIX: Must FIX price fetching mechanism!!
+    var price =
+        -1.0; //CartItem.getListTotalPrice(cartItems, Provider.of<SectionNotifier>(context).isWholeSale);
     String address = "";
     String clientName = "";
     String clientNumber = "";

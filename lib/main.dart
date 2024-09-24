@@ -1,4 +1,5 @@
-import 'package:firebase_app_check/firebase_app_check.dart';
+import 'package:device_preview/device_preview.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
@@ -9,28 +10,22 @@ import 'package:thraa_najd_mobile_app/providers/CartNotifier.dart';
 import 'package:thraa_najd_mobile_app/providers/SectionNotifier.dart';
 import 'package:thraa_najd_mobile_app/screens/Admin/OrderDetailsView.dart';
 import 'package:thraa_najd_mobile_app/screens/Forget_password.dart';
+import 'package:thraa_najd_mobile_app/screens/LoginView.dart';
+import 'package:thraa_najd_mobile_app/screens/RegistrationView.dart';
 import 'package:thraa_najd_mobile_app/screens/User/CartView.dart';
-import 'package:thraa_najd_mobile_app/screens/User/EditProfileView.dart';
+import 'package:thraa_najd_mobile_app/screens/User/HomeView.dart';
 import 'package:thraa_najd_mobile_app/screens/User/ProductInfo.dart';
 import 'package:thraa_najd_mobile_app/screens/User/ProfileView.dart';
 import 'package:thraa_najd_mobile_app/screens/User/welcomeView.dart';
-import 'package:thraa_najd_mobile_app/screens/LoginView.dart';
-import 'package:thraa_najd_mobile_app/screens/RegistrationView.dart';
-import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
+
+import 'firebase_options.dart';
 import 'providers/admin_mode.dart';
 import 'providers/model_hud.dart';
 import 'screens/Admin/AddProductView.dart';
 import 'screens/Admin/AdminHomeView.dart';
-import 'screens/Admin/ManageProductsView.dart';
-import 'screens/Admin/EditProductView.dart';
 import 'screens/Admin/AllOrdersView.dart';
-import 'screens/User/HomeView.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'firebase_options.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:device_preview/device_preview.dart';
+import 'screens/Admin/ManageProductsView.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

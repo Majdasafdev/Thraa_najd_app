@@ -1,20 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:provider/provider.dart';
-import 'package:thraa_najd_mobile_app/models/phoneNumberValid.dart';
-import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
+import 'package:thraa_najd_mobile_app/screens/LoginView.dart';
 import 'package:thraa_najd_mobile_app/services/AuthRepository.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
-import 'package:thraa_najd_mobile_app/providers/model_hud.dart';
-import 'package:thraa_najd_mobile_app/screens/LoginView.dart';
 import 'package:thraa_najd_mobile_app/widgets/custom_button.dart';
 import 'package:thraa_najd_mobile_app/widgets/custome_input_text_field.dart';
 import 'package:thraa_najd_mobile_app/widgets/custome_logo.dart';
-import 'package:thraa_najd_mobile_app/widgets/snack_bar.dart';
-
-import 'User/HomeView.dart';
 
 class RegistrationView extends StatefulWidget {
   const RegistrationView({super.key});
@@ -36,6 +27,7 @@ class _RegistrationViewState extends State<RegistrationView> {
       r"^[a-zA-Z0-9._%+-]+[a-z-AZ0-9.-]+\.[a-zA-Z]{2,}$"); // Declare _emailRegExp here
 
   GlobalKey<FormState> formkey = GlobalKey();
+
   @override
   void dispose() {
     super.dispose();
@@ -46,6 +38,7 @@ class _RegistrationViewState extends State<RegistrationView> {
   }
 
   void signupUser() async {
+    if (!_validatePhoneNumber(phoneNumberController.text.trim())) return;
     // signup user using our authmethod
     String res = await AuthRepository().signupUser(
       email: emailController.text.trim(),
@@ -137,11 +130,6 @@ class _RegistrationViewState extends State<RegistrationView> {
                 textEditingController: phoneNumberController,
                 hintText: 'writephonehere'.tr(),
                 textInputType: TextInputType.phone,
-                onChanged: (value) {
-                  setState(() {
-                    isPhoneNumberValid = _validatePhoneNumber(value);
-                  });
-                },
                 iconSize: screenWidth * 0.06,
                 fontSize: screenWidth * 0.04,
               ),
