@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thraa_najd_mobile_app/screens/Forget_password.dart';
 import 'package:thraa_najd_mobile_app/screens/User/HomeView.dart';
+import 'package:thraa_najd_mobile_app/screens/User/welcomeView.dart';
 import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
 import 'package:thraa_najd_mobile_app/providers/model_hud.dart';

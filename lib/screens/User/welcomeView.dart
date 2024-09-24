@@ -54,16 +54,20 @@ class _WelcomeViewState extends State<WelcomeView> {
   }
 
   Widget _buildButton(String text) {
+    SectionNotifier sectionNotifier =
+        Provider.of<SectionNotifier>(context, listen: false);
+
     return ElevatedButton(
       onPressed: () {
-        if (text == 'Wholesale') {
-          //Provider.of<SectionNotifier>(context).setSection(true);
+        if (text == 'Wholesale section ') {
+          sectionNotifier.setSection(true);
+
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const LoginView()),
           );
-        } else if (text == 'Retail') {
-          //Provider.of<SectionNotifier>(context).setSection(false);
+        } else if (text == 'Retail section ') {
+          sectionNotifier.setSection(false);
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const LoginView()),
