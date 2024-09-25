@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:thraa_najd_mobile_app/providers/SectionNotifier.dart';
 import 'package:thraa_najd_mobile_app/screens/LoginView.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
 import 'package:thraa_najd_mobile_app/widgets/custome_logo.dart';
