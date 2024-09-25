@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -20,10 +19,13 @@ import 'package:thraa_najd_mobile_app/widgets/snack_bar.dart';
 import 'package:thraa_najd_mobile_app/widgets/switch_langs.dart';
 
 import 'Admin/AdminHomeView.dart';
+import 'RegistrationView.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
+
   static String id = 'loginView';
+
   @override
   State<LoginView> createState() => _LoginViewState();
 }
@@ -50,21 +52,7 @@ class _LoginViewState extends State<LoginView> {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     // ignore: deprecated_member_use
-    final textScaleFactor = MediaQuery.of(context).textScaleFactor;
 
-    Future(() async {
-      var link =
-          "https://th.bing.com/th/id/R.cc01aa868d1cef6d9529c066ac7ec371?rik=cOAAiJWK9GDr2Q&pid=ImgRaw&r=0";
-      var imageBytes =
-          await NetworkAssetBundle(Uri.parse(link.trim())).load(link.trim());
-      try {
-        var result =
-            await instantiateImageCodec(imageBytes.buffer.asUint8List());
-        var next = await result.getNextFrame();
-      } catch (e, stk) {
-        print(e);
-      }
-    });
     return Scaffold(
       backgroundColor: kMainColor,
       body: Consumer<ModelHud>(

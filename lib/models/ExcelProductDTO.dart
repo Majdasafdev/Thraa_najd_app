@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:dart_mappable/dart_mappable.dart';
@@ -17,8 +16,8 @@ class ExcelProductDTO with ExcelProductDTOMappable {
   final String productNameAR;
   final Category? category;
   final double costPrice;
-  final double retailPrice;
-  final double wholesalePrice;
+  final ProductPrice retailPrice;
+  final ProductPrice wholesalePrice;
   final Uint8List? imageLink;
   final bool stocked;
 
@@ -39,7 +38,11 @@ class ExcelProductDTO with ExcelProductDTOMappable {
       required Uint8List image,
       bool throwExceptionWithError = false}) {
     final costPrice =
-        double.tryParse(data[5]?.value.toString().trim() ?? "") ?? -1;
+        double.tryParse(data[4]?.value.toString().trim() ?? "") ?? -1;
+    final String retailUnitAR = data[5]!.value.toString().trim();
+    final String retailUnitEN = data[6]!.value.toString().trim();
+    final String wholeSaleUnitAR = data[7]!.value.toString().trim();
+    final String wholeSaleUnitEN = data[8]!.value.toString().trim();
     final product = ExcelProductDTO(
         productId: "",
         materialId: data[0]?.value.toString().trim() ?? "",
@@ -49,8 +52,12 @@ class ExcelProductDTO with ExcelProductDTOMappable {
             ? null
             : CategoryMapper.fromValue(data[3]!.value.toString()),
         costPrice: costPrice,
-        retailPrice: calcRetail(costPrice),
-        wholesalePrice: calcWholesalePrice(costPrice),
+        retailPrice: ProductPrice.calcRetail(
+            costPrice: costPrice, unitAR: retailUnitAR, unitEN: retailUnitEN),
+        wholesalePrice: ProductPrice.calcWholesalePrice(
+            costPrice: costPrice,
+            unitAR: wholeSaleUnitAR,
+            unitEN: wholeSaleUnitEN),
         imageLink: image,
         stocked: true);
 
@@ -76,12 +83,34 @@ class ExcelProductDTO with ExcelProductDTOMappable {
       retailPrice: retailPrice,
       wholesalePrice: wholesalePrice,
       imageLink: imageLink);
+}
 
-  static double calcRetail(double costPrice) {
-    return (costPrice > 1000 ? costPrice * 1.25 : costPrice * 1.30) / 10;
+@MappableClass()
+class ProductPrice with ProductPriceMappable {
+  final String unitAR;
+  final String unitEN;
+  final double price;
+
+  const ProductPrice(
+      {required this.unitEN, required this.unitAR, required this.price});
+
+  static const fromMap = ProductPriceMapper.fromMap;
+
+  static ProductPrice calcRetail(
+      {required double costPrice,
+      required String unitAR,
+      required String unitEN}) {
+    return ProductPrice(
+        price: (costPrice > 1000 ? costPrice * 1.25 : costPrice * 1.30) / 10,
+        unitAR: unitAR,
+        unitEN: unitEN);
   }
 
-  static double calcWholesalePrice(double costPrice) {
-    return costPrice * (1.30);
+  static ProductPrice calcWholesalePrice(
+      {required double costPrice,
+      required String unitAR,
+      required String unitEN}) {
+    return ProductPrice(
+        unitAR: unitAR, unitEN: unitEN, price: costPrice * (1.30));
   }
 }

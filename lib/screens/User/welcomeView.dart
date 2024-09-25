@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:thraa_najd_mobile_app/screens/LoginView.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
 import 'package:thraa_najd_mobile_app/widgets/custome_logo.dart';
+
+import '../../providers/SectionNotifier.dart';
 
 class WelcomeView extends StatefulWidget {
   static String id = 'WelcomeView';

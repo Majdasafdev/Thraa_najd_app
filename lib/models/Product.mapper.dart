@@ -14,6 +14,7 @@ class ProductMapper extends ClassMapperBase<Product> {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = ProductMapper._());
       CategoryMapper.ensureInitialized();
+      ProductPriceMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -39,11 +40,11 @@ class ProductMapper extends ClassMapperBase<Product> {
   static double _$costPrice(Product v) => v.costPrice;
   static const Field<Product, double> _f$costPrice =
       Field('costPrice', _$costPrice);
-  static double _$retailPrice(Product v) => v.retailPrice;
-  static const Field<Product, double> _f$retailPrice =
+  static ProductPrice _$retailPrice(Product v) => v.retailPrice;
+  static const Field<Product, ProductPrice> _f$retailPrice =
       Field('retailPrice', _$retailPrice);
-  static double _$wholesalePrice(Product v) => v.wholesalePrice;
-  static const Field<Product, double> _f$wholesalePrice =
+  static ProductPrice _$wholesalePrice(Product v) => v.wholesalePrice;
+  static const Field<Product, ProductPrice> _f$wholesalePrice =
       Field('wholesalePrice', _$wholesalePrice);
   static String _$imageLink(Product v) => v.imageLink;
   static const Field<Product, String> _f$imageLink =
@@ -129,6 +130,8 @@ extension ProductValueCopy<$R, $Out> on ObjectCopyWith<$R, Product, $Out> {
 
 abstract class ProductCopyWith<$R, $In extends Product, $Out>
     implements ClassCopyWith<$R, $In, $Out> {
+  ProductPriceCopyWith<$R, ProductPrice, ProductPrice> get retailPrice;
+  ProductPriceCopyWith<$R, ProductPrice, ProductPrice> get wholesalePrice;
   $R call(
       {String? productId,
       String? materialId,
@@ -136,8 +139,8 @@ abstract class ProductCopyWith<$R, $In extends Product, $Out>
       String? productNameAR,
       Category? category,
       double? costPrice,
-      double? retailPrice,
-      double? wholesalePrice,
+      ProductPrice? retailPrice,
+      ProductPrice? wholesalePrice,
       String? imageLink,
       bool? stocked});
   ProductCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
@@ -152,6 +155,12 @@ class _ProductCopyWithImpl<$R, $Out>
   late final ClassMapperBase<Product> $mapper =
       ProductMapper.ensureInitialized();
   @override
+  ProductPriceCopyWith<$R, ProductPrice, ProductPrice> get retailPrice =>
+      $value.retailPrice.copyWith.$chain((v) => call(retailPrice: v));
+  @override
+  ProductPriceCopyWith<$R, ProductPrice, ProductPrice> get wholesalePrice =>
+      $value.wholesalePrice.copyWith.$chain((v) => call(wholesalePrice: v));
+  @override
   $R call(
           {String? productId,
           String? materialId,
@@ -159,8 +168,8 @@ class _ProductCopyWithImpl<$R, $Out>
           String? productNameAR,
           Category? category,
           double? costPrice,
-          double? retailPrice,
-          double? wholesalePrice,
+          ProductPrice? retailPrice,
+          ProductPrice? wholesalePrice,
           String? imageLink,
           bool? stocked}) =>
       $apply(FieldCopyWithData({

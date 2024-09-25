@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:excel/excel.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -17,21 +18,34 @@ class ProductRepository extends AbstractRepository {
         .load(rawImageLink.trim());
   }
 
+  Future<Uint8List> getImageBytes(String link) async {
+    var imageBytes = await loadNetworkAsset(link);
+    try {
+      var result = await instantiateImageCodec(imageBytes.buffer.asUint8List());
+      var next = await result.getNextFrame();
+      return imageBytes.buffer.asUint8List();
+    } catch (e, stk) {
+      throw Exception(
+          "The provided link is not an image link, with Error: ${e.toString()}");
+    }
+  }
+
   Future<List<ExcelProductDTO>> translateExcelSheet(String sheetPath) async {
     final data = Excel.decodeBytes(
         (await rootBundle.load(sheetPath)).buffer.asUint8List());
 
     final table = data.tables.entries.first.value.rows;
     table.removeAt(0);
-    var emptyImage = await rootBundle.load("assets/images/empty.jpg");
-    List<Future<ByteData>> futureImages = table.map((e) async {
-      if (e[6]?.value != null) {
-        return loadNetworkAsset(e[6]!.value.toString());
+    var emptyImage =
+        (await rootBundle.load("assets/images/empty.jpg")).buffer.asUint8List();
+    List<Future<Uint8List>> futureImages = table.map((e) async {
+      if (e[9]?.value != null) {
+        return getImageBytes(e[9]!.value.toString());
       }
       return emptyImage;
     }).toList();
     var images = (await futureImages.wait).map((e) {
-      return e.buffer.asUint8List();
+      return e;
     });
 
     List<ExcelProductDTO> productDTOs = [];
@@ -78,7 +92,6 @@ class ProductRepository extends AbstractRepository {
         }
         throw Exception(error.toString());
       });
-      ;
 
       await docsRefs.map((element) {
         return element.update({Product.firebaseProductId: element.id});
@@ -99,7 +112,11 @@ class ProductRepository extends AbstractRepository {
         throw Exception("No Empty Material Id Allowed");
       }
       if (productDTO.productNameAR.isEmpty ||
-          productDTO.productNameEN.isEmpty) {
+          productDTO.productNameEN.isEmpty ||
+          productDTO.retailPrice.unitAR.isEmpty ||
+          productDTO.retailPrice.unitEN.isEmpty ||
+          productDTO.wholesalePrice.unitAR.isEmpty ||
+          productDTO.wholesalePrice.unitEN.isEmpty) {
         throw Exception("No Empty Names Allowed!");
       }
       if (productDTO.costPrice < 1) {
@@ -107,9 +124,8 @@ class ProductRepository extends AbstractRepository {
       }
       if (rawImageLink.isEmpty) throw Exception("no image specified");
 
-      var imageBytes = await loadNetworkAsset(rawImageLink);
-      productDTO =
-          productDTO.copyWith(imageLink: imageBytes.buffer.asUint8List());
+      var imageBytes = await getImageBytes(rawImageLink);
+      productDTO = productDTO.copyWith(imageLink: imageBytes);
 
       var imageLink =
           await addImage(productDTO.imageLink!, productDTO.materialId);
@@ -147,9 +163,8 @@ class ProductRepository extends AbstractRepository {
     bool updatedImage = updatedProduct.imageLink != currentProduct.imageLink;
     String updatedImageLink = "";
     if (updatedImage) {
-      var imageBytes = await loadNetworkAsset(updatedProduct.imageLink);
-      updatedImageLink = await addImage(
-          imageBytes.buffer.asUint8List(), updatedProduct.materialId);
+      var imageBytes = await getImageBytes(updatedProduct.imageLink);
+      updatedImageLink = await addImage(imageBytes, updatedProduct.materialId);
     }
 
     var productMap = updatedImage
