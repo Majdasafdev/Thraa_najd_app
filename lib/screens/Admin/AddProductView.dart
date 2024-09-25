@@ -4,7 +4,6 @@ import 'package:thraa_najd_mobile_app/models/Category.dart';
 import 'package:thraa_najd_mobile_app/models/ExcelProductDTO.dart';
 import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
 import 'package:thraa_najd_mobile_app/widgets/custome_text_field.dart';
-import '../../utils/constants.dart';
 
 class AddProductView extends StatefulWidget {
   static const String id = "AddProductView";
@@ -22,6 +21,10 @@ class _AddProductViewState extends State<AddProductView> {
   String imageLink = "";
   String materialId = "";
   String costPrice = "";
+  String retailUnitAR = "";
+  String retailUnitEN = "";
+  String wholeSaleUnitAR = "";
+  String wholeSaleUnitEN = "";
   Category category = Category.nuts;
 
   @override
@@ -38,48 +41,83 @@ class _AddProductViewState extends State<AddProductView> {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                CustomTextField(
-                  hintText: "material-ID".tr(),
-                  onChanged: (data) {
-                    materialId = data;
-                  },
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: CustomTextField(
+                    hintText: "material-ID".tr(),
+                    onChanged: (data) {
+                      materialId = data;
+                    },
+                  ),
                 ),
-                const SizedBox(
-                  height: 10,
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: CustomTextField(
+                    hintText: "product-Name-English".tr(),
+                    onChanged: (data) {
+                      productNameEN = data;
+                    },
+                  ),
                 ),
-                CustomTextField(
-                  hintText: "product-Name-English".tr(),
-                  onChanged: (data) {
-                    productNameEN = data;
-                  },
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: CustomTextField(
+                    hintText: "product-Name-Arabic".tr(),
+                    onChanged: (data) {
+                      productNameAR = data;
+                    },
+                  ),
                 ),
-                const SizedBox(
-                  height: 10,
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: CustomTextField(
+                    hintText: "product-Image-URL".tr(),
+                    onChanged: (data) {
+                      imageLink = data;
+                    },
+                  ),
                 ),
-                CustomTextField(
-                  hintText: "product-Name-Arabic".tr(),
-                  onChanged: (data) {
-                    productNameAR = data;
-                  },
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5.0),
+                  child: CustomTextField(
+                    hintText: "product-Price".tr(),
+                    onChanged: (data) {
+                      costPrice = data;
+                    },
+                  ),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
-                CustomTextField(
-                  hintText: "product-Image-URL".tr(),
-                  onChanged: (data) {
-                    imageLink = data;
-                  },
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                CustomTextField(
-                  hintText: "product-Price".tr(),
-                  onChanged: (data) {
-                    costPrice = data;
-                  },
-                ),
+                Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: CustomTextField(
+                      hintText: "product-RetailUnitAR".tr(),
+                      onChanged: (data) {
+                        retailUnitAR = data;
+                      },
+                    )),
+                Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: CustomTextField(
+                      hintText: "product-RetailUnitEN".tr(),
+                      onChanged: (data) {
+                        retailUnitEN = data;
+                      },
+                    )),
+                Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: CustomTextField(
+                      hintText: "product-WholeSaleUnitAR".tr(),
+                      onChanged: (data) {
+                        wholeSaleUnitAR = data;
+                      },
+                    )),
+                Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: CustomTextField(
+                      hintText: "product-WholeSaleUnitEN".tr(),
+                      onChanged: (data) {
+                        wholeSaleUnitEN = data;
+                      },
+                    )),
                 DropdownButton(
                   hint: Align(
                       alignment: Alignment.centerLeft,
@@ -144,11 +182,15 @@ class _AddProductViewState extends State<AddProductView> {
                                     productNameAR: productNameAR,
                                     category: category,
                                     costPrice: parsedCost,
-                                    retailPrice:
-                                        ExcelProductDTO.calcRetail(parsedCost),
+                                    retailPrice: ProductPrice.calcRetail(
+                                        costPrice: parsedCost,
+                                        unitEN: retailUnitEN,
+                                        unitAR: retailUnitAR),
                                     wholesalePrice:
-                                        ExcelProductDTO.calcWholesalePrice(
-                                            parsedCost),
+                                        ProductPrice.calcWholesalePrice(
+                                            costPrice: parsedCost,
+                                            unitAR: wholeSaleUnitAR,
+                                            unitEN: wholeSaleUnitEN),
                                     imageLink: null,
                                     stocked: true),
                                 rawImageLink: imageLink);

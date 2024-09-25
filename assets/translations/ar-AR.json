@@ -80,5 +80,9 @@
   "logOut": "تسجيل الخروج",
   "products-Screen": "شاشة المنتجات",
   "Edit": "تعديل",
-  "Delete": "حذف"
+  "Delete": "حذف",
+  "product-WholeSaleUnitAR": "وحدة قياس الجملة باللغة العربية",
+  "product-WholeSaleUnitEN": "وحدة قياس الجملة باللغة بالانجليزية",
+  "product-RetailUnitAR": "وحدة قياس التفرقة باللغة العربي",
+  "product-RetailUnitEN": "وحدة قياس الجملة باللغة الانجليزية"
 }

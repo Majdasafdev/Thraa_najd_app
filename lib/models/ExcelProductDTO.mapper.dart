@@ -14,6 +14,7 @@ class ExcelProductDTOMapper extends ClassMapperBase<ExcelProductDTO> {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = ExcelProductDTOMapper._());
       CategoryMapper.ensureInitialized();
+      ProductPriceMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -39,11 +40,11 @@ class ExcelProductDTOMapper extends ClassMapperBase<ExcelProductDTO> {
   static double _$costPrice(ExcelProductDTO v) => v.costPrice;
   static const Field<ExcelProductDTO, double> _f$costPrice =
       Field('costPrice', _$costPrice);
-  static double _$retailPrice(ExcelProductDTO v) => v.retailPrice;
-  static const Field<ExcelProductDTO, double> _f$retailPrice =
+  static ProductPrice _$retailPrice(ExcelProductDTO v) => v.retailPrice;
+  static const Field<ExcelProductDTO, ProductPrice> _f$retailPrice =
       Field('retailPrice', _$retailPrice);
-  static double _$wholesalePrice(ExcelProductDTO v) => v.wholesalePrice;
-  static const Field<ExcelProductDTO, double> _f$wholesalePrice =
+  static ProductPrice _$wholesalePrice(ExcelProductDTO v) => v.wholesalePrice;
+  static const Field<ExcelProductDTO, ProductPrice> _f$wholesalePrice =
       Field('wholesalePrice', _$wholesalePrice);
   static Uint8List? _$imageLink(ExcelProductDTO v) => v.imageLink;
   static const Field<ExcelProductDTO, Uint8List> _f$imageLink =
@@ -133,6 +134,8 @@ extension ExcelProductDTOValueCopy<$R, $Out>
 
 abstract class ExcelProductDTOCopyWith<$R, $In extends ExcelProductDTO, $Out>
     implements ClassCopyWith<$R, $In, $Out> {
+  ProductPriceCopyWith<$R, ProductPrice, ProductPrice> get retailPrice;
+  ProductPriceCopyWith<$R, ProductPrice, ProductPrice> get wholesalePrice;
   $R call(
       {String? productId,
       String? materialId,
@@ -140,8 +143,8 @@ abstract class ExcelProductDTOCopyWith<$R, $In extends ExcelProductDTO, $Out>
       String? productNameAR,
       Category? category,
       double? costPrice,
-      double? retailPrice,
-      double? wholesalePrice,
+      ProductPrice? retailPrice,
+      ProductPrice? wholesalePrice,
       Uint8List? imageLink,
       bool? stocked});
   ExcelProductDTOCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
@@ -157,6 +160,12 @@ class _ExcelProductDTOCopyWithImpl<$R, $Out>
   late final ClassMapperBase<ExcelProductDTO> $mapper =
       ExcelProductDTOMapper.ensureInitialized();
   @override
+  ProductPriceCopyWith<$R, ProductPrice, ProductPrice> get retailPrice =>
+      $value.retailPrice.copyWith.$chain((v) => call(retailPrice: v));
+  @override
+  ProductPriceCopyWith<$R, ProductPrice, ProductPrice> get wholesalePrice =>
+      $value.wholesalePrice.copyWith.$chain((v) => call(wholesalePrice: v));
+  @override
   $R call(
           {String? productId,
           String? materialId,
@@ -164,8 +173,8 @@ class _ExcelProductDTOCopyWithImpl<$R, $Out>
           String? productNameAR,
           Object? category = $none,
           double? costPrice,
-          double? retailPrice,
-          double? wholesalePrice,
+          ProductPrice? retailPrice,
+          ProductPrice? wholesalePrice,
           Object? imageLink = $none,
           bool? stocked}) =>
       $apply(FieldCopyWithData({
@@ -197,4 +206,124 @@ class _ExcelProductDTOCopyWithImpl<$R, $Out>
   ExcelProductDTOCopyWith<$R2, ExcelProductDTO, $Out2> $chain<$R2, $Out2>(
           Then<$Out2, $R2> t) =>
       _ExcelProductDTOCopyWithImpl($value, $cast, t);
+}
+
+class ProductPriceMapper extends ClassMapperBase<ProductPrice> {
+  ProductPriceMapper._();
+
+  static ProductPriceMapper? _instance;
+  static ProductPriceMapper ensureInitialized() {
+    if (_instance == null) {
+      MapperContainer.globals.use(_instance = ProductPriceMapper._());
+    }
+    return _instance!;
+  }
+
+  @override
+  final String id = 'ProductPrice';
+
+  static String _$unitEN(ProductPrice v) => v.unitEN;
+  static const Field<ProductPrice, String> _f$unitEN =
+      Field('unitEN', _$unitEN);
+  static String _$unitAR(ProductPrice v) => v.unitAR;
+  static const Field<ProductPrice, String> _f$unitAR =
+      Field('unitAR', _$unitAR);
+  static double _$price(ProductPrice v) => v.price;
+  static const Field<ProductPrice, double> _f$price = Field('price', _$price);
+
+  @override
+  final MappableFields<ProductPrice> fields = const {
+    #unitEN: _f$unitEN,
+    #unitAR: _f$unitAR,
+    #price: _f$price,
+  };
+
+  static ProductPrice _instantiate(DecodingData data) {
+    return ProductPrice(
+        unitEN: data.dec(_f$unitEN),
+        unitAR: data.dec(_f$unitAR),
+        price: data.dec(_f$price));
+  }
+
+  @override
+  final Function instantiate = _instantiate;
+
+  static ProductPrice fromMap(Map<String, dynamic> map) {
+    return ensureInitialized().decodeMap<ProductPrice>(map);
+  }
+
+  static ProductPrice fromJson(String json) {
+    return ensureInitialized().decodeJson<ProductPrice>(json);
+  }
+}
+
+mixin ProductPriceMappable {
+  String toJson() {
+    return ProductPriceMapper.ensureInitialized()
+        .encodeJson<ProductPrice>(this as ProductPrice);
+  }
+
+  Map<String, dynamic> toMap() {
+    return ProductPriceMapper.ensureInitialized()
+        .encodeMap<ProductPrice>(this as ProductPrice);
+  }
+
+  ProductPriceCopyWith<ProductPrice, ProductPrice, ProductPrice> get copyWith =>
+      _ProductPriceCopyWithImpl(this as ProductPrice, $identity, $identity);
+  @override
+  String toString() {
+    return ProductPriceMapper.ensureInitialized()
+        .stringifyValue(this as ProductPrice);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return ProductPriceMapper.ensureInitialized()
+        .equalsValue(this as ProductPrice, other);
+  }
+
+  @override
+  int get hashCode {
+    return ProductPriceMapper.ensureInitialized()
+        .hashValue(this as ProductPrice);
+  }
+}
+
+extension ProductPriceValueCopy<$R, $Out>
+    on ObjectCopyWith<$R, ProductPrice, $Out> {
+  ProductPriceCopyWith<$R, ProductPrice, $Out> get $asProductPrice =>
+      $base.as((v, t, t2) => _ProductPriceCopyWithImpl(v, t, t2));
+}
+
+abstract class ProductPriceCopyWith<$R, $In extends ProductPrice, $Out>
+    implements ClassCopyWith<$R, $In, $Out> {
+  $R call({String? unitEN, String? unitAR, double? price});
+  ProductPriceCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
+}
+
+class _ProductPriceCopyWithImpl<$R, $Out>
+    extends ClassCopyWithBase<$R, ProductPrice, $Out>
+    implements ProductPriceCopyWith<$R, ProductPrice, $Out> {
+  _ProductPriceCopyWithImpl(super.value, super.then, super.then2);
+
+  @override
+  late final ClassMapperBase<ProductPrice> $mapper =
+      ProductPriceMapper.ensureInitialized();
+  @override
+  $R call({String? unitEN, String? unitAR, double? price}) =>
+      $apply(FieldCopyWithData({
+        if (unitEN != null) #unitEN: unitEN,
+        if (unitAR != null) #unitAR: unitAR,
+        if (price != null) #price: price
+      }));
+  @override
+  ProductPrice $make(CopyWithData data) => ProductPrice(
+      unitEN: data.get(#unitEN, or: $value.unitEN),
+      unitAR: data.get(#unitAR, or: $value.unitAR),
+      price: data.get(#price, or: $value.price));
+
+  @override
+  ProductPriceCopyWith<$R2, ProductPrice, $Out2> $chain<$R2, $Out2>(
+          Then<$Out2, $R2> t) =>
+      _ProductPriceCopyWithImpl($value, $cast, t);
 }
