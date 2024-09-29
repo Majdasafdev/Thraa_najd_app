@@ -3,7 +3,7 @@
     "thraaNajd": "Thraa Najd Store",
     "registeration": "Welcome to the registeration page",
     "writenamehere": "Enter your name ",
-    "writeadress": "Enter your adress here ",
+    "writeadress": "Your adress: Dammam, Uhud, Khaled Alhawari st",
     "writeemailhere": "Enter your E-mali ",
     "writepasslhere": "Enter your password ",
     "writephonehere": "Enter your mobile number ",
@@ -33,6 +33,7 @@
     "Forget-Your-Password": "Forget Your Password",
     "Send": "Send",
     "Password-reset": "Password reset email sent. Please check your inbox.",
+    "Forget-Password": "Forget Password?",
     "------------------------------------------------------------------": "----------------------------------------------------------------",
     "signout": "Sign Out",
     "nuts": "Nuts",
@@ -48,7 +49,7 @@
     "emptyCart": "Dear customer your Cart is Empity!",
     "confirmOrder": "CONFIRM THE OREDER",
     "search": "search",
-    "totalPrice": "Totall Price  = ",
+    "totalAmount": "The total amount of your order  = ",
     "address": "Address: ",
     "edit": "Edit",
     "delete": "Delete",
@@ -81,5 +82,9 @@
     "logOut": "Log out",
     "products-Screen": "Products screen",
     "Edit": "Edit",
-    "Delete": "Delete"
+    "Delete": "Delete",
+    "Yes": "yes",
+    "No": "No",
+    "quantity": "Quantity",
+    "total Price: ": "Total Price"
 }

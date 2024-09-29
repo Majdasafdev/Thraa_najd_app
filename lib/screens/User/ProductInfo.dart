@@ -172,7 +172,7 @@ class _ProductInfoState extends State<ProductInfo> {
                             addToCart(context, product);
                           },
                           child: Text(
-                            'Add-to-Cart'.toUpperCase().tr(),
+                            'Add-to-Cart'.tr(),
                             style: TextStyle(
                               fontSize: screenWidth * 0.05,
                               fontWeight: FontWeight.bold,

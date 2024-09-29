@@ -9,6 +9,7 @@ import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
 import 'package:thraa_najd_mobile_app/utils/Extensions.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
 import 'package:thraa_najd_mobile_app/widgets/custome_logo.dart';
+import 'package:thraa_najd_mobile_app/widgets/snack_bar.dart';
 
 import '../../models/CustomerOrder.dart';
 import '../../widgets/cusotme_menu.dart';
@@ -21,7 +22,7 @@ class CartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<CartItem> currentCartItems =
-        Provider.of<CartNotifier>(context).cartItems;
+        Provider.of<CartNotifier>(context, listen: false).cartItems;
     final double screenHeight = MediaQuery.of(context).size.height;
     final double screenWidth = MediaQuery.of(context).size.width;
     final double appBarHeight = AppBar().preferredSize.height;
@@ -30,7 +31,7 @@ class CartScreen extends StatelessWidget {
       backgroundColor: kUnActiveColor,
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        backgroundColor: kSecondaryColor,
+        backgroundColor: kUnActiveColor,
         elevation: 0,
         title: Text(
           'myCart'.tr(),
@@ -90,17 +91,19 @@ class CartScreen extends StatelessWidget {
                                         fontWeight: FontWeight.bold),
                                   ),
                                   Text(
-                                    "total Price: ${currentCartItems[index].product.getProductPrice(context)}",
+                                    "${tr('total Price: ')} ${currentCartItems[index].product.getProductPrice(context)}",
                                     style: const TextStyle(
-                                        fontWeight: FontWeight.bold),
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(right: 20),
                                     child: Text(
-                                      "Quantity: ${currentCartItems[index].quantity.toString()}",
+                                      "${tr('quantity')} ${currentCartItems[index].quantity.toString()}",
                                       style: const TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold),
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -138,7 +141,7 @@ class CartScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              CustomLogo()
+              const CustomLogo()
             ])
           : SizedBox(
               height: screenHeight -
@@ -185,37 +188,72 @@ class CartScreen extends StatelessWidget {
     );
   }
 
+  bool _validatePhoneNumber(String value) {
+    final phoneRegExp = RegExp(r"^05\d{8}$");
+    return phoneRegExp.hasMatch(value);
+  }
+
   //NOTE: Edited workflow.
   //TODO: Assign actual address, clientName, clientNumber.
-  void showCustomDialog(List<CartItem> cartItems, context) async {
-    //TODO: HOT FIX: Must FIX price fetching mechanism!!
-    var price =
-        -1.0; //CartItem.getListTotalPrice(cartItems, Provider.of<SectionNotifier>(context).isWholeSale);
+
+  void showCustomDialog(List<CartItem> cartItems, BuildContext context) async {
+    List<CartItem> currentCartItems =
+        Provider.of<CartNotifier>(context, listen: false).cartItems;
+    var price = CartItem.getListTotalPrice(cartItems,
+        Provider.of<SectionNotifier>(context, listen: false).isWholeSale);
     String address = "";
     String clientName = "";
     String clientNumber = "";
+
     AlertDialog alertDialog = AlertDialog(
       actions: <Widget>[
         MaterialButton(
-          onPressed: () {
+          onPressed: () async {
+            if (!_validatePhoneNumber(clientNumber)) {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text("Error"),
+                    content: const Text(
+                        'Invalid phone number. Please enter a valid number starting with 05 and followed by 8 digits.'),
+                    actions: <Widget>[
+                      ElevatedButton(
+                        child: const Text("OK"),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+              return; // Exit early if validation fails
+            }
+
             try {
               repositoryClient.ordersRepository.storeOrders(CustomerOrder(
-                  totalPrice: price,
-                  clientName: clientName,
-                  clientMobileNumber: clientNumber,
-                  address: address,
-                  products: cartItems,
-                  orderId: "",
-                  orderStatus: false,
-                  isWholesale:
-                      Provider.of<SectionNotifier>(context).isWholeSale));
-
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text('orderd-Successfully'.tr()),
+                totalPrice: price,
+                clientName: clientName,
+                clientMobileNumber: clientNumber,
+                address: address,
+                products: cartItems,
+                orderId: "",
+                orderStatus: false,
+                isWholesale:
+                    Provider.of<SectionNotifier>(context, listen: false)
+                        .isWholeSale,
               ));
-              //      Provider.of<CartNotifier>(context, listen: false)
-              ////          .clearCart(); // Add this line
-              //      Navigator.pop(context);
+              Provider.of<CartNotifier>(context, listen: false).clearCart();
+              Navigator.pop(context);
+              await showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    content: Text('ordered-Successfully'.tr()),
+                  );
+                },
+              );
             } catch (ex) {
               print(ex);
             }
@@ -230,25 +268,29 @@ class CartScreen extends StatelessWidget {
               onChanged: (value) {
                 address = value;
               },
-              decoration: InputDecoration(hintText: 'writeadress'.tr()),
+              decoration: InputDecoration(hintText: 'writenamehere'.tr()),
             ),
             TextField(
               onChanged: (value) {
                 clientName = value;
               },
-              decoration: InputDecoration(hintText: 'writenamehere'.tr()),
+              decoration: InputDecoration(hintText: 'writeadress'.tr()),
             ),
             TextField(
               onChanged: (value) {
-                clientNumber = value;
+                clientNumber =
+                    value; // Store the phone number without validating
               },
-              decoration: InputDecoration(hintText: 'writephonehere'.tr()),
+              decoration: InputDecoration(
+                hintText: 'writephonehere'.tr(),
+              ),
             ),
           ],
         ),
       ),
-      title: Text('totalPrice  =  $price'.tr()),
+      title: Text('${'totalAmount'.tr()} $price'),
     );
+
     await showDialog(
       context: context,
       builder: (context) {

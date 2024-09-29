@@ -34,7 +34,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             myDialogBox(context);
           },
           child: Text(
-            "Forget Password?",
+            "Forget-Password".tr(),
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 14.0 * (screenSize.width / 375.0),
