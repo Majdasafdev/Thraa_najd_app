@@ -1,5 +1,4 @@
 import 'package:dart_mappable/dart_mappable.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:thraa_najd_mobile_app/models/Product.dart';
 
 part 'CartItem.mapper.dart';
@@ -11,9 +10,9 @@ class CartItem with CartItemMappable {
 
   const CartItem({required this.product, required this.quantity});
 
-  double get totalRetailPrice => quantity * product.retailPrice;
+  double get totalRetailPrice => quantity * product.retailPrice.price;
 
-  double get totalWholeSale => quantity * product.wholesalePrice;
+  double get totalWholeSale => quantity * product.wholesalePrice.price;
 
   static double getListTotalPrice(List<CartItem> items, bool isWholesale) {
     return items.fold(

@@ -1,8 +1,8 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
+import 'package:thraa_najd_mobile_app/models/ExcelProductDTO.dart';
 
 import '../providers/SectionNotifier.dart';
 import 'Category.dart';
@@ -17,8 +17,8 @@ class Product with ProductMappable {
   final String productNameAR;
   final Category category;
   final double costPrice;
-  final double retailPrice;
-  final double wholesalePrice;
+  final ProductPrice retailPrice;
+  final ProductPrice wholesalePrice;
   final String imageLink;
   final bool stocked;
 
@@ -52,15 +52,7 @@ class Product with ProductMappable {
 
   static const fromMap = ProductMapper.fromMap;
 
-  static double calcRetail(double costPrice) {
-    return (costPrice > 1000 ? costPrice * 1.25 : costPrice * 1.30) / 10;
-  }
-
-  static double calcWholesalePrice(double costPrice) {
-    return costPrice * (1.30);
-  }
-
-  double getProductPrice(BuildContext context) {
+  ProductPrice getProductPrice(BuildContext context) {
     return Provider.of<SectionNotifier>(context).isWholeSale
         ? wholesalePrice
         : retailPrice;

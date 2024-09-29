@@ -1,14 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:thraa_najd_mobile_app/models/ExcelProductDTO.dart';
 import 'package:thraa_najd_mobile_app/services/AbstractRepository.dart';
 import 'package:thraa_najd_mobile_app/utils/constants.dart';
-import 'package:thraa_najd_mobile_app/widgets/custome_text_field.dart';
 import 'package:thraa_najd_mobile_app/widgets/snack_bar.dart';
 
 import '../../models/Category.dart';
@@ -32,6 +26,10 @@ class _EditProductViewState extends State<EditProductView> {
   TextEditingController imageLink = TextEditingController();
   TextEditingController materialId = TextEditingController();
   TextEditingController costPrice = TextEditingController();
+  TextEditingController retailUnitAR = TextEditingController();
+  TextEditingController retailUnitEN = TextEditingController();
+  TextEditingController wholesaleUnitAR = TextEditingController();
+  TextEditingController wholesaleUnitEN = TextEditingController();
   bool stocked = false;
   Category category = Category.nuts;
 
@@ -47,6 +45,10 @@ class _EditProductViewState extends State<EditProductView> {
           materialId.text = widget.product.materialId;
           costPrice.text = widget.product.costPrice.toString();
           category = widget.product.category;
+          retailUnitAR.text = widget.product.retailPrice.unitAR;
+          retailUnitEN.text = widget.product.retailPrice.unitAR;
+          wholesaleUnitAR.text = widget.product.wholesalePrice.unitAR;
+          wholesaleUnitEN.text = widget.product.wholesalePrice.unitEN;
           stocked = widget.product.stocked;
         });
       },
@@ -55,7 +57,6 @@ class _EditProductViewState extends State<EditProductView> {
 
   @override
   Widget build(BuildContext context) {
-    Product? product = ModalRoute.of(context)!.settings.arguments as Product?;
     return Scaffold(
       backgroundColor: kMainColor,
       body: Padding(
@@ -71,41 +72,81 @@ class _EditProductViewState extends State<EditProductView> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   //NOTE: added arabic, english fields, added material ID.
-                  TextField(
-                    controller: materialId,
-                    decoration: const InputDecoration(hintText: "Material Id"),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: TextField(
+                      controller: materialId,
+                      decoration:
+                          const InputDecoration(hintText: "Material Id"),
+                    ),
                   ),
-                  const SizedBox(
-                    height: 10,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: TextField(
+                      controller: productNameEN,
+                      decoration: const InputDecoration(
+                          hintText: "Product Name English"),
+                    ),
                   ),
-                  TextField(
-                    controller: productNameEN,
-                    decoration:
-                        const InputDecoration(hintText: "Product Name English"),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: TextField(
+                      controller: productNameAR,
+                      decoration: const InputDecoration(
+                          hintText: "Product Name Arabic"),
+                    ),
                   ),
-                  const SizedBox(
-                    height: 10,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: TextField(
+                      controller: imageLink,
+                      decoration:
+                          const InputDecoration(hintText: "Product Image URL"),
+                    ),
                   ),
-                  TextField(
-                    controller: productNameAR,
-                    decoration:
-                        const InputDecoration(hintText: "Product Name Arabic"),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: TextField(
+                      controller: costPrice,
+                      decoration:
+                          const InputDecoration(hintText: "Product Cost Price"),
+                    ),
                   ),
-                  const SizedBox(
-                    height: 10,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: TextField(
+                      controller: retailUnitAR,
+                      decoration: InputDecoration(
+                        hintText: "product-RetailUnitAR".tr(),
+                      ),
+                    ),
                   ),
-                  TextField(
-                    controller: imageLink,
-                    decoration:
-                        const InputDecoration(hintText: "Product Image URL"),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: TextField(
+                      controller: retailUnitEN,
+                      decoration: InputDecoration(
+                        hintText: "product-RetailUnitEN".tr(),
+                      ),
+                    ),
                   ),
-                  TextField(
-                    controller: costPrice,
-                    decoration:
-                        const InputDecoration(hintText: "Product Cost Price"),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: TextField(
+                      controller: wholesaleUnitAR,
+                      decoration: InputDecoration(
+                        hintText: "product-WholeSaleUnitAR".tr(),
+                      ),
+                    ),
                   ),
-                  const SizedBox(
-                    height: 10,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: TextField(
+                      controller: wholesaleUnitEN,
+                      decoration: InputDecoration(
+                        hintText: "product-WholeSaleUnitEN".tr(),
+                      ),
+                    ),
                   ),
                   DropdownButton(
                     hint: const Align(
@@ -176,9 +217,15 @@ class _EditProductViewState extends State<EditProductView> {
                                   productNameAR: productNameAR.value.text,
                                   category: category,
                                   costPrice: parsedCost,
-                                  retailPrice: Product.calcRetail(parsedCost),
+                                  retailPrice: ProductPrice.calcRetail(
+                                      costPrice: parsedCost,
+                                      unitEN: retailUnitEN.value.text,
+                                      unitAR: retailUnitAR.value.text),
                                   wholesalePrice:
-                                      Product.calcWholesalePrice(parsedCost),
+                                      ProductPrice.calcWholesalePrice(
+                                          costPrice: parsedCost,
+                                          unitAR: wholesaleUnitAR.value.text,
+                                          unitEN: wholesaleUnitEN.value.text),
                                   imageLink: imageLink.value.text,
                                   stocked: stocked));
                           if (result && context.mounted) {
